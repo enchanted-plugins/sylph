@@ -152,10 +152,14 @@ def _glob_match(path: str, glob: str) -> bool:
             i += 1
 
     regex = "".join(buf)
+    # Always anchor to end-of-string so segment-bounded patterns don't match
+    # partial segments. Non-anchored patterns allow any path prefix (matching
+    # GitHub's actual CODEOWNERS behavior).
     if anchored:
-        return bool(re.match(f"^{regex}$", path))
-    # Non-anchored: match anywhere in the path.
-    return bool(re.search(regex, path))
+        full_re = f"^{regex}$"
+    else:
+        full_re = f"^(?:.*/)?{regex}$"
+    return bool(re.match(full_re, path))
 
 
 def _codeowners_for_path(path: str, entries: list[tuple[str, list[str]]]) -> list[str]:
