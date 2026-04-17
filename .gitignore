@@ -9,8 +9,10 @@
 plugins/*/state/audit.jsonl
 plugins/*/state/metrics.jsonl
 plugins/*/state/boundary-clusters.json
+plugins/*/state/boundary-events.jsonl
 plugins/*/state/workflow-map.json
 plugins/*/state/learnings.json
+plugins/*/state/priors.json
 plugins/*/state/session-cache/
 
 # Lock directories (atomic mkdir pattern)
