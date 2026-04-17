@@ -96,18 +96,24 @@ class PRDescription:
                 body_parts.append(f"- {d}")
             body_parts.append("")
 
+            body_parts.append("## How it was verified\n")
             verified = session_continuity.get("verified") or []
             if verified:
-                body_parts.append("## How it was verified\n")
                 for v in verified[:5]:
                     body_parts.append(f"- {v}")
-                body_parts.append("")
+            else:
+                body_parts.append("_Not recorded in session continuity._")
+            body_parts.append("")
         else:
             body_parts.append("## Why\n")
             body_parts.append(
                 "_Hornet V4 session-continuity data unavailable — this PR description "
                 "reflects W2 cluster metadata + commit messages only. Install hornet "
                 "to upgrade._\n"
+            )
+            body_parts.append("## How it was verified\n")
+            body_parts.append(
+                "_Inspection only — reviewer should run the test suite before merging._\n"
             )
 
         # Rollback plan — always compute from commits.
