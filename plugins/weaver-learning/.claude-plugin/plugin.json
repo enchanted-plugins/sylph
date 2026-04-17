@@ -1,8 +1,8 @@
 {
   "name": "weaver-learning",
-  "description": "W5 — Gauss Learning (Weaver). Developer preference persistence via Allay-A4 atomic serialization. Tracks commit-style acceptance rates, branch-naming choices, PR turnaround. Exports to shared/learnings.json. Not yet implemented — Phase 2.",
-  "version": "0.0.0",
+  "description": "W5 — Gauss Learning (Weaver). Per-developer preference persistence via exponential moving averages with Allay-A4 atomic serialization. Tracks commit-style (scope rate, body rate, types), branch-naming conventions, PR turnaround, reviewer overrides, W2 corrections. Priors flow back to W1/W2/W3/W4 after the bootstrap sample floor.",
+  "version": "0.1.0",
   "author": { "name": "enchanted-plugins" },
   "license": "MIT",
-  "keywords": ["gauss-accumulation", "preference-learning", "W5", "unimplemented"]
+  "keywords": ["gauss-accumulation", "preference-learning", "W5", "ema"]
 }
