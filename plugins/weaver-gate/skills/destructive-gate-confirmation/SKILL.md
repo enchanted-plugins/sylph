@@ -1,7 +1,7 @@
 ---
 name: destructive-gate-confirmation
 description: Surfaces the decision-gate to the user when a destructive git operation is detected, pausing the session for explicit confirmation before the command runs. Invoked by weaver-gate's PreToolUse hook when a Bash call is classified destructive or protected-destructive.
-allowed-tools: Read, Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/destructive_patterns.py *)
+allowed-tools: Read, Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/destructive_patterns.py *)
 ---
 
 # destructive-gate-confirmation
@@ -15,7 +15,7 @@ route the confirmation decision.
 
 ## Classification tiers
 
-Three outcomes, matching `shared/destructive_patterns.py`:
+Three outcomes, matching `shared/scripts/destructive_patterns.py`:
 
 1. **SAFE** (classification = `safe`) — hook exits 0, skill does not fire, command runs normally.
 2. **DESTRUCTIVE** — force-push, interactive rebase of pushed commits, reset --hard past pushed tip, branch -D of unmerged, remote branch deletion, tag -d. Can be bypassed with explicit user confirmation. Default: require confirmation.
@@ -70,7 +70,7 @@ Options:
 The hook has already written a record to `plugins/weaver-gate/state/audit.jsonl`
 with the blocked classification, command, recovery window, and timestamp. When
 the user confirms via option 1, append a second record with `{outcome:
-"confirmed", at: <ts>}` to the same file via `shared/atomic_json.py`'s
+"confirmed", at: <ts>}` to the same file via `shared/scripts/atomic_json.py`'s
 `append_jsonl`. Never overwrite prior records — append-only.
 
 ## What this skill does *not* do

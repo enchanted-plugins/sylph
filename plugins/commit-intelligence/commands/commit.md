@@ -34,7 +34,7 @@ Commit the currently-staged changes with a Conventional Commits message.
    └─ Emit draft message in Conventional Commits form.
 
 3. Stage 2 — message-validator (Haiku + Python)
-   ├─ Run shared/commit_classify.py validate-stdin on the draft.
+   ├─ Run shared/scripts/commit_classify.py validate-stdin on the draft.
    ├─ If valid: pass.
    ├─ If invalid: propose a fix mechanically; return verdict { pass | fix-proposed | reject }.
    └─ Surface proposal to user for approval when fix-proposed.

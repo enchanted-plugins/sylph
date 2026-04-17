@@ -19,7 +19,7 @@ to the local repo or any remote.
 ## What it does
 
 1. Takes the full command that follows `/weaver:dry-run`.
-2. Routes it through `weaver-gate`'s destructive-op classifier (`shared/destructive_patterns.py`).
+2. Routes it through `weaver-gate`'s destructive-op classifier (`shared/scripts/destructive_patterns.py`).
 3. Emits a plan summary: classification, recovery window, the reverse command
    (if we can suggest one), and the intended side-effects.
 4. **Never** executes the command.

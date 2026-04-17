@@ -3,7 +3,7 @@ name: message-validator
 description: W1 Stage 2 — validates a draft Conventional Commits message against format and policy. Runs the Python stdlib rules module first; escalates ambiguous cases (policy questions, BREAKING CHANGE judgment) to Haiku.
 model: claude-haiku-4-5
 context: narrow
-allowed-tools: Read, Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/commit_classify.py *)
+allowed-tools: Read, Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/commit_classify.py *)
 ---
 
 # message-validator (Haiku, W1 Stage 2)
@@ -23,7 +23,7 @@ Haiku because the task is primarily rule-checking; judgment calls are narrow.
 Invoke the Python stdlib validator:
 
 ```
-python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/commit_classify.py validate-stdin
+python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/commit_classify.py validate-stdin
 ```
 
 Pipe the draft message to its stdin. Exit 0 = valid, exit 1 = invalid. The stdout

@@ -2,7 +2,7 @@
 # weaver-gate PreToolUse(Bash) — destructive-op decision-gate.
 #
 # Reads a PreToolUse payload from stdin (Claude Code hook protocol), extracts
-# the Bash command, and delegates classification to shared/destructive_patterns.py.
+# the Bash command, and delegates classification to shared/scripts/destructive_patterns.py.
 #
 # Exit semantics follow Claude Code's hook contract:
 #   0 — allow the tool call to proceed
@@ -16,7 +16,7 @@ set -euo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname "$(dirname "$(dirname "$0")")")}"
 PRODUCT_ROOT="$(dirname "$(dirname "$PLUGIN_ROOT")")"
-SHARED="$PRODUCT_ROOT/shared"
+SHARED="$PRODUCT_ROOT/shared/scripts"
 AUDIT_LOG="$PLUGIN_ROOT/state/audit.jsonl"
 
 mkdir -p "$(dirname "$AUDIT_LOG")"
