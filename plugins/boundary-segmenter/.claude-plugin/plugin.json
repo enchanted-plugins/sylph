@@ -1,8 +1,18 @@
 {
   "name": "boundary-segmenter",
-  "description": "W2 — Jaccard-Cosine Boundary Segmentation. The defining engine. Clusters PostToolUse(Edit|Write) events into task boundaries using multi-modal distance (file-set Jaccard + Hornet V1 semantic-diff cosine + idle-time gap). Not yet implemented — Phase 2.",
-  "version": "0.0.0",
+  "description": "W2 — Jaccard-Cosine Boundary Segmentation. Weaver's defining engine. Clusters PostToolUse(Edit|Write) events into task boundaries via multi-modal distance (file-set Jaccard + token cosine + idle-time gap). Standalone: works without Hornet V1 by deriving token vectors from edit content. Upgraded automatically when Hornet V1 embeddings are available on the event bus.",
+  "version": "0.1.0",
   "author": { "name": "enchanted-plugins" },
   "license": "MIT",
-  "keywords": ["boundary-segmentation", "clustering", "W2", "defining-engine", "unimplemented"]
+  "keywords": [
+    "boundary-segmentation",
+    "clustering",
+    "W2",
+    "defining-engine",
+    "jaccard-cosine"
+  ],
+  "agents": "./agents/",
+  "skills": [
+    "./skills/boundary-segmentation/"
+  ]
 }
