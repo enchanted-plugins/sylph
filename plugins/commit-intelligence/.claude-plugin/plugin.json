@@ -1,0 +1,18 @@
+{
+  "name": "commit-intelligence",
+  "description": "W1 — Myers-Diff Conventional Classifier. Drafts Conventional Commits messages via a Sonnet agent (Stage 1), validates format + policy via a Haiku agent and a Python stdlib rules pass (Stage 2). Safe-amend detection blocks rewriting pushed commits.",
+  "version": "0.0.1",
+  "author": { "name": "enchanted-plugins" },
+  "license": "MIT",
+  "keywords": [
+    "commits",
+    "conventional-commits",
+    "myers-diff",
+    "W1",
+    "git"
+  ],
+  "commands": [
+    "./commands/commit.md"
+  ],
+  "agents": "./agents/"
+}
