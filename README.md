@@ -35,6 +35,31 @@ The git-workflow layer of AI-assisted development. Observes your Claude Code ses
 
 ## How It Works
 
+<p align="center">
+  <img src="docs/assets/highlevel.svg"
+       alt="Weaver high-level: Claude Code tool calls route to capability-memory (SessionStart) and weaver-gate (PreToolUse) plus 7 more plugins coordinating through mcp-event-bus"
+       width="100%" style="max-width: 900px;">
+</p>
+
+<details>
+<summary>View all four diagrams (regenerated from plugin.json &amp; hooks.json)</summary>
+
+- [High level](docs/assets/highlevel.svg) — plugins and the hook phases they own
+- [Hook detail](docs/assets/hooks.svg) — which tool matchers fire which scripts with what timeouts
+- [Data flow](docs/assets/dataflow.svg) — per-plugin metrics streams into mcp-event-bus
+- [Session lifecycle](docs/assets/lifecycle.svg) — SessionStart → PreToolUse → PostToolUse → PreCompact
+
+Regenerate after editing any `plugin.json` or `hooks.json`:
+
+```bash
+python docs/architecture/generate.py
+npx -y -p @mermaid-js/mermaid-cli mmdc -i docs/architecture/highlevel.mmd \
+  -o docs/assets/highlevel.svg -c docs/assets/mermaid.config.json -b "#0d1117" -w 1400
+# ...repeat for hooks / dataflow / lifecycle
+```
+
+</details>
+
 Weaver doesn't replace git. It *listens* to your session and drives git on your behalf.
 
 Every `PostToolUse(Edit|Write)` event flows into **W2 — Jaccard-Cosine Boundary Segmentation**, an online clustering algorithm that decides when a coherent logical unit of work has completed. The distance function combines file-set Jaccard, Hornet-V1 semantic-diff cosine, and idle-time gap — multi-signal from day one, avoiding the idle-timer-only split failure mode Graphite hit in 2023.
