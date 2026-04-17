@@ -1,9 +1,10 @@
 graph TD
     CC["Claude Code<br/>Tool Calls"]
-    boundary_segmenter["boundary-segmenter<br/><small>—</small>"]
+    boundary_segmenter["boundary-segmenter<br/><small>PostToolUse + PreCompact</small>"]
     CC --> boundary_segmenter
     boundary_segmenter_out(["state/metrics.jsonl"])
     boundary_segmenter --> boundary_segmenter_out
+    style boundary_segmenter fill:#161b22,stroke:#bc8cff,color:#e6edf3
     branch_workflow["branch-workflow<br/><small>—</small>"]
     CC --> branch_workflow
     branch_workflow_out(["state/metrics.jsonl"])
@@ -34,8 +35,9 @@ graph TD
     weaver_gate_out(["state/metrics.jsonl"])
     weaver_gate --> weaver_gate_out
     style weaver_gate fill:#161b22,stroke:#58a6ff,color:#e6edf3
-    weaver_learning["weaver-learning<br/><small>—</small>"]
+    weaver_learning["weaver-learning<br/><small>PreCompact + SessionStart</small>"]
     CC --> weaver_learning
     weaver_learning_out(["state/metrics.jsonl"])
     weaver_learning --> weaver_learning_out
+    style weaver_learning fill:#161b22,stroke:#bc8cff,color:#e6edf3
     style CC fill:#0d1117,stroke:#bc8cff,color:#e6edf3

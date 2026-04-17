@@ -6,6 +6,7 @@ graph TB
         Glob["Glob / Grep"]
     end
     boundary_segmenter_metrics["boundary-segmenter/state/metrics.jsonl<br/><small>weaver.task.boundary.detected</small>"]
+    Write --> boundary_segmenter_metrics
     branch_workflow_metrics["branch-workflow/state/metrics.jsonl<br/><small>weaver.workflow.detected<br/>weaver.branch.created</small>"]
     capability_memory_metrics["capability-memory/state/metrics.jsonl<br/><small>capability_loaded<br/>gitlab_version_probed</small>"]
     ci_reader_metrics["ci-reader/state/metrics.jsonl<br/><small>weaver.ci.status.observed</small>"]

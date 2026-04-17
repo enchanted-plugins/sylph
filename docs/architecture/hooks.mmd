@@ -1,5 +1,11 @@
 graph LR
     subgraph boundary_segmenter["boundary-segmenter"]
+        boundary_segmenter_h0_trigger["PostToolUse<br/>Edit | Write | MultiEdit"]
+        boundary_segmenter_h0_script["boundary-segment.sh<br/><small>timeout: 10s</small>"]
+        boundary_segmenter_h0_trigger --> boundary_segmenter_h0_script
+        boundary_segmenter_h1_trigger["PreCompact<br/>*"]
+        boundary_segmenter_h1_script["checkpoint-clusters.sh<br/><small>timeout: 5s</small>"]
+        boundary_segmenter_h1_trigger --> boundary_segmenter_h1_script
     end
     subgraph branch_workflow["branch-workflow"]
     end
@@ -22,4 +28,10 @@ graph LR
         weaver_gate_h0_trigger --> weaver_gate_h0_script
     end
     subgraph weaver_learning["weaver-learning"]
+        weaver_learning_h0_trigger["SessionStart<br/>*"]
+        weaver_learning_h0_script["load-priors.sh<br/><small>timeout: 5s</small>"]
+        weaver_learning_h0_trigger --> weaver_learning_h0_script
+        weaver_learning_h1_trigger["PreCompact<br/>*"]
+        weaver_learning_h1_script["checkpoint-learnings.sh<br/><small>timeout: 5s</small>"]
+        weaver_learning_h1_trigger --> weaver_learning_h1_script
     end

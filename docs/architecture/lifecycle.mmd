@@ -4,5 +4,14 @@ graph TD
         t1["Turn N: Tool Call"]
         t1 --> pre["PreToolUse<br/>weaver-gate"]
         pre --> exec["Tool Executes"]
-        exec --> t1
+        exec --> post["PostToolUse<br/>boundary-segmenter"]
+        post --> t1
     end
+    turns -->|"Context full"| compact["⚠️ Compaction"]
+    compact --> precompact["PreCompact<br/>boundary-segmenter, weaver-learning"]
+    precompact --> wipe["Context Wiped"]
+    wipe --> restore["Restore context"]
+    restore --> resume(["Session Continues"])
+    style compact fill:#f85149,color:#0d1117
+    style precompact fill:#d29922,color:#0d1117
+    style restore fill:#3fb950,color:#0d1117

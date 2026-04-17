@@ -132,7 +132,7 @@
 <div class="brand-bar"></div>
 <div class="container">
   <h1>Weaver <span>Architecture Explorer</span></h1>
-  <div class="subtitle">Auto-generated from codebase — 2026-04-17 13:02 UTC</div>
+  <div class="subtitle">Auto-generated from codebase — 2026-04-17 14:14 UTC</div>
 
   <h2>System Diagrams</h2>
   <div class="tabs">
@@ -145,10 +145,11 @@
   <div id="panel-highlevel" class="diagram-panel active">
     <pre class="mermaid">graph TD
     CC["Claude Code<br/>Tool Calls"]
-    boundary_segmenter["boundary-segmenter<br/><small>—</small>"]
+    boundary_segmenter["boundary-segmenter<br/><small>PostToolUse + PreCompact</small>"]
     CC --> boundary_segmenter
     boundary_segmenter_out(["state/metrics.jsonl"])
     boundary_segmenter --> boundary_segmenter_out
+    style boundary_segmenter fill:#161b22,stroke:#bc8cff,color:#e6edf3
     branch_workflow["branch-workflow<br/><small>—</small>"]
     CC --> branch_workflow
     branch_workflow_out(["state/metrics.jsonl"])
@@ -179,15 +180,22 @@
     weaver_gate_out(["state/metrics.jsonl"])
     weaver_gate --> weaver_gate_out
     style weaver_gate fill:#161b22,stroke:#58a6ff,color:#e6edf3
-    weaver_learning["weaver-learning<br/><small>—</small>"]
+    weaver_learning["weaver-learning<br/><small>PreCompact + SessionStart</small>"]
     CC --> weaver_learning
     weaver_learning_out(["state/metrics.jsonl"])
     weaver_learning --> weaver_learning_out
+    style weaver_learning fill:#161b22,stroke:#bc8cff,color:#e6edf3
     style CC fill:#0d1117,stroke:#bc8cff,color:#e6edf3</pre>
   </div>
   <div id="panel-hooks" class="diagram-panel">
     <pre class="mermaid">graph LR
     subgraph boundary_segmenter["boundary-segmenter"]
+        boundary_segmenter_h0_trigger["PostToolUse<br/>Edit | Write | MultiEdit"]
+        boundary_segmenter_h0_script["boundary-segment.sh<br/><small>timeout: 10s</small>"]
+        boundary_segmenter_h0_trigger --> boundary_segmenter_h0_script
+        boundary_segmenter_h1_trigger["PreCompact<br/>*"]
+        boundary_segmenter_h1_script["checkpoint-clusters.sh<br/><small>timeout: 5s</small>"]
+        boundary_segmenter_h1_trigger --> boundary_segmenter_h1_script
     end
     subgraph branch_workflow["branch-workflow"]
     end
@@ -210,6 +218,12 @@
         weaver_gate_h0_trigger --> weaver_gate_h0_script
     end
     subgraph weaver_learning["weaver-learning"]
+        weaver_learning_h0_trigger["SessionStart<br/>*"]
+        weaver_learning_h0_script["load-priors.sh<br/><small>timeout: 5s</small>"]
+        weaver_learning_h0_trigger --> weaver_learning_h0_script
+        weaver_learning_h1_trigger["PreCompact<br/>*"]
+        weaver_learning_h1_script["checkpoint-learnings.sh<br/><small>timeout: 5s</small>"]
+        weaver_learning_h1_trigger --> weaver_learning_h1_script
     end</pre>
   </div>
   <div id="panel-dataflow" class="diagram-panel">
@@ -221,6 +235,7 @@
         Glob["Glob / Grep"]
     end
     boundary_segmenter_metrics["boundary-segmenter/state/metrics.jsonl<br/><small>weaver.task.boundary.detected</small>"]
+    Write --> boundary_segmenter_metrics
     branch_workflow_metrics["branch-workflow/state/metrics.jsonl<br/><small>weaver.workflow.detected<br/>weaver.branch.created</small>"]
     capability_memory_metrics["capability-memory/state/metrics.jsonl<br/><small>capability_loaded<br/>gitlab_version_probed</small>"]
     ci_reader_metrics["ci-reader/state/metrics.jsonl<br/><small>weaver.ci.status.observed</small>"]
@@ -248,8 +263,17 @@
         t1["Turn N: Tool Call"]
         t1 --> pre["PreToolUse<br/>weaver-gate"]
         pre --> exec["Tool Executes"]
-        exec --> t1
-    end</pre>
+        exec --> post["PostToolUse<br/>boundary-segmenter"]
+        post --> t1
+    end
+    turns -->|"Context full"| compact["⚠️ Compaction"]
+    compact --> precompact["PreCompact<br/>boundary-segmenter, weaver-learning"]
+    precompact --> wipe["Context Wiped"]
+    wipe --> restore["Restore context"]
+    restore --> resume(["Session Continues"])
+    style compact fill:#f85149,color:#0d1117
+    style precompact fill:#d29922,color:#0d1117
+    style restore fill:#3fb950,color:#0d1117</pre>
   </div>
 
   <h2>Plugin Components</h2>
@@ -257,27 +281,27 @@
     
         <div class="plugin-card">
           <h3>boundary-segmenter</h3>
-          <p class="desc">W2 — Jaccard-Cosine Boundary Segmentation. The defining engine. Clusters PostToolUse(Edit|Write) events into task boundaries using multi-modal distance (file-set Jaccard + Hornet V1 semantic-diff cosine + idle-time gap). Not yet implemented — Phase 2.</p>
+          <p class="desc">W2 — Jaccard-Cosine Boundary Segmentation. Weaver's defining engine. Clusters PostToolUse(Edit|Write) events into task boundaries via multi-modal distance (file-set Jaccard + token cosine + idle-time gap). Standalone: works without Hornet V1 by deriving token vectors from edit content. Upgraded automatically when Hornet V1 embeddings are available on the event bus.</p>
           <div class="section-label">Hooks</div>
-          <div class="dim">None</div>
+          <div class="hook"><span class="phase">PostToolUse</span> <span class="matcher">Edit|Write|MultiEdit</span> → <code>boundary-segment.sh</code> <span class="dim">(10s)</span></div><div class="hook"><span class="phase">PreCompact</span> <span class="matcher">*</span> → <code>checkpoint-clusters.sh</code> <span class="dim">(5s)</span></div>
           <div class="section-label">Skills</div>
-          <div class="dim">None</div>
+          <div class="item"><strong>boundary-segmentation</strong></div>
           <div class="section-label">Agents</div>
-          <div class="dim">None</div>
+          <div class="item"><strong>boundary-detector</strong> <span class="dim">(claude-opus-4-7, narrow)</span></div>
           <div class="section-label">Commands</div>
           <div class="dim">None</div>
         </div>
         <div class="plugin-card">
           <h3>branch-workflow</h3>
-          <p class="desc">W3 — Workflow-Pattern Classifier. Infers the active branching model (GitHub Flow / Trunk-Based / GitFlow / Release Flow / Stacked Diffs) from repo signals and drives branch creation. Not yet implemented — Phase 2.</p>
+          <p class="desc">W3 — Workflow-Pattern Classifier. Infers the active branching model (GitHub Flow / Trunk-Based / GitFlow / Release Flow / Stacked Diffs / Unknown) from repo signals and suggests a branch name for the next task boundary. Per-subtree support for monorepos via .weaver/workflow-map.yaml.</p>
           <div class="section-label">Hooks</div>
           <div class="dim">None</div>
           <div class="section-label">Skills</div>
-          <div class="dim">None</div>
+          <div class="item"><strong>workflow-detection</strong></div>
           <div class="section-label">Agents</div>
           <div class="dim">None</div>
           <div class="section-label">Commands</div>
-          <div class="dim">None</div>
+          <div class="item"><code>weaver:branch</code></div><div class="item"><code>weaver:workflow-detect</code></div>
         </div>
         <div class="plugin-card">
           <h3>capability-memory</h3>
@@ -293,7 +317,7 @@
         </div>
         <div class="plugin-card">
           <h3>ci-reader</h3>
-          <p class="desc">Read-only status + log-stream across GitHub Actions, GitLab CI, CircleCI, Jenkins, Buildkite, Drone/Woodpecker, Tekton, and ArgoCD/FluxCD. Weaver reads; Assembler runs. Not yet implemented — Phase 2.</p>
+          <p class="desc">Read-only CI status + log streaming across GitHub Actions, GitLab CI, CircleCI, Jenkins, Buildkite, Drone/Woodpecker, Tekton, ArgoCD/FluxCD. Weaver reads; Assembler runs. Normalizes per-system check payloads into a typed Check interface and emits weaver.ci.status.observed events. GitHub Actions fully implemented via gh CLI; 7 other systems stub and degrade to manual-handoff.</p>
           <div class="section-label">Hooks</div>
           <div class="dim">None</div>
           <div class="section-label">Skills</div>
@@ -301,7 +325,7 @@
           <div class="section-label">Agents</div>
           <div class="dim">None</div>
           <div class="section-label">Commands</div>
-          <div class="dim">None</div>
+          <div class="item"><code>weaver:ci-status</code></div>
         </div>
         <div class="plugin-card">
           <h3>commit-intelligence</h3>
@@ -329,15 +353,15 @@
         </div>
         <div class="plugin-card">
           <h3>pr-lifecycle</h3>
-          <p class="desc">W4 — Path-History Reviewer Routing + idempotent PR state machine. Opens draft PRs with Hornet-V4 session-context descriptions, ranks reviewers from blame + CODEOWNERS + availability events, drives merge-queue integration. Not yet implemented — Phase 2.</p>
+          <p class="desc">W4 — Path-History Reviewer Routing + idempotent PR state machine. Opens draft PRs with session-context descriptions (upgrades to Hornet V4 when available), ranks reviewers via git-blame + CODEOWNERS + optional availability events, drives merge-queue integration. GitHub fully implemented via gh CLI; 9 other hosts stub cleanly and degrade to manual-handoff mode.</p>
           <div class="section-label">Hooks</div>
           <div class="dim">None</div>
           <div class="section-label">Skills</div>
-          <div class="dim">None</div>
+          <div class="item"><strong>pr-description-crafter</strong></div><div class="item"><strong>reviewer-router</strong></div>
           <div class="section-label">Agents</div>
-          <div class="dim">None</div>
+          <div class="item"><strong>conflict-resolver</strong> <span class="dim">(claude-opus-4-7, medium)</span></div><div class="item"><strong>pr-description-crafter</strong> <span class="dim">(claude-opus-4-7, medium)</span></div>
           <div class="section-label">Commands</div>
-          <div class="dim">None</div>
+          <div class="item"><code>weaver:pr</code></div><div class="item"><code>weaver:status</code></div>
         </div>
         <div class="plugin-card">
           <h3>weaver-gate</h3>
@@ -353,9 +377,9 @@
         </div>
         <div class="plugin-card">
           <h3>weaver-learning</h3>
-          <p class="desc">W5 — Gauss Learning (Weaver). Developer preference persistence via Allay-A4 atomic serialization. Tracks commit-style acceptance rates, branch-naming choices, PR turnaround. Exports to shared/learnings.json. Not yet implemented — Phase 2.</p>
+          <p class="desc">W5 — Gauss Learning (Weaver). Per-developer preference persistence via exponential moving averages with Allay-A4 atomic serialization. Tracks commit-style (scope rate, body rate, types), branch-naming conventions, PR turnaround, reviewer overrides, W2 corrections. Priors flow back to W1/W2/W3/W4 after the bootstrap sample floor.</p>
           <div class="section-label">Hooks</div>
-          <div class="dim">None</div>
+          <div class="hook"><span class="phase">SessionStart</span> <span class="matcher">*</span> → <code>load-priors.sh</code> <span class="dim">(5s)</span></div><div class="hook"><span class="phase">PreCompact</span> <span class="matcher">*</span> → <code>checkpoint-learnings.sh</code> <span class="dim">(5s)</span></div>
           <div class="section-label">Skills</div>
           <div class="dim">None</div>
           <div class="section-label">Agents</div>
