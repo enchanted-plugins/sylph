@@ -1,0 +1,243 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-04-17",
+  "source_of_truth": "docs/architecture/ (generated), output-reference at flux/prompts/weaver-architecture/",
+  "hosts": {
+    "github": {
+      "id": "github",
+      "display_name": "GitHub (Cloud + Enterprise Server)",
+      "api_base": "https://api.github.com",
+      "auth_modes": ["pat", "oauth", "github_app", "installation_token", "ssh"],
+      "rate_limits": {
+        "authenticated_per_hour": 5000,
+        "app_per_hour": 15000,
+        "notes": "per-installation for Apps; secondary rate limits not captured here"
+      },
+      "webhook_signing": "hmac-sha256",
+      "merge_strategies": ["merge-commit", "squash", "rebase"],
+      "has_merge_queue": true,
+      "has_draft_pr": true,
+      "codeowners_flavor": "github-native",
+      "release_asset_support": true,
+      "markdown_flavor": "gfm",
+      "known_quirks": [
+        "Status API (legacy) and Check Runs API (current) coexist — Weaver prefers Check Runs for gating"
+      ],
+      "support_level": "first-class"
+    },
+    "gitlab": {
+      "id": "gitlab",
+      "display_name": "GitLab (SaaS + self-managed)",
+      "api_base": "https://gitlab.com/api/v4",
+      "auth_modes": ["pat", "oauth", "project_token", "group_token", "deploy_token", "job_token"],
+      "rate_limits": {
+        "authenticated_per_hour": 2000,
+        "app_per_hour": null,
+        "notes": "SaaS.com defaults; self-managed varies — probe /api/v4/version and capability endpoints"
+      },
+      "webhook_signing": "hmac-sha256",
+      "merge_strategies": ["merge-commit", "squash", "fast-forward"],
+      "has_merge_queue": true,
+      "has_draft_pr": true,
+      "codeowners_flavor": "gitlab-premium",
+      "release_asset_support": true,
+      "markdown_flavor": "gfm",
+      "known_quirks": [
+        "Merge queue = Merge Trains; requires pipelines for merge-request events",
+        "CODEOWNERS requires Premium+ tier",
+        "Self-managed version drift v14+ — runtime probe required"
+      ],
+      "support_level": "first-class"
+    },
+    "bitbucket-cloud": {
+      "id": "bitbucket-cloud",
+      "display_name": "Bitbucket Cloud",
+      "api_base": "https://api.bitbucket.org/2.0",
+      "auth_modes": ["oauth", "repo_access_token", "app_password"],
+      "rate_limits": {
+        "authenticated_per_hour": 1000,
+        "app_per_hour": null,
+        "notes": "Tiered; App Passwords deprecated in favor of Repository Access Tokens"
+      },
+      "webhook_signing": "none",
+      "merge_strategies": ["merge-commit", "squash", "fast-forward"],
+      "has_merge_queue": false,
+      "has_draft_pr": true,
+      "codeowners_flavor": "default-reviewers-emulated",
+      "release_asset_support": false,
+      "markdown_flavor": "commonmark",
+      "known_quirks": [
+        "Webhooks UNSIGNED by default — mitigate via IP allowlist or shared secret",
+        "No CODEOWNERS file support; uses repository-level default reviewers",
+        "REST 2.0 API differs significantly from Bitbucket Data Center"
+      ],
+      "support_level": "first-class"
+    },
+    "bitbucket-dc": {
+      "id": "bitbucket-dc",
+      "display_name": "Bitbucket Data Center",
+      "api_base": "https://<self-hosted>/rest/api/1.0",
+      "auth_modes": ["pat", "oauth", "ssh"],
+      "rate_limits": {
+        "authenticated_per_hour": null,
+        "app_per_hour": null,
+        "notes": "Self-managed; rate limits configurable per instance"
+      },
+      "webhook_signing": "hmac-sha256",
+      "merge_strategies": ["merge-commit", "squash", "fast-forward"],
+      "has_merge_queue": false,
+      "has_draft_pr": false,
+      "codeowners_flavor": "default-reviewers-emulated",
+      "release_asset_support": false,
+      "markdown_flavor": "commonmark",
+      "known_quirks": [
+        "Ships JGit — large-repo performance slower than C git",
+        "REST API path differs from Cloud (/rest/api/1.0 vs /2.0)",
+        "On-prem only; no SaaS deployment"
+      ],
+      "support_level": "first-class"
+    },
+    "azure-devops": {
+      "id": "azure-devops",
+      "display_name": "Azure DevOps (Repos)",
+      "api_base": "https://dev.azure.com/{organization}/{project}/_apis/git",
+      "auth_modes": ["pat", "oauth", "azure_ad", "managed_identity"],
+      "rate_limits": {
+        "authenticated_per_hour": null,
+        "app_per_hour": null,
+        "notes": "Tiered by TSTU (throughput units); docs vary by service"
+      },
+      "webhook_signing": "hmac-sha1",
+      "merge_strategies": ["merge-commit", "squash", "rebase"],
+      "has_merge_queue": false,
+      "has_draft_pr": true,
+      "codeowners_flavor": "none",
+      "release_asset_support": true,
+      "markdown_flavor": "commonmark",
+      "known_quirks": [
+        "Scoped by organization/project/repository — deeper path than other hosts",
+        "VSTS-era REST endpoints; auth via PAT or Azure AD",
+        "Draft PRs first-class as of 2023"
+      ],
+      "support_level": "best-effort"
+    },
+    "gitea": {
+      "id": "gitea",
+      "display_name": "Gitea (self-managed)",
+      "api_base": "https://<host>/api/v1",
+      "auth_modes": ["pat", "oauth", "ssh"],
+      "rate_limits": {
+        "authenticated_per_hour": null,
+        "app_per_hour": null,
+        "notes": "Self-managed defaults; varies per instance config"
+      },
+      "webhook_signing": "hmac-sha256",
+      "merge_strategies": ["merge-commit", "squash", "rebase"],
+      "has_merge_queue": false,
+      "has_draft_pr": false,
+      "codeowners_flavor": "none",
+      "release_asset_support": true,
+      "markdown_flavor": "gfm",
+      "known_quirks": [
+        "API shape is GitHub-compatible subset — many GH adapters work with minor tweaks"
+      ],
+      "support_level": "best-effort"
+    },
+    "forgejo": {
+      "id": "forgejo",
+      "display_name": "Forgejo (Gitea soft-fork)",
+      "api_base": "https://<host>/api/v1",
+      "auth_modes": ["pat", "oauth", "ssh"],
+      "rate_limits": {
+        "authenticated_per_hour": null,
+        "app_per_hour": null,
+        "notes": "Self-managed; config-dependent"
+      },
+      "webhook_signing": "hmac-sha256",
+      "merge_strategies": ["merge-commit", "squash", "rebase"],
+      "has_merge_queue": false,
+      "has_draft_pr": false,
+      "codeowners_flavor": "none",
+      "release_asset_support": true,
+      "markdown_flavor": "gfm",
+      "known_quirks": [
+        "Soft-fork of Gitea — API shape substantially identical; Weaver's Gitea adapter works",
+        "ActivityPub federation experimental; not yet in Weaver scope"
+      ],
+      "support_level": "best-effort",
+      "adapter_shares_with": "gitea"
+    },
+    "codeberg": {
+      "id": "codeberg",
+      "display_name": "Codeberg (Forgejo-hosted community)",
+      "api_base": "https://codeberg.org/api/v1",
+      "auth_modes": ["pat", "oauth", "ssh"],
+      "rate_limits": {
+        "authenticated_per_hour": null,
+        "app_per_hour": null,
+        "notes": "Community-tier; soft limits"
+      },
+      "webhook_signing": "hmac-sha256",
+      "merge_strategies": ["merge-commit", "squash", "rebase"],
+      "has_merge_queue": false,
+      "has_draft_pr": false,
+      "codeowners_flavor": "none",
+      "release_asset_support": true,
+      "markdown_flavor": "gfm",
+      "known_quirks": [
+        "Hosted on Forgejo — API identical to Forgejo / Gitea-compatible subset"
+      ],
+      "support_level": "best-effort",
+      "adapter_shares_with": "gitea"
+    },
+    "codecommit": {
+      "id": "codecommit",
+      "display_name": "AWS CodeCommit",
+      "api_base": "https://codecommit.{region}.amazonaws.com",
+      "auth_modes": ["sigv4", "ssh"],
+      "rate_limits": {
+        "authenticated_per_hour": null,
+        "app_per_hour": null,
+        "notes": "AWS account-scoped limits; governed by IAM throttling"
+      },
+      "webhook_signing": "not-applicable",
+      "merge_strategies": ["merge-commit", "squash", "fast-forward"],
+      "has_merge_queue": false,
+      "has_draft_pr": false,
+      "codeowners_flavor": "none",
+      "release_asset_support": false,
+      "markdown_flavor": "commonmark",
+      "known_quirks": [
+        "SigV4-authenticated HTTPS or SSH-with-IAM — no basic auth",
+        "No native PR review UI; PR API exists but UX is Console or third-party",
+        "Strategic decline in AWS roadmap [verify: Q1 2026]"
+      ],
+      "support_level": "read-only"
+    },
+    "sourcehut": {
+      "id": "sourcehut",
+      "display_name": "SourceHut",
+      "api_base": "https://git.sr.ht/api",
+      "auth_modes": ["pat", "ssh"],
+      "rate_limits": {
+        "authenticated_per_hour": null,
+        "app_per_hour": null,
+        "notes": "Community-tier, soft limits"
+      },
+      "webhook_signing": "not-applicable",
+      "merge_strategies": ["patch-email", "fast-forward"],
+      "has_merge_queue": false,
+      "has_draft_pr": false,
+      "codeowners_flavor": "none",
+      "release_asset_support": false,
+      "markdown_flavor": "commonmark",
+      "known_quirks": [
+        "PR workflow is email-based: git send-email to a mailing list, not POST /pulls",
+        "No pull-request resource — Weaver generates git format-patch output and posts to the configured list address",
+        "Review workflow is entirely in-mailing-list; Weaver cannot track review state except via mailing-list archive scraping",
+        "Weaver support downgraded to read-only — outgoing patches possible, PR lifecycle impossible"
+      ],
+      "support_level": "read-only"
+    }
+  }
+}

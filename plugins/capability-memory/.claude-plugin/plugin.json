@@ -1,0 +1,13 @@
+{
+  "name": "capability-memory",
+  "description": "Provider capability registry — the 'memory' of how each git host behaves. Ships baseline data for 9 hosts (GitHub, GitLab, Bitbucket Cloud/DC, Azure DevOps, Gitea/Forgejo/Codeberg, AWS CodeCommit, SourceHut); refreshed nightly by CI and probed at runtime for GitLab self-managed version drift.",
+  "version": "0.0.1",
+  "author": { "name": "enchanted-plugins" },
+  "license": "MIT",
+  "keywords": [
+    "git-hosts",
+    "capability-registry",
+    "provider-abstraction",
+    "memory"
+  ]
+}
