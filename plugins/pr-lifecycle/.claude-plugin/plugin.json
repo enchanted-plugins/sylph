@@ -1,0 +1,8 @@
+{
+  "name": "pr-lifecycle",
+  "description": "W4 — Path-History Reviewer Routing + idempotent PR state machine. Opens draft PRs with Hornet-V4 session-context descriptions, ranks reviewers from blame + CODEOWNERS + availability events, drives merge-queue integration. Not yet implemented — Phase 2.",
+  "version": "0.0.0",
+  "author": { "name": "enchanted-plugins" },
+  "license": "MIT",
+  "keywords": ["pr-lifecycle", "reviewer-routing", "W4", "merge-queue", "unimplemented"]
+}

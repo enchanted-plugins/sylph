@@ -1,0 +1,8 @@
+{
+  "name": "branch-workflow",
+  "description": "W3 — Workflow-Pattern Classifier. Infers the active branching model (GitHub Flow / Trunk-Based / GitFlow / Release Flow / Stacked Diffs) from repo signals and drives branch creation. Not yet implemented — Phase 2.",
+  "version": "0.0.0",
+  "author": { "name": "enchanted-plugins" },
+  "license": "MIT",
+  "keywords": ["branching", "workflow-detection", "W3", "unimplemented"]
+}

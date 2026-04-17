@@ -1,0 +1,8 @@
+{
+  "name": "ci-reader",
+  "description": "Read-only status + log-stream across GitHub Actions, GitLab CI, CircleCI, Jenkins, Buildkite, Drone/Woodpecker, Tekton, and ArgoCD/FluxCD. Weaver reads; Assembler runs. Not yet implemented — Phase 2.",
+  "version": "0.0.0",
+  "author": { "name": "enchanted-plugins" },
+  "license": "MIT",
+  "keywords": ["ci-cd", "status-reader", "github-actions", "gitlab-ci", "jenkins", "unimplemented"]
+}

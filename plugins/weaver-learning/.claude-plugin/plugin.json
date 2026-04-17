@@ -1,0 +1,8 @@
+{
+  "name": "weaver-learning",
+  "description": "W5 — Gauss Learning (Weaver). Developer preference persistence via Allay-A4 atomic serialization. Tracks commit-style acceptance rates, branch-naming choices, PR turnaround. Exports to shared/learnings.json. Not yet implemented — Phase 2.",
+  "version": "0.0.0",
+  "author": { "name": "enchanted-plugins" },
+  "license": "MIT",
+  "keywords": ["gauss-accumulation", "preference-learning", "W5", "unimplemented"]
+}
