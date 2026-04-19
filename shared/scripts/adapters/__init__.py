@@ -158,29 +158,42 @@ def parse_github_repo(remote_url: str) -> str | None:
 
 
 def get_adapter(host_id: str) -> HostAdapter:
-    """Factory: return the adapter for a host id. Raises KeyError for unknowns."""
-    # Late import to avoid a cycle when adapters import back into the package.
-    from . import github as _gh
-    from . import stubs as _stubs
+    """Factory: return the adapter for a host id. Raises KeyError for unknowns.
 
+    All 10 hosts have real adapter implementations. Availability at runtime
+    depends on credentials / tooling being present; each adapter's
+    is_authenticated() reports that and raises NotImplementedHostOp on
+    op invocation when unavailable.
+    """
     if host_id == "github":
+        from . import github as _gh
         return _gh.GitHubAdapter()
+    if host_id == "gitlab":
+        from . import gitlab as _gl
+        return _gl.GitLabAdapter()
+    if host_id == "bitbucket-cloud":
+        from . import bitbucket as _bb
+        return _bb.BitbucketCloudAdapter()
+    if host_id == "bitbucket-dc":
+        from . import bitbucket as _bb
+        return _bb.BitbucketDataCenterAdapter()
+    if host_id == "azure-devops":
+        from . import azure_devops as _ado
+        return _ado.AzureDevOpsAdapter()
+    if host_id == "gitea":
+        from . import gitea as _gt
+        return _gt.GiteaAdapter()
+    if host_id == "forgejo":
+        from . import gitea as _gt
+        return _gt.ForgejoAdapter()
+    if host_id == "codeberg":
+        from . import gitea as _gt
+        return _gt.CodebergAdapter()
+    if host_id == "codecommit":
+        from . import codecommit as _cc
+        return _cc.CodeCommitAdapter()
+    if host_id == "sourcehut":
+        from . import sourcehut as _sh
+        return _sh.SourceHutAdapter()
 
-    # Every other host ships as a stub that raises NotImplementedHostOp for
-    # every op. pr-lifecycle falls back gracefully when that happens.
-    stub = {
-        "gitlab": _stubs.GitLabAdapter,
-        "bitbucket-cloud": _stubs.BitbucketCloudAdapter,
-        "bitbucket-dc": _stubs.BitbucketDataCenterAdapter,
-        "azure-devops": _stubs.AzureDevOpsAdapter,
-        "gitea": _stubs.GiteaAdapter,
-        "forgejo": _stubs.ForgejoAdapter,
-        "codeberg": _stubs.CodebergAdapter,
-        "codecommit": _stubs.CodeCommitAdapter,
-        "sourcehut": _stubs.SourceHutAdapter,
-    }.get(host_id)
-
-    if stub is None:
-        raise KeyError(f"unknown host id: {host_id}")
-
-    return stub()
+    raise KeyError(f"unknown host id: {host_id}")
