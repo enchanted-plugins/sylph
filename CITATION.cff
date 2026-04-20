@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+title: "Weaver"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - alias: klaiderman
+    affiliation: "enchanted-plugins"
+repository-code: "https://github.com/enchanted-plugins/weaver"
+url: "https://github.com/enchanted-plugins/weaver"
+license: MIT
+version: "0.0.1"
+date-released: "2026-04-20"
+abstract: "Git workflow layer for AI-assisted development: destructive-op decision gate, workflow-pattern classifier, path-history reviewer routing, per-developer preference adaptation."
+keywords:
+  - claude-code
+  - enchanted-plugins
+  - git
+  - pull-requests
+  - ci-cd
+  - llm

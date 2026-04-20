@@ -9,6 +9,7 @@
   <img alt="5 named engines (W1-W5)" src="https://img.shields.io/badge/Engines-W1--W5-ff7b72?style=for-the-badge">
   <img alt="28 tests passing" src="https://img.shields.io/badge/Tests-28%2F28-3fb950?style=for-the-badge">
   <img alt="Zero runtime deps (bash plus jq plus Python stdlib)" src="https://img.shields.io/badge/Deps-0-f85149?style=for-the-badge">
+  <a href="https://www.repostatus.org/#active"><img alt="Project Status: Active" src="https://www.repostatus.org/badges/latest/active.svg"></a>
 </p>
 
 > **An @enchanted-plugins product — algorithm-driven, agent-managed, self-learning.**
@@ -42,6 +43,17 @@ Weaver takes its name from the **Weavers of Hollow Knight** — Hornet's ancestr
 
 The question this plugin answers: *How does this ship?*
 
+## Who this is for
+
+- Teams working across multiple git hosts / CI systems who want one tool that speaks all of them — GitHub + GitLab + Bitbucket + the rest — via a single adapter contract.
+- Engineers who've force-pushed their career off the edge once and want the destructive-op gate to catch the next one before it runs.
+- Developers tired of manually classifying workflow (GitFlow vs. trunk vs. stacked) and having tools assume GitHub Flow — Weaver classifies before it acts.
+
+Not for:
+
+- Solo repos where you already know every command by muscle memory — Weaver's value scales with team size and host diversity.
+- Teams who want a tool that **triggers** builds — Weaver reads CI; the Assembler boundary is explicit and enforced.
+
 ## Contents
 
 - [The Numbers](#the-numbers)
@@ -49,8 +61,10 @@ The question this plugin answers: *How does this ship?*
 - [What Makes Weaver Different](#what-makes-weaver-different)
 - [The Full Lifecycle](#the-full-lifecycle)
 - [Install](#install)
+- [Quickstart](#quickstart)
 - [8 Plugins, 5 Agents, 15 Commands](#8-plugins-5-agents-15-commands)
 - [What You Get Per Session](#what-you-get-per-session)
+- [Roadmap](#roadmap)
 - [The Science Behind Weaver](#the-science-behind-weaver)
 - [All 15 Workflows](#all-15-workflows)
 - [10 Git Hosts, All Real](#10-git-hosts-all-real)
@@ -60,7 +74,10 @@ The question this plugin answers: *How does this ship?*
 - [Agent Conduct (10 Modules)](#agent-conduct-10-modules)
 - [Architecture](#architecture)
 - [Testing](#testing)
+- [Acknowledgments](#acknowledgments)
+- [Versioning & release cadence](#versioning--release-cadence)
 - [Contributing](#contributing)
+- [Citation](#citation)
 - [License](#license)
 
 ## The Numbers
@@ -182,6 +199,20 @@ If you skip setup entirely, Weaver runs in degraded mode — commit drafting + W
 
 ---
 
+## Quickstart
+
+Install, probe the host, commit. Sixty seconds:
+
+```
+/plugin install full@weaver
+/weaver:setup
+/weaver:commit
+```
+
+Expected: `/weaver:setup` classifies your host + CI + auth in one pass, prompting only for a token when needed. `/weaver:commit` drafts a Conventional Commits message from the staged diff (W1 Sonnet + Haiku validate), signs it, and commits — without you touching `git commit -m`. See [docs/getting-started.md](docs/getting-started.md) for the full first-PR walkthrough.
+
+---
+
 ## 8 Plugins, 5 Agents, 15 Commands
 
 | Plugin | Command(s) | What | Agent (tier) |
@@ -196,6 +227,10 @@ If you skip setup entirely, Weaver runs in degraded mode — commit drafting + W
 | weaver-learning | `/weaver:learnings` | W5 Gauss EMA per-developer preference adaptation | — |
 
 **Agent tier spread:** 3 Opus (boundary-detector, conflict-resolver, pr-description-crafter), 1 Sonnet (commit-drafter), 1 Haiku (message-validator) — orchestration on Opus, execution on Sonnet, validation on Haiku. See [CLAUDE.md](CLAUDE.md) for the tiering contract.
+
+## Roadmap
+
+Tracked in [docs/ROADMAP.md](docs/ROADMAP.md) and the shared [ecosystem map](https://github.com/enchanted-plugins/flux/blob/main/docs/ecosystem.md). For upcoming work specific to Weaver, see issues tagged [roadmap](https://github.com/enchanted-plugins/weaver/labels/roadmap). New host adapters, CI systems, and workflow classes are **not** breaking and land in minor releases; the ROADMAP captures engine-level changes.
 
 ## What You Get Per Session
 
@@ -429,9 +464,46 @@ npx -y -p @mermaid-js/mermaid-cli mmdc -i docs/architecture/highlevel.mmd \
 
 ---
 
+## Acknowledgments
+
+Weaver builds on foundations laid by others:
+
+- **[Claude Code](https://github.com/anthropics/claude-code)** (Anthropic) — the plugin surface this work extends.
+- **[Keep a Changelog](https://keepachangelog.com/)** — CHANGELOG convention.
+- **[Semantic Versioning](https://semver.org/)** — versioning contract.
+- **[Contributor Covenant](https://www.contributor-covenant.org/)** — Code of Conduct.
+- **[repostatus.org](https://www.repostatus.org/)** — status badge.
+- **[Citation File Format](https://citation-file-format.github.io/)** — citation metadata.
+- **[Conventional Commits](https://www.conventionalcommits.org/)** — commit convention the W1 engine emits and Haiku validates.
+
+W5 Gauss Learning shares the EMA update shape with Hornet's H6 Session Learning (see [docs/glossary.md](docs/glossary.md) § H-suffix references) — aligned patterns across siblings, independent implementations.
+
+## Versioning & release cadence
+
+Weaver follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Breaking changes land on major bumps only; the [CHANGELOG](CHANGELOG.md) flags them explicitly. Release cadence is opportunistic — tags land when accumulated fixes or features justify a cut, not on a fixed schedule. Changes to the `HostAdapter` contract, the W3 classifier labels, the `weaver-gate` destructive-op classification, or the W2/W5 ledger shapes **are** breaking; new adapters, CI systems, and workflow classes are **not**. Migration notes between majors live in [docs/upgrading.md](docs/upgrading.md).
+
+---
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). TL;DR: zero pip installs, honest scoring, per-sub-plugin structure identical, tests pass, Assembler boundary respected (Weaver reads CI; Weaver does not trigger builds).
+
+---
+
+## Citation
+
+If you use this project in research or derivative work, please cite it:
+
+```bibtex
+@software{weaver_2026,
+  title = {Weaver},
+  author = {{Klaiderman}},
+  year = {2026},
+  url = {https://github.com/enchanted-plugins/weaver}
+}
+```
+
+See [CITATION.cff](CITATION.cff) for additional formats (APA, MLA, EndNote).
 
 ---
 
