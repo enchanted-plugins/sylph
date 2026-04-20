@@ -1,0 +1,56 @@
+---
+title: Weaver nine-subplugin architecture
+config:
+  look: neo
+  theme: dark
+  flowchart:
+    curve: basis
+    padding: 18
+    nodeSpacing: 44
+    rankSpacing: 54
+    htmlLabels: true
+    subGraphTitleMargin:
+      top: 14
+      bottom: 18
+---
+flowchart TB
+    TitleBlock["<div style='font-family:ui-monospace,SFMono-Regular,Consolas,monospace;text-align:center;min-width:940px;padding:6px 10px;line-height:1.8'><div style='color:#58a6ff;font-size:15px;letter-spacing:6px;border-bottom:1px solid #1e3a5f;padding-bottom:10px;margin-bottom:10px'>WEAVER &nbsp;·&nbsp; GIT&nbsp;WORKFLOW&nbsp;LAYER &nbsp;·&nbsp; ARCHITECTURE</div><div style='display:flex;gap:40px;justify-content:center;font-size:11px;color:#8b949e;letter-spacing:2px'><span>DWG&nbsp;&nbsp;<b style='color:#e6edf3'>WVR-001</b></span><span>REV&nbsp;&nbsp;<b style='color:#e6edf3'>A.1</b></span><span>SCALE&nbsp;&nbsp;<b style='color:#e6edf3'>1:1</b></span><span>ENGINES&nbsp;&nbsp;<b style='color:#e6edf3'>W1&nbsp;·&nbsp;W2&nbsp;·&nbsp;W3&nbsp;·&nbsp;W4&nbsp;·&nbsp;W5</b></span><span>SHEET&nbsp;&nbsp;<b style='color:#e6edf3'>01&nbsp;/&nbsp;01</b></span></div></div>"]
+
+    Session(["<div style='text-align:center;line-height:1.8;padding:4px 12px'><b style='letter-spacing:1.5px'>INPUT&nbsp;·&nbsp;CLAUDE&nbsp;CODE&nbsp;SESSION</b><br/><em style='color:#8b949e;font-size:13px;font-weight:400'>SessionStart · PostToolUse(Edit|Write) · PreToolUse(Bash) · PreCompact</em></div>"])
+
+    subgraph Observe["<div style='text-align:center;min-width:940px;line-height:2'><div><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>SUB-PLUGIN&nbsp;01</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>BOUNDARY-SEGMENTER</b>&nbsp;&nbsp;·&nbsp;&nbsp;<span style='color:#58a6ff;letter-spacing:1px'>W2&nbsp;(defining)</span></div><div style='color:#6e7681;font-size:11px;font-family:ui-monospace,monospace;letter-spacing:1.2px'>ROLE&nbsp;·&nbsp;Jaccard-Cosine&nbsp;boundary&nbsp;clustering&nbsp;&nbsp;·&nbsp;&nbsp;confidence&nbsp;≥&nbsp;0.7&nbsp;→&nbsp;autonomous&nbsp;&nbsp;·&nbsp;&nbsp;&lt;&nbsp;0.7&nbsp;→&nbsp;Opus&nbsp;judge</div></div>"]
+        direction LR
+        cluster["<div style='text-align:center;line-height:1.7;padding:2px 4px'>CLUSTER<br/>EDITS<br/><small style='color:#6e7681;letter-spacing:1px'>file-set&nbsp;·&nbsp;semantic&nbsp;·&nbsp;time</small></div>"] --> detect["<div style='text-align:center;line-height:1.7;padding:2px 4px'>DETECT<br/>BOUNDARY<br/><small style='color:#6e7681;letter-spacing:1px'>edit&nbsp;distance&nbsp;threshold</small></div>"] --> emit["<div style='text-align:center;line-height:1.7;padding:2px 4px'>EMIT<br/>EVENT<br/><small style='color:#6e7681;letter-spacing:1px'>weaver.task.boundary.detected</small></div>"]
+    end
+
+    subgraph Commit["<div style='text-align:center;min-width:940px;line-height:2'><div><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>SUB-PLUGINS&nbsp;02&nbsp;·&nbsp;03&nbsp;·&nbsp;04</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>COMMIT-INTELLIGENCE&nbsp;&nbsp;·&nbsp;&nbsp;BRANCH-WORKFLOW&nbsp;&nbsp;·&nbsp;&nbsp;PR-LIFECYCLE</b>&nbsp;&nbsp;·&nbsp;&nbsp;<span style='color:#3fb950;letter-spacing:1px'>W1&nbsp;+&nbsp;W3&nbsp;+&nbsp;W4</span></div><div style='color:#6e7681;font-size:11px;font-family:ui-monospace,monospace;letter-spacing:1.2px'>Myers-Diff&nbsp;classifier&nbsp;(W1)&nbsp;&nbsp;·&nbsp;&nbsp;Workflow-Pattern&nbsp;classifier&nbsp;(W3)&nbsp;&nbsp;·&nbsp;&nbsp;Path-History&nbsp;reviewer&nbsp;routing&nbsp;(W4)</div></div>"]
+        direction LR
+        branch["<div style='text-align:center;line-height:1.7;padding:2px 4px'>PICK<br/>BRANCH&nbsp;(W3)<br/><small style='color:#6e7681;letter-spacing:1px'>GitHub&nbsp;Flow&nbsp;·&nbsp;GitFlow&nbsp;·&nbsp;Trunk</small></div>"] --> draft["<div style='text-align:center;line-height:1.7;padding:2px 4px'>DRAFT<br/>COMMIT&nbsp;(W1)<br/><small style='color:#6e7681;letter-spacing:1px'>Conventional&nbsp;Commits</small></div>"] --> pr["<div style='text-align:center;line-height:1.7;padding:2px 4px'>OPEN<br/>PR&nbsp;(W4)<br/><small style='color:#6e7681;letter-spacing:1px'>blame-graph&nbsp;reviewer&nbsp;rank</small></div>"]
+    end
+
+    subgraph Guard["<div style='text-align:center;min-width:940px;line-height:2'><div><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>SUB-PLUGINS&nbsp;05&nbsp;·&nbsp;06&nbsp;·&nbsp;07&nbsp;·&nbsp;08</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>WEAVER-GATE&nbsp;&nbsp;·&nbsp;&nbsp;CAPABILITY-MEMORY&nbsp;&nbsp;·&nbsp;&nbsp;CI-READER&nbsp;&nbsp;·&nbsp;&nbsp;WEAVER-LEARNING</b>&nbsp;&nbsp;·&nbsp;&nbsp;<span style='color:#bc8cff;letter-spacing:1px'>gate&nbsp;+&nbsp;registry&nbsp;+&nbsp;CI&nbsp;+&nbsp;W5</span></div><div style='color:#6e7681;font-size:11px;font-family:ui-monospace,monospace;letter-spacing:1.2px'>destructive-op&nbsp;decision-gate&nbsp;&nbsp;·&nbsp;&nbsp;10-host&nbsp;capability&nbsp;registry&nbsp;&nbsp;·&nbsp;&nbsp;8-CI&nbsp;read-only&nbsp;status&nbsp;&nbsp;·&nbsp;&nbsp;Gauss&nbsp;Learning&nbsp;(W5)</div></div>"]
+        direction LR
+        gate["<div style='text-align:center;line-height:1.7;padding:2px 4px'>WEAVER<br/>GATE<br/><small style='color:#6e7681;letter-spacing:1px'>force-push&nbsp;·&nbsp;reset&nbsp;--hard</small></div>"] --> reg["<div style='text-align:center;line-height:1.7;padding:2px 4px'>CAPABILITY<br/>MEMORY<br/><small style='color:#6e7681;letter-spacing:1px'>GitHub&nbsp;·&nbsp;GitLab&nbsp;·&nbsp;…</small></div>"] --> ci["<div style='text-align:center;line-height:1.7;padding:2px 4px'>CI<br/>READER<br/><small style='color:#6e7681;letter-spacing:1px'>8&nbsp;CI&nbsp;systems</small></div>"] --> learn["<div style='text-align:center;line-height:1.7;padding:2px 4px'>WEAVER<br/>LEARNING&nbsp;(W5)<br/><small style='color:#6e7681;letter-spacing:1px'>preference&nbsp;EMA</small></div>"]
+    end
+
+    subgraph Bus["<div style='text-align:center;min-width:940px;line-height:2'><div><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>OUTPUT&nbsp;·&nbsp;ENCHANTED-MCP&nbsp;BUS</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>AUTO-ORCHESTRATION&nbsp;EVENTS</b></div><div style='color:#6e7681;font-size:11px;font-family:ui-monospace,monospace;letter-spacing:1.2px'>weaver&nbsp;publishes&nbsp;·&nbsp;peers&nbsp;subscribe&nbsp;·&nbsp;silent&nbsp;by&nbsp;default,&nbsp;loud&nbsp;when&nbsp;risky</div></div>"]
+        direction LR
+        evt1["<div style='text-align:center;line-height:1.7;padding:2px 4px'>weaver.task.<br/>boundary.detected<br/><small style='color:#6e7681;letter-spacing:1px'>on&nbsp;W2&nbsp;cluster&nbsp;close</small></div>"] --> evt2["<div style='text-align:center;line-height:1.7;padding:2px 4px'>weaver.commit.<br/>committed<br/><small style='color:#6e7681;letter-spacing:1px'>after&nbsp;W1&nbsp;signs&nbsp;off</small></div>"] --> evt3["<div style='text-align:center;line-height:1.7;padding:2px 4px'>weaver.pr.<br/>ready<br/><small style='color:#6e7681;letter-spacing:1px'>CI&nbsp;green&nbsp;+&nbsp;reviewers</small></div>"] --> evt4["<div style='text-align:center;line-height:1.7;padding:2px 4px'>weaver.destructive.<br/>detected<br/><small style='color:#6e7681;letter-spacing:1px'>gate&nbsp;intercepts</small></div>"]
+    end
+
+    Peers["<div style='text-align:center;min-width:940px;line-height:1.8;padding:6px 10px'><b style='letter-spacing:1.5px;color:#79c0ff'>PEER&nbsp;PLUGINS&nbsp;REACT</b><br/><em style='color:#8b949e;font-size:13px;font-weight:400'>Reaper blocks push on secret detection &nbsp;·&nbsp; Assembler gates merge-queue entry on CI &nbsp;·&nbsp; Nook attributes PR spend</em></div>"]
+
+    Session --> Observe
+    Observe --> Commit
+    Observe --> Guard
+    Commit --> Bus
+    Guard --> Bus
+    Bus --> Peers
+
+    classDef titleBlock fill:#0d1117,stroke:#1e3a5f,stroke-width:1px,color:#e6edf3
+    classDef session fill:#161b22,stroke:#30363d,stroke-width:1px,color:#e6edf3
+    classDef peers fill:#161b22,stroke:#1e3a5f,stroke-width:1px,color:#e6edf3
+
+    class TitleBlock titleBlock
+    class Session session
+    class Peers peers
