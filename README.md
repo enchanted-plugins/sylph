@@ -198,28 +198,38 @@ Every gated op is audited to `plugins/weaver-gate/state/audit.jsonl` — append-
 
 ## Install
 
-```bash
-# Prerequisites (one-time)
-winget install --id GitHub.cli      # or: brew install gh  — for the GitHub fast-path
-gh auth login                        # device flow; stores in OS keychain
+Two commands in Claude Code + one per project:
 
-# Weaver
+```
 /plugin marketplace add enchanted-plugins/weaver
 /plugin install full@weaver
 ```
 
-That installs all 8 plugins + the `full` meta-plugin via dependency resolution.
+Then, from inside the repo you want to use Weaver on:
 
-**Opt-in tooling per adapter** — Weaver works without any of these (each adapter reports `is_authenticated()=False` and raises cleanly), but having them unlocks the host:
+```
+/weaver:setup
+```
 
-- GitHub: `GH_TOKEN` / `GITHUB_TOKEN` / git-credential-manager
-- GitLab: `GITLAB_TOKEN`
-- Bitbucket: `BITBUCKET_TOKEN` (Cloud) or `BITBUCKET_DC_TOKEN` (DC)
-- Azure DevOps: `AZURE_DEVOPS_TOKEN`
-- Gitea/Forgejo/Codeberg: `GITEA_TOKEN` / `FORGEJO_TOKEN`
-- CodeCommit: `aws configure` (AWS CLI v2)
-- SourceHut: SMTP config OR `git send-email` configured
-- Tekton/ArgoCD/FluxCD: `kubectl` with a current context
+`/weaver:setup` is the **auto-configurator**: it runs `git remote get-url origin`, maps the URL to one of the 10 supported hosts, and does **only** the work that host needs — auto-installing the right tool via your platform's package manager (`winget` on Windows, `brew` on macOS, `apt`/`dnf`/`pacman` on Linux) and walking you through exactly one token prompt when required. No manual shell steps. No forced `gh` install if you're on GitLab.
+
+If you skip setup entirely, Weaver runs in degraded mode — commit drafting + W2 task-boundary clustering + the destructive-op gate all work without any host credentials. Only PR opening / merging needs the host token.
+
+<details>
+<summary>What `/weaver:setup` does per host</summary>
+
+| Host | What gets configured |
+|---|---|
+| GitHub | Uses the existing git-credential-manager token if present (the same one that authorizes `git push`). Otherwise offers to install `gh` + run `gh auth login`. |
+| GitLab | Prompts for a PAT (api + write_repository scopes), stores via `git credential approve`. Handles self-managed via prompted api_base. |
+| Bitbucket Cloud | Prompts for a Repository Access Token (App Passwords are deprecated). |
+| Bitbucket Data Center | Prompts for api_base + HTTP PAT. |
+| Azure DevOps | Prompts for PAT (Code + Pull Request scopes), org, project. |
+| Gitea / Forgejo / Codeberg | Prompts for api_base + PAT. |
+| AWS CodeCommit | Auto-installs `aws` CLI if missing; runs `aws configure` if no IAM identity resolves. |
+| SourceHut | Configures the project's mailing-list address + `git send-email` OR SMTP credentials. |
+
+</details>
 
 ---
 
