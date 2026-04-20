@@ -199,6 +199,22 @@ If you skip setup entirely, Weaver runs in degraded mode — commit drafting + W
 
 ## What You Get Per Session
 
+Four hook events fan out into six color-coded journals — one per sub-plugin whose state actually persists — and converge on the enchanted-mcp bus plus the 15-command query surface. Color maps engines to journals: blue = boundary-segmenter (W2) · amber = capability-memory · red = weaver-gate · yellow = commit-intelligence + pr-lifecycle (W1 + W4) · purple = weaver-learning (W5).
+
+<p align="center">
+  <a href="docs/assets/state-flow.mmd" title="View state-flow diagram source (Mermaid)">
+    <img src="docs/assets/state-flow.svg"
+         alt="Weaver per-session state flow: four hooks (SessionStart, PostToolUse Edit|Write, PreToolUse Bash, PreCompact) feed six color-coded journals (boundary-segmenter clusters+events, capability-memory registry, weaver-gate audit, commit-intelligence metrics + pr-lifecycle reviewer suggestion, weaver-learning learnings+priors) converging on the enchanted-mcp bus and the /weaver:* skill-invoked query surface"
+         width="100%" style="max-width:1100px;">
+  </a>
+</p>
+
+<sub align="center">
+
+Source: [docs/assets/state-flow.mmd](docs/assets/state-flow.mmd) · Regeneration command in [docs/assets/README.md](docs/assets/README.md).
+
+</sub>
+
 ```
 plugins/boundary-segmenter/state/
 ├── boundary-clusters.json           W2 rolling cluster state, survives compaction

@@ -13,6 +13,8 @@ here as `<img>`.
 | `hooks.svg` | `../architecture/hooks.mmd` | `npx @mermaid-js/mermaid-cli -i ../architecture/hooks.mmd -o hooks.svg -c mermaid.config.json -b "#0a1628" -w 1800 && node apply-blueprint.js hooks.svg` |
 | `lifecycle.svg` | `../architecture/lifecycle.mmd` | `npx @mermaid-js/mermaid-cli -i ../architecture/lifecycle.mmd -o lifecycle.svg -c mermaid.config.json -b "#0a1628" -w 1800 && node apply-blueprint.js lifecycle.svg` |
 | `dataflow.svg` | `../architecture/dataflow.mmd` | `npx @mermaid-js/mermaid-cli -i ../architecture/dataflow.mmd -o dataflow.svg -c mermaid.config.json -b "#0a1628" -w 1800 && node apply-blueprint.js dataflow.svg` |
+| `pipeline.svg` | `pipeline.mmd` | `npx -y @mermaid-js/mermaid-cli -i pipeline.mmd -o pipeline.svg -c mermaid.config.json -p puppeteer.config.json -b "#0a1628" -w 1800 && node apply-blueprint.js pipeline.svg` |
+| `state-flow.svg` | `state-flow.mmd` | `npx -y @mermaid-js/mermaid-cli -i state-flow.mmd -o state-flow.svg -c mermaid.config.json -p puppeteer.config.json -b "#0a1628" -w 1800 && node apply-blueprint.js state-flow.svg` |
 | `math/*.svg` | `render-math.js` | `npm install --prefix . mathjax-full && node render-math.js` |
 
 Run the commands from `docs/assets/` (paths are relative). The
