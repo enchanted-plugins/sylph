@@ -46,6 +46,7 @@ The question this plugin answers: *How does this ship?*
 
 - [The Numbers](#the-numbers)
 - [How It Works](#how-it-works)
+- [What Makes Weaver Different](#what-makes-weaver-different)
 - [The Full Lifecycle](#the-full-lifecycle)
 - [Install](#install)
 - [What You Get Per Session](#what-you-get-per-session)
@@ -56,6 +57,7 @@ The question this plugin answers: *How does this ship?*
 - [The Decision-Gate Contract](#the-decision-gate-contract)
 - [Verification](#verification)
 - [vs Everything Else](#vs-everything-else)
+- [Agent Conduct (10 Modules)](#agent-conduct-10-modules)
 - [Architecture](#architecture)
 - [Contributing](#contributing)
 - [License](#license)
@@ -103,6 +105,24 @@ Weaver runs inside your Claude Code session and drives git on your behalf:
 Source: [docs/assets/pipeline.mmd](docs/assets/pipeline.mmd) · Regeneration command in [docs/assets/README.md](docs/assets/README.md).
 
 </sub>
+
+## What Makes Weaver Different
+
+### It clusters the edit stream, not the commit stream
+
+W2 Jaccard-Cosine Boundary Segmentation runs on `PostToolUse(Edit|Write)` — *before* commits exist. Distance `= α·(1−jaccard(files)) + β·(1−cosine(tokens)) + γ·tanh(idle/τ)`. At θ=0.55, a coherent task closes and the commit+PR logic fires. No timer-based batching, no manual `git add` discipline — just "did I finish a logical thing?"
+
+### Every git host speaks the same contract
+
+10 hosts, 1 `HostAdapter` contract: token resolution → authenticated request → normalized `PullRequest` return. Same `_rest.api_request` call path for GitHub, GitLab, Bitbucket Cloud / Data Center, Azure DevOps, Gitea, Forgejo, Codeberg, AWS CodeCommit, and SourceHut. When one host's JSON shape changes, exactly one file moves.
+
+### Destructive ops route through a Hornet-style gate
+
+`git push --force`, `git rebase -i <pushed-ref>`, `git clean -fdx`, `git filter-branch` — every destructive pattern routes through weaver-gate before it can run. Recovery windows documented per op; `clean -fdx` has zero; force-push to protected branches has zero bypass. No accidental career-enders.
+
+### It learns per-developer, not per-repo
+
+W5 Gauss Learning EMA runs per `(developer, surface)`. After 10 samples, the defaults give way to what you actually do — commit-subject verbosity, kebab vs. snake branch-name preferences, reviewer override patterns, W2 threshold corrections.
 
 ## The Full Lifecycle
 
@@ -324,6 +344,25 @@ Every gated op is audited to `plugins/weaver-gate/state/audit.jsonl` — append-
 | Zero runtime deps | ✗ npm | ✓ python | ✗ npm | ✗ node | ✓ | ✓ |
 
 Weaver isn't replacing git. It's **the layer above it** that you were building piece-by-piece in every project anyway.
+
+---
+
+## Agent Conduct (10 Modules)
+
+Every skill inherits a reusable behavioral contract from [shared/conduct/](shared/conduct/) — loaded once into [CLAUDE.md](CLAUDE.md), applied across all plugins. This is how Claude *acts* inside Weaver: deterministic, surgical, verifiable. Not a suggestion; a contract.
+
+| Module | What it governs |
+|--------|-----------------|
+| [discipline.md](shared/conduct/discipline.md) | Coding conduct: think-first, simplicity, surgical edits, goal-driven loops |
+| [context.md](shared/conduct/context.md) | Attention-budget hygiene, U-curve placement, checkpoint protocol |
+| [verification.md](shared/conduct/verification.md) | Independent checks, baseline snapshots, dry-run for destructive ops |
+| [delegation.md](shared/conduct/delegation.md) | Subagent contracts, tool whitelisting, parallel vs. serial rules |
+| [failure-modes.md](shared/conduct/failure-modes.md) | 14-code taxonomy for `state/learnings.json` so W5 Gauss Accumulation compounds |
+| [tool-use.md](shared/conduct/tool-use.md) | Tool-choice hygiene, error payload contract, parallel-dispatch rules |
+| [formatting.md](shared/conduct/formatting.md) | Per-target format (XML / Markdown sandwich / minimal / few-shot), prefill + stop sequences |
+| [skill-authoring.md](shared/conduct/skill-authoring.md) | SKILL.md frontmatter discipline, discovery test |
+| [hooks.md](shared/conduct/hooks.md) | Advisory-only hooks, injection over denial, fail-open |
+| [precedent.md](shared/conduct/precedent.md) | Log self-observed failures to `state/precedent-log.md`; consult before risky steps |
 
 ---
 
