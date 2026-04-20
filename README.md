@@ -13,8 +13,6 @@
 
 > **An @enchanted-plugins product — algorithm-driven, agent-managed, self-learning.**
 
-Named after the **Weavers** of Hollow Knight — Hornet's ancestral kin who spun silk into patterns. Every branch is a thread; every merge stitches threads into a coherent history; every PR asks *does this thread fit the pattern?*
-
 **8 plugins. 5 named engines. 10 git hosts. 10 CI systems. 15 slash commands. Zero runtime deps.**
 
 Built from the commit log of teams that ship: every flow exists because someone, somewhere, force-pushed their career off the edge.
@@ -37,6 +35,12 @@ Built from the commit log of teams that ship: every flow exists because someone,
 Weaver is the git workflow layer you wrote yourself, if you'd had three months and a production-incident scar.
 
 ---
+
+## Origin
+
+Weaver takes its name from the **Weavers of Hollow Knight** — Hornet's ancestral kin, silk-spinners who wove threads into coherent patterns. Every branch is a thread; every merge stitches threads into history; every PR asks *does this fit the pattern?*
+
+The question this plugin answers: *How does this ship?*
 
 ## Contents
 
@@ -312,6 +316,14 @@ Weaver isn't replacing git. It's **the layer above it** that you were building p
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). TL;DR: zero pip installs, honest scoring, per-sub-plugin structure identical, tests pass, Assembler boundary respected (Weaver reads CI; Weaver does not trigger builds).
+
+---
+
+## Origin
+
+Weaver takes its name from **Hollow Knight** — the Weavers are Hornet's ancestral kin, silk-spinners who weave individual threads into coherent patterns. Branches are threads; merges stitch them into a coherent history. This plugin inherits Hornet's careful-observer stance (see the H-suffix cross-references in [docs/glossary.md](docs/glossary.md)) and adds the weave: workflow classification, path-history reviewer routing, per-developer learning that gets quieter as it learns.
+
+Weaver sits alongside Hornet in the ecosystem — Hornet watches *changes*, Weaver weaves *workflow*. Together they answer both halves of *"what just happened?"* See [docs/ecosystem.md](docs/ecosystem.md) for the full map.
 
 ---
 
