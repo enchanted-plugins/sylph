@@ -1,7 +1,14 @@
 {
-  "schema_version": "1.0",
-  "last_updated": "2026-04-17",
+  "schema_version": "1.1",
+  "last_updated": "2026-04-20",
   "source_of_truth": "docs/architecture/ (generated), output-reference at flux/prompts/weaver-architecture/",
+  "schema_changelog": [
+    {
+      "version": "1.1",
+      "date": "2026-04-20",
+      "change": "+10 fields per host (signed_commit_verification, protected_branch_api, default_branch_convention, lfs_variant, release_api_path, webhook_event_taxonomy, pat_scopes_required, signed_tag_support, commit_status_api_shape, supports_draft_protected_branch_override)"
+    }
+  ],
   "hosts": {
     "github": {
       "id": "github",
@@ -20,6 +27,28 @@
       "codeowners_flavor": "github-native",
       "release_asset_support": true,
       "markdown_flavor": "gfm",
+      "signed_commit_verification": {
+        "supported": true,
+        "mechanisms": ["gpg", "ssh", "sigstore"],
+        "api_field": "verification.verified"
+      },
+      "protected_branch_api": {
+        "supported": true,
+        "endpoint": "/repos/{owner}/{repo}/branches/{branch}/protection",
+        "requires_admin": true
+      },
+      "default_branch_convention": "main",
+      "lfs_variant": "git-lfs",
+      "release_api_path": "/repos/{owner}/{repo}/releases",
+      "webhook_event_taxonomy": {
+        "pr_event": "pull_request",
+        "push_event": "push",
+        "ci_event": "check_run"
+      },
+      "pat_scopes_required": ["repo", "workflow", "read:org"],
+      "signed_tag_support": true,
+      "commit_status_api_shape": "check-runs",
+      "supports_draft_protected_branch_override": true,
       "known_quirks": [
         "Status API (legacy) and Check Runs API (current) coexist — Weaver prefers Check Runs for gating"
       ],
@@ -42,6 +71,28 @@
       "codeowners_flavor": "gitlab-premium",
       "release_asset_support": true,
       "markdown_flavor": "gfm",
+      "signed_commit_verification": {
+        "supported": true,
+        "mechanisms": ["gpg", "ssh", "sigstore"],
+        "api_field": "signature.verification_status"
+      },
+      "protected_branch_api": {
+        "supported": true,
+        "endpoint": "/projects/{id}/protected_branches",
+        "requires_admin": true
+      },
+      "default_branch_convention": "main",
+      "lfs_variant": "git-lfs",
+      "release_api_path": "/projects/{id}/releases",
+      "webhook_event_taxonomy": {
+        "pr_event": "merge_request",
+        "push_event": "push",
+        "ci_event": "pipeline"
+      },
+      "pat_scopes_required": ["api", "write_repository", "read_user"],
+      "signed_tag_support": true,
+      "commit_status_api_shape": "pipelines",
+      "supports_draft_protected_branch_override": true,
       "known_quirks": [
         "Merge queue = Merge Trains; requires pipelines for merge-request events",
         "CODEOWNERS requires Premium+ tier",
@@ -66,10 +117,33 @@
       "codeowners_flavor": "default-reviewers-emulated",
       "release_asset_support": false,
       "markdown_flavor": "commonmark",
+      "signed_commit_verification": {
+        "supported": false,
+        "mechanisms": [],
+        "api_field": null
+      },
+      "protected_branch_api": {
+        "supported": true,
+        "endpoint": "/repositories/{workspace}/{repo_slug}/branch-restrictions",
+        "requires_admin": true
+      },
+      "default_branch_convention": "main",
+      "lfs_variant": "git-lfs",
+      "release_api_path": null,
+      "webhook_event_taxonomy": {
+        "pr_event": "pullrequest:created",
+        "push_event": "repo:push",
+        "ci_event": "repo:commit_status_updated"
+      },
+      "pat_scopes_required": ["repository", "repository:write", "pullrequest:write"],
+      "signed_tag_support": false,
+      "commit_status_api_shape": "statuses",
+      "supports_draft_protected_branch_override": false,
       "known_quirks": [
         "Webhooks UNSIGNED by default — mitigate via IP allowlist or shared secret",
         "No CODEOWNERS file support; uses repository-level default reviewers",
-        "REST 2.0 API differs significantly from Bitbucket Data Center"
+        "REST 2.0 API differs significantly from Bitbucket Data Center",
+        "Signed commit verification not surfaced via API [verify: 2026-04-20]"
       ],
       "support_level": "first-class"
     },
@@ -90,10 +164,33 @@
       "codeowners_flavor": "default-reviewers-emulated",
       "release_asset_support": false,
       "markdown_flavor": "commonmark",
+      "signed_commit_verification": {
+        "supported": false,
+        "mechanisms": [],
+        "api_field": null
+      },
+      "protected_branch_api": {
+        "supported": true,
+        "endpoint": "/rest/branch-permissions/2.0/projects/{projectKey}/repos/{repositorySlug}/restrictions",
+        "requires_admin": true
+      },
+      "default_branch_convention": "master",
+      "lfs_variant": "git-lfs",
+      "release_api_path": null,
+      "webhook_event_taxonomy": {
+        "pr_event": "pr:opened",
+        "push_event": "repo:refs_changed",
+        "ci_event": "repo:commit_status"
+      },
+      "pat_scopes_required": ["REPO_WRITE", "PROJECT_READ"],
+      "signed_tag_support": false,
+      "commit_status_api_shape": "statuses",
+      "supports_draft_protected_branch_override": false,
       "known_quirks": [
         "Ships JGit — large-repo performance slower than C git",
         "REST API path differs from Cloud (/rest/api/1.0 vs /2.0)",
-        "On-prem only; no SaaS deployment"
+        "On-prem only; no SaaS deployment",
+        "Signed commit verification not surfaced via API [verify: 2026-04-20]"
       ],
       "support_level": "first-class"
     },
@@ -114,10 +211,33 @@
       "codeowners_flavor": "none",
       "release_asset_support": true,
       "markdown_flavor": "commonmark",
+      "signed_commit_verification": {
+        "supported": false,
+        "mechanisms": [],
+        "api_field": null
+      },
+      "protected_branch_api": {
+        "supported": true,
+        "endpoint": "/_apis/policy/configurations",
+        "requires_admin": true
+      },
+      "default_branch_convention": "main",
+      "lfs_variant": "git-lfs",
+      "release_api_path": "/_apis/release/releases",
+      "webhook_event_taxonomy": {
+        "pr_event": "git.pullrequest.created",
+        "push_event": "git.push",
+        "ci_event": "ms.vss-pipelines.run-state-changed-event"
+      },
+      "pat_scopes_required": ["vso.code_write", "vso.code_status", "vso.work_write"],
+      "signed_tag_support": false,
+      "commit_status_api_shape": "statuses",
+      "supports_draft_protected_branch_override": false,
       "known_quirks": [
         "Scoped by organization/project/repository — deeper path than other hosts",
         "VSTS-era REST endpoints; auth via PAT or Azure AD",
-        "Draft PRs first-class as of 2023"
+        "Draft PRs first-class as of 2023",
+        "Branch protection modeled as policy configurations, not a /protection resource"
       ],
       "support_level": "best-effort"
     },
@@ -138,8 +258,31 @@
       "codeowners_flavor": "none",
       "release_asset_support": true,
       "markdown_flavor": "gfm",
+      "signed_commit_verification": {
+        "supported": true,
+        "mechanisms": ["gpg", "ssh"],
+        "api_field": "verification.verified"
+      },
+      "protected_branch_api": {
+        "supported": true,
+        "endpoint": "/repos/{owner}/{repo}/branch_protections",
+        "requires_admin": true
+      },
+      "default_branch_convention": "main",
+      "lfs_variant": "git-lfs",
+      "release_api_path": "/repos/{owner}/{repo}/releases",
+      "webhook_event_taxonomy": {
+        "pr_event": "pull_request",
+        "push_event": "push",
+        "ci_event": "commit_status"
+      },
+      "pat_scopes_required": ["write:repository", "read:organization"],
+      "signed_tag_support": true,
+      "commit_status_api_shape": "statuses",
+      "supports_draft_protected_branch_override": false,
       "known_quirks": [
-        "API shape is GitHub-compatible subset — many GH adapters work with minor tweaks"
+        "API shape is GitHub-compatible subset — many GH adapters work with minor tweaks",
+        "Sigstore mechanism not supported [verify: 2026-04-20]"
       ],
       "support_level": "best-effort"
     },
@@ -160,9 +303,32 @@
       "codeowners_flavor": "none",
       "release_asset_support": true,
       "markdown_flavor": "gfm",
+      "signed_commit_verification": {
+        "supported": true,
+        "mechanisms": ["gpg", "ssh"],
+        "api_field": "verification.verified"
+      },
+      "protected_branch_api": {
+        "supported": true,
+        "endpoint": "/repos/{owner}/{repo}/branch_protections",
+        "requires_admin": true
+      },
+      "default_branch_convention": "main",
+      "lfs_variant": "git-lfs",
+      "release_api_path": "/repos/{owner}/{repo}/releases",
+      "webhook_event_taxonomy": {
+        "pr_event": "pull_request",
+        "push_event": "push",
+        "ci_event": "commit_status"
+      },
+      "pat_scopes_required": ["write:repository", "read:organization"],
+      "signed_tag_support": true,
+      "commit_status_api_shape": "statuses",
+      "supports_draft_protected_branch_override": false,
       "known_quirks": [
         "Soft-fork of Gitea — API shape substantially identical; Weaver's Gitea adapter works",
-        "ActivityPub federation experimental; not yet in Weaver scope"
+        "ActivityPub federation experimental; not yet in Weaver scope",
+        "Sigstore mechanism not supported [verify: 2026-04-20]"
       ],
       "support_level": "best-effort",
       "adapter_shares_with": "gitea"
@@ -184,8 +350,31 @@
       "codeowners_flavor": "none",
       "release_asset_support": true,
       "markdown_flavor": "gfm",
+      "signed_commit_verification": {
+        "supported": true,
+        "mechanisms": ["gpg", "ssh"],
+        "api_field": "verification.verified"
+      },
+      "protected_branch_api": {
+        "supported": true,
+        "endpoint": "/repos/{owner}/{repo}/branch_protections",
+        "requires_admin": true
+      },
+      "default_branch_convention": "main",
+      "lfs_variant": "git-lfs",
+      "release_api_path": "/repos/{owner}/{repo}/releases",
+      "webhook_event_taxonomy": {
+        "pr_event": "pull_request",
+        "push_event": "push",
+        "ci_event": "commit_status"
+      },
+      "pat_scopes_required": ["write:repository", "read:organization"],
+      "signed_tag_support": true,
+      "commit_status_api_shape": "statuses",
+      "supports_draft_protected_branch_override": false,
       "known_quirks": [
-        "Hosted on Forgejo — API identical to Forgejo / Gitea-compatible subset"
+        "Hosted on Forgejo — API identical to Forgejo / Gitea-compatible subset",
+        "Sigstore mechanism not supported [verify: 2026-04-20]"
       ],
       "support_level": "best-effort",
       "adapter_shares_with": "gitea"
@@ -207,10 +396,34 @@
       "codeowners_flavor": "none",
       "release_asset_support": false,
       "markdown_flavor": "commonmark",
+      "signed_commit_verification": {
+        "supported": false,
+        "mechanisms": [],
+        "api_field": null
+      },
+      "protected_branch_api": {
+        "supported": true,
+        "endpoint": "IAM policy (codecommit:GitPush on resource ARN)",
+        "requires_admin": true
+      },
+      "default_branch_convention": "main",
+      "lfs_variant": "none",
+      "release_api_path": null,
+      "webhook_event_taxonomy": {
+        "pr_event": "CodeCommit Pull Request State Change",
+        "push_event": "CodeCommit Repository State Change",
+        "ci_event": null
+      },
+      "pat_scopes_required": ["codecommit:GitPull", "codecommit:GitPush", "codecommit:CreatePullRequest"],
+      "signed_tag_support": false,
+      "commit_status_api_shape": "none",
+      "supports_draft_protected_branch_override": false,
       "known_quirks": [
         "SigV4-authenticated HTTPS or SSH-with-IAM — no basic auth",
         "No native PR review UI; PR API exists but UX is Console or third-party",
-        "Strategic decline in AWS roadmap [verify: Q1 2026]"
+        "Strategic decline in AWS roadmap [verify: Q1 2026]",
+        "Webhooks routed through EventBridge rather than repo-level subscriptions",
+        "No native Git LFS server — attachments via S3 [verify: 2026-04-20]"
       ],
       "support_level": "read-only"
     },
@@ -231,11 +444,34 @@
       "codeowners_flavor": "none",
       "release_asset_support": false,
       "markdown_flavor": "commonmark",
+      "signed_commit_verification": {
+        "supported": true,
+        "mechanisms": ["gpg", "ssh"],
+        "api_field": null
+      },
+      "protected_branch_api": {
+        "supported": false,
+        "endpoint": null,
+        "requires_admin": false
+      },
+      "default_branch_convention": "master",
+      "lfs_variant": "git-annex",
+      "release_api_path": null,
+      "webhook_event_taxonomy": {
+        "pr_event": "email",
+        "push_event": "repo:post-update",
+        "ci_event": null
+      },
+      "pat_scopes_required": ["meta.sr.ht/PROFILE:RO", "git.sr.ht/REPOSITORIES:RW"],
+      "signed_tag_support": true,
+      "commit_status_api_shape": "none",
+      "supports_draft_protected_branch_override": false,
       "known_quirks": [
         "PR workflow is email-based: git send-email to a mailing list, not POST /pulls",
         "No pull-request resource — Weaver generates git format-patch output and posts to the configured list address",
         "Review workflow is entirely in-mailing-list; Weaver cannot track review state except via mailing-list archive scraping",
-        "Weaver support downgraded to read-only — outgoing patches possible, PR lifecycle impossible"
+        "Weaver support downgraded to read-only — outgoing patches possible, PR lifecycle impossible",
+        "Signature verification performed by mailing-list consumer rather than a REST field [verify: 2026-04-20]"
       ],
       "support_level": "read-only"
     }
