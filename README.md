@@ -512,3 +512,13 @@ See [CITATION.cff](CITATION.cff) for additional formats (APA, MLA, EndNote).
 ## License
 
 MIT. See [LICENSE.txt](LICENSE.txt).
+
+---
+
+## Role in the ecosystem
+
+Weaver is the **git-workflow layer** — it coordinates branch / commit / PR / CI / merge across 10 git hosts and 10 CI systems. Upstream, it consumes signals from Flux (commits emerge from Flux-engineered sessions), Hornet (trust-gaming gate pattern reused in weaver-gate; W4 reviewer availability borrows Hornet's signal), and Mantis (findings surfaced on the PR body at `/weaver:pr` time). Downstream, the W2 boundary-segmentation events feed Nook's per-task cost attribution.
+
+Weaver does **not** trigger CI builds — that's Assembler's lane, and the boundary is explicit in [CLAUDE.md](CLAUDE.md) and enforced in every CONTRIBUTING review. Weaver **reads** CI; it does not start it. Weaver also does not engineer prompts (Flux), track tokens (Allay), score change trust (Hornet), review code correctness (Mantis), or scan security surfaces (Reaper).
+
+See [docs/ecosystem.md § Data Flow Between Plugins](docs/ecosystem.md#data-flow-between-plugins) for the full map.
