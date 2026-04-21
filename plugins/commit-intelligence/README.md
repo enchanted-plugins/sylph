@@ -26,6 +26,12 @@ Standalone: `/plugin install commit-intelligence@weaver`. Without `boundary-segm
 | Command | `/weaver commit` | Manual invocation |
 | Hook | PreToolUse(Bash) filter | Inspects `git commit` invocations |
 
+## Hook chain
+
+`commit-intelligence` registers a `PostToolUse(Edit|Write|MultiEdit)` hook (`hooks/post-tool-use/on-boundary.sh`) that tails `plugins/boundary-segmenter/state/boundary-events.jsonl` from its persisted byte offset in `state/listener-offset.json`. For each new `weaver.task.boundary.detected` line, it infers a Conventional-Commits type from the closed cluster's file paths and appends a `commit.drafted` record to `state/pending-drafts.jsonl`. The hook never calls an LLM — drafting happens when the developer invokes `/weaver:commit`, which reads pending drafts and hands them to the Sonnet commit-drafter agent.
+
+Architecture note: **independent listener (Option 1)** — each plugin owns its own offset; the hook is advisory-only (exits 0 regardless).
+
 ## Cross-plugin
 
 - **Consumes** `hornet.change.classified` for V1 compressed-diff when diff > 1500 tokens.

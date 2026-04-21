@@ -73,3 +73,26 @@ The root-path key `.` forces the whole repo regardless of the tree.
 When confidence drops below 0.5, W3 returns `unknown` rather than a
 low-confidence guess. That's by design — a wrong branch-naming convention
 is visible to every reviewer on every PR. Silence is better than noise.
+
+## Pending-actions inbox
+
+The `branch-workflow` PostToolUse hook doesn't create branches — it
+classifies the workflow when W2 closes a task boundary and appends a
+`branch.suggested` record to:
+
+```
+plugins/branch-workflow/state/pending-actions.jsonl
+```
+
+Each record carries `{ts, event:"branch.suggested", workflow, dominant_file,
+confidence, source_event, executed:false}`. The `/weaver:branch` command is
+the consumer — on next invocation it reads the inbox via
+`shared/scripts/pending_inbox.py read`, sorts by descending confidence,
+presents the top record as the default, and calls
+`pending_inbox.py mark <path> <record_ts> branch_name=<name>` to flip the
+record to `executed:true` once a branch has been created.
+
+This keeps the loop auto-detect-on / auto-execute-off: W3 always classifies
+on every observed boundary, but the branch is created only when the developer
+runs `/weaver:branch` (or accepts the default in the next turn). No silent
+branch switches — that would violate "silent by default, loud when risky."

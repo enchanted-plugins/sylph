@@ -433,10 +433,18 @@ def __main_cli():
     result = seg.step(event)
     _save_state(state_path, seg)
 
+    # Confidence is a monotonic inversion of the observed distance clamped to
+    # [0.0, 1.0]. Callers (the PostToolUse hook, the Opus escalation path)
+    # treat confidence < WEAVER_BOUNDARY_CONFIDENCE_THRESHOLD as a signal to
+    # route the decision to the boundary-detector agent rather than acting
+    # autonomously. Keep the raw `distance` field as well for back-compat.
+    confidence = max(0.0, min(1.0, 1.0 - result.distance))
+
     out: dict[str, Any] = {
         "boundary": result.boundary_fired,
         "uncertain": result.uncertain,
         "distance": round(result.distance, 4),
+        "confidence": round(confidence, 4),
         "active_cluster": result.active_cluster.to_json(),
     }
     if result.closed_cluster:
