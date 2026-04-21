@@ -6,13 +6,30 @@ from typing import Any
 
 from . import Check, CIAdapter, NotImplementedCIOp
 from ._http import resolve_token, get_json, CIHttpError
+from registry_loader import get_ci_system
+
+
+# CircleCI's host for REST is circleci.com/api/v2. The ci-registry entry
+# records the status_api_path but not the host base (CircleCI is SaaS-
+# only for Weaver's purposes). We keep the host base here as a module-
+# level constant derived from the registry entry when available, but the
+# registry does not expose it directly — CircleCI's registry `status_api_path`
+# is a path template, not a full URL. Keep the default here with a
+# registry-aware comment so future schema additions (registry `api_base`
+# key) are honored automatically.
+_CIRCLECI_DEFAULT_BASE = "https://circleci.com/api/v2"
 
 
 class CircleCIAdapter(CIAdapter):
     system_id = "circleci"
 
-    def __init__(self, token: str | None = None, api_base: str = "https://circleci.com/api/v2"):
-        self.api_base = api_base.rstrip("/")
+    def __init__(self, token: str | None = None, api_base: str | None = None):
+        self.registry = get_ci_system("circleci")
+        # Prefer an api_base in the registry if one has been added;
+        # otherwise fall back to the documented default base. (The
+        # registry tracks path, auth_modes, rate limits today.)
+        reg_base = self.registry.get("api_base") or _CIRCLECI_DEFAULT_BASE
+        self.api_base = (api_base or reg_base).rstrip("/")
         self._token_explicit = token
         self._token_cached: str | None = None
         self._token_probed = False

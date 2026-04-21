@@ -43,6 +43,7 @@ from pathlib import Path
 from typing import Any
 
 from . import HostAdapter, NotImplementedHostOp, PullRequest
+from registry_loader import get_host
 
 
 class SourceHutAdapter(HostAdapter):
@@ -57,6 +58,11 @@ class SourceHutAdapter(HostAdapter):
         smtp_user: str | None = None,
         smtp_password: str | None = None,
     ):
+        # SourceHut has no PR REST endpoint; adapter composes patches
+        # against a mailing list. We snapshot the registry entry so
+        # callers can inspect merge_strategies / support_level / etc.
+        # without a second registry lookup.
+        self.registry = get_host("sourcehut")
         self._list_explicit = list_address
         self._sender = sender or self._git_config("user.email") or "weaver@localhost"
         self._smtp_host = smtp_host or os.environ.get("SOURCEHUT_SMTP_HOST")

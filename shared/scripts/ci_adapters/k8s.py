@@ -21,6 +21,7 @@ import subprocess
 from typing import Any
 
 from . import Check, CIAdapter, NotImplementedCIOp
+from registry_loader import get_ci_system
 
 
 def _kubectl_available() -> bool:
@@ -82,6 +83,10 @@ class _K8sBase(CIAdapter):
 class TektonAdapter(_K8sBase):
     system_id = "tekton"
 
+    def __init__(self, namespace: str | None = None, kubecontext: str | None = None):
+        super().__init__(namespace=namespace, kubecontext=kubecontext)
+        self.registry = get_ci_system("tekton")
+
     def latest_status(self, repo: str, ref: str) -> list[Check]:
         """Tekton has no built-in repo/ref filter on PipelineRuns; operators
         typically label them with the git ref. We list PipelineRuns in the
@@ -130,6 +135,7 @@ class ArgoCDAdapter(_K8sBase):
 
     def __init__(self, namespace: str | None = None, **kw):
         super().__init__(namespace=namespace or "argocd", **kw)
+        self.registry = get_ci_system("argocd")
 
     def latest_status(self, repo: str, ref: str) -> list[Check]:
         if not self.is_available():
@@ -174,6 +180,7 @@ class FluxCDAdapter(_K8sBase):
 
     def __init__(self, namespace: str | None = None, **kw):
         super().__init__(namespace=namespace or "flux-system", **kw)
+        self.registry = get_ci_system("fluxcd")
 
     def latest_status(self, repo: str, ref: str) -> list[Check]:
         if not self.is_available():

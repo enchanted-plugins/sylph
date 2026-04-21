@@ -15,6 +15,7 @@ import subprocess
 from typing import Any
 
 from . import Check, CIAdapter, NotImplementedCIOp
+from registry_loader import get_ci_system
 
 
 class GitHubActionsAdapter(CIAdapter):
@@ -22,6 +23,14 @@ class GitHubActionsAdapter(CIAdapter):
 
     def __init__(self, gh_bin: str = "gh"):
         self.gh = gh_bin
+        # Snapshot the CI registry entry. The `gh` CLI provides the real
+        # transport here; status_api_path + rerun_api live in the registry
+        # as the canonical contract for REST callers that sidestep gh.
+        # NOTE: the capability-memory registry keys with dashes
+        # ("github-actions"), while ci-registry.json uses underscores
+        # ("github_actions"). We key CI by the underscore form per the
+        # ci-registry schema.
+        self.registry = get_ci_system("github_actions")
 
     def is_available(self) -> bool:
         if shutil.which(self.gh) is None:
@@ -96,7 +105,7 @@ class GitHubActionsAdapter(CIAdapter):
 
     def rerun(self, check_id: str) -> bool:
         """Rerun a workflow run. Weaver only re-runs existing runs; it never
-        triggers a fresh run (that's Assembler's ownership)."""
+        triggers a fresh run from scratch."""
         if not self.is_available():
             raise NotImplementedCIOp(self.system_id, "rerun: gh not available")
 

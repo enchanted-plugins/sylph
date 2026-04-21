@@ -19,12 +19,16 @@ from typing import Any
 
 from . import HostAdapter, NotImplementedHostOp, PullRequest
 from ._rest import api_request, resolve_token, RestError
+from registry_loader import get_host
 
 
 class GiteaAdapter(HostAdapter):
     host_id = "gitea"
     _env_vars = ["GITEA_TOKEN"]
     _default_host = "gitea.example.com"  # No SaaS — callers must set credential_host
+    # Which capability-registry entry to consult for defaults. Subclasses
+    # override (forgejo, codeberg).
+    _registry_id = "gitea"
 
     def __init__(
         self,
@@ -32,7 +36,14 @@ class GiteaAdapter(HostAdapter):
         api_base: str | None = None,
         credential_host: str | None = None,
     ):
-        self.api_base = (api_base or "").rstrip("/") or None
+        # Registry may carry a placeholder base for self-hosted hosts
+        # (gitea/forgejo) or a real SaaS URL (codeberg).
+        reg = get_host(self._registry_id)
+        reg_base = reg.get("api_base") or ""
+        if reg_base and "<" in reg_base:
+            # Placeholder like https://<host>/api/v1 — don't use.
+            reg_base = ""
+        self.api_base = (api_base or reg_base).rstrip("/") or None
         self.credential_host = credential_host or self._default_host
         self._token_explicit = token
         self._token_cached: str | None = None
@@ -195,15 +206,20 @@ class GiteaAdapter(HostAdapter):
 class ForgejoAdapter(GiteaAdapter):
     host_id = "forgejo"
     _env_vars = ["FORGEJO_TOKEN", "GITEA_TOKEN"]
+    _registry_id = "forgejo"
 
 
 class CodebergAdapter(ForgejoAdapter):
     host_id = "codeberg"
     _default_host = "codeberg.org"
+    _registry_id = "codeberg"
 
     def __init__(self, token=None, api_base=None, credential_host=None):
+        # Codeberg's registry entry is a real SaaS base (not a placeholder),
+        # so GiteaAdapter.__init__ picks it up without override. The only
+        # thing special here is the credential_host default.
         super().__init__(
             token=token,
-            api_base=api_base or "https://codeberg.org/api/v1",
+            api_base=api_base,
             credential_host=credential_host or "codeberg.org",
         )

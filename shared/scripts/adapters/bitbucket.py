@@ -26,6 +26,12 @@ from typing import Any
 
 from . import HostAdapter, NotImplementedHostOp, PullRequest
 from ._rest import api_request, resolve_token, RestError
+from registry_loader import get_host
+
+
+def _credential_host_from(api_base: str, fallback: str) -> str:
+    """Derive the git-credential host from a registry api_base URL."""
+    return urllib.parse.urlparse(api_base).hostname or fallback
 
 
 # ──────────────────────────────────────────────────────────────────────
@@ -39,11 +45,15 @@ class BitbucketCloudAdapter(HostAdapter):
     def __init__(
         self,
         token: str | None = None,
-        api_base: str = "https://api.bitbucket.org/2.0",
-        credential_host: str = "bitbucket.org",
+        api_base: str | None = None,
+        credential_host: str | None = None,
     ):
-        self.api_base = api_base.rstrip("/")
-        self.credential_host = credential_host
+        reg = get_host("bitbucket-cloud")
+        self.api_base = (api_base or reg["api_base"]).rstrip("/")
+        # bitbucket.org is the canonical credential host for SaaS Bitbucket.
+        self.credential_host = credential_host or _credential_host_from(
+            self.api_base, "bitbucket.org"
+        )
         self._token_explicit = token
         self._token_cached: str | None = None
         self._token_probed = False
@@ -199,8 +209,19 @@ class BitbucketDataCenterAdapter(HostAdapter):
         api_base: str | None = None,
         credential_host: str | None = None,
     ):
-        # DC is always self-hosted — no default.
-        self.api_base = (api_base or "").rstrip("/")
+        # DC is always self-hosted — the registry carries a placeholder
+        # api_base (`https://<self-hosted>/...`) so we consult the registry
+        # only to surface documented defaults; callers must supply a real
+        # base via env/kwarg. If the registry placeholder leaks through,
+        # downstream code already treats an empty/placeholder base as
+        # unconfigured via is_authenticated.
+        reg = get_host("bitbucket-dc")
+        reg_base = reg.get("api_base", "")
+        # Treat the "<...>" placeholder as empty; real bases come from
+        # caller or env.
+        if reg_base and "<" in reg_base:
+            reg_base = ""
+        self.api_base = (api_base or reg_base).rstrip("/")
         self.credential_host = credential_host or ""
         self._token_explicit = token
         self._token_cached: str | None = None

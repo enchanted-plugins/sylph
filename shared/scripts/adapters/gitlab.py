@@ -20,6 +20,13 @@ from typing import Any
 
 from . import HostAdapter, NotImplementedHostOp, PullRequest
 from ._rest import api_request, resolve_token, RestError
+from registry_loader import get_host
+
+
+def _credential_host_from(api_base: str) -> str:
+    """Extract the hostname from a registry api_base. `gitlab.com/api/v4` →
+    `gitlab.com`. Falls back to the original string if unparseable."""
+    return urllib.parse.urlparse(api_base).hostname or "gitlab.com"
 
 
 class GitLabAdapter(HostAdapter):
@@ -28,11 +35,12 @@ class GitLabAdapter(HostAdapter):
     def __init__(
         self,
         token: str | None = None,
-        api_base: str = "https://gitlab.com/api/v4",
-        credential_host: str = "gitlab.com",
+        api_base: str | None = None,
+        credential_host: str | None = None,
     ):
-        self.api_base = api_base.rstrip("/")
-        self.credential_host = credential_host
+        reg = get_host("gitlab")
+        self.api_base = (api_base or reg["api_base"]).rstrip("/")
+        self.credential_host = credential_host or _credential_host_from(self.api_base)
         self._token_explicit = token
         self._token_cached: str | None = None
         self._token_probed = False

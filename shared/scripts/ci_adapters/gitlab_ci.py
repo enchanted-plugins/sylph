@@ -7,6 +7,11 @@ from typing import Any
 
 from . import Check, CIAdapter, NotImplementedCIOp
 from ._http import resolve_token, get_json, CIHttpError
+from registry_loader import get_ci_system, get_host
+
+
+def _credential_host_from(api_base: str, fallback: str) -> str:
+    return urllib.parse.urlparse(api_base).hostname or fallback
 
 
 class GitLabCIAdapter(CIAdapter):
@@ -15,11 +20,19 @@ class GitLabCIAdapter(CIAdapter):
     def __init__(
         self,
         token: str | None = None,
-        api_base: str = "https://gitlab.com/api/v4",
-        credential_host: str = "gitlab.com",
+        api_base: str | None = None,
+        credential_host: str | None = None,
     ):
-        self.api_base = api_base.rstrip("/")
-        self.credential_host = credential_host
+        # ci-registry.json carries status_api_path / rerun_api / rate limits,
+        # but the base URL proper lives on the host registry (gitlab).
+        # The two are kept in sync by design — ci-registry.json's
+        # source_of_truth header points at the host adapter.
+        self.ci_registry = get_ci_system("gitlab_ci")
+        host_reg = get_host("gitlab")
+        self.api_base = (api_base or host_reg["api_base"]).rstrip("/")
+        self.credential_host = credential_host or _credential_host_from(
+            self.api_base, "gitlab.com"
+        )
         self._token_explicit = token
         self._token_cached: str | None = None
         self._token_probed = False

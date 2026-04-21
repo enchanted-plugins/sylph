@@ -4,10 +4,8 @@ Weaver CI-adapter package.
 Read-only status + log-stream + rerun across GitHub Actions, GitLab CI,
 CircleCI, Jenkins, Buildkite, Drone/Woodpecker, Tekton, ArgoCD/FluxCD.
 
-Weaver reads; Assembler (Phase 3) runs. The event-bus boundary is:
+Weaver reads CI; it never triggers builds. The event-bus surface is:
   - Weaver publishes `weaver.ci.status.observed`
-  - Weaver publishes `weaver.ci.trigger.requested` (Assembler picks up)
-  - Weaver subscribes to `assembler.pipeline.status.changed`
 
 Each adapter implements CIAdapter; unimplemented systems raise
 NotImplementedCIOp. GitHub Actions is fully implemented; 7 others stub.
@@ -79,8 +77,8 @@ class CIAdapter(ABC):
     @abstractmethod
     def rerun(self, check_id: str) -> bool:
         """Re-trigger a check. Returns True on success. May raise
-        NotImplementedCIOp (Weaver doesn't trigger new runs from scratch —
-        Assembler owns that)."""
+        NotImplementedCIOp (Weaver re-runs existing runs only; fresh
+        builds are out of scope)."""
 
 
 def detect_system(repo_root) -> list[str]:

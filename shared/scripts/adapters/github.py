@@ -27,9 +27,16 @@ import urllib.request
 from typing import Any
 
 from . import HostAdapter, NotImplementedHostOp, PullRequest
+from registry_loader import get_host
 
 
-API_BASE = "https://api.github.com"
+# Pulled from the capability registry (plugins/capability-memory/state/
+# capability-registry.json). Looked up lazily via a module-level property-
+# style function so tests that mutate the registry see fresh values.
+def _registry() -> dict[str, Any]:
+    return get_host("github")
+
+
 USER_AGENT = "weaver/0.1.0"
 
 
@@ -79,8 +86,16 @@ def resolve_token() -> str | None:
 class GitHubAdapter(HostAdapter):
     host_id = "github"
 
-    def __init__(self, gh_bin: str = "gh", token: str | None = None):
+    def __init__(
+        self,
+        gh_bin: str = "gh",
+        token: str | None = None,
+        api_base: str | None = None,
+    ):
         self.gh = gh_bin
+        # api_base from the registry (lookup at construction time so tests
+        # mutating the registry pick up the change), overridable via kwarg.
+        self.api_base = (api_base or _registry()["api_base"]).rstrip("/")
         # Explicit token wins; else resolved lazily on first use.
         self._token_explicit = token
         self._token_cached: str | None = None
@@ -127,7 +142,7 @@ class GitHubAdapter(HostAdapter):
     ) -> dict[str, Any] | list[Any]:
         """Call the GitHub REST API with the resolved token.
 
-        path is appended to API_BASE (e.g. '/repos/owner/name/pulls').
+        path is appended to self.api_base (e.g. '/repos/owner/name/pulls').
         Returns parsed JSON (dict or list). Raises urllib.error.HTTPError
         on 4xx/5xx — callers map to NotImplementedHostOp / RuntimeError.
         """
@@ -135,7 +150,7 @@ class GitHubAdapter(HostAdapter):
         if not tok:
             raise NotImplementedHostOp(self.host_id, f"{method} {path}: no token (set GH_TOKEN or configure git credential-manager)")
 
-        url = API_BASE + path
+        url = self.api_base + path
         headers = {
             "Authorization": f"Bearer {tok}",
             "Accept": "application/vnd.github+json",

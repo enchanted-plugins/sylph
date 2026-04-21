@@ -22,9 +22,21 @@ from typing import Any
 
 from . import HostAdapter, NotImplementedHostOp, PullRequest
 from ._rest import api_request, resolve_token, RestError
+from registry_loader import get_host
 
 
 API_VERSION = "7.1-preview.1"
+
+
+def _azure_root(registry_base: str) -> str:
+    """The registry records the full templated path
+    (`https://dev.azure.com/{organization}/{project}/_apis/git`); the adapter
+    builds per-PR URLs from the host root. Strip everything after the
+    hostname."""
+    p = urllib.parse.urlparse(registry_base)
+    if p.scheme and p.hostname:
+        return f"{p.scheme}://{p.hostname}"
+    return registry_base
 
 
 class AzureDevOpsAdapter(HostAdapter):
@@ -33,11 +45,14 @@ class AzureDevOpsAdapter(HostAdapter):
     def __init__(
         self,
         token: str | None = None,
-        api_base: str = "https://dev.azure.com",
-        credential_host: str = "dev.azure.com",
+        api_base: str | None = None,
+        credential_host: str | None = None,
     ):
-        self.api_base = api_base.rstrip("/")
-        self.credential_host = credential_host
+        reg = get_host("azure-devops")
+        self.api_base = (api_base or _azure_root(reg["api_base"])).rstrip("/")
+        self.credential_host = credential_host or (
+            urllib.parse.urlparse(self.api_base).hostname or "dev.azure.com"
+        )
         self._token_explicit = token
         self._token_cached: str | None = None
         self._token_probed = False

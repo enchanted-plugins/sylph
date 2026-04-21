@@ -7,13 +7,22 @@ from typing import Any
 
 from . import Check, CIAdapter, NotImplementedCIOp
 from ._http import resolve_token, get_json, CIHttpError
+from registry_loader import get_ci_system
+
+
+# Like CircleCI, ci-registry carries the path template (not the base);
+# we hold the documented Buildkite SaaS base here, sourced from the
+# registry when that field is added to the schema.
+_BUILDKITE_DEFAULT_BASE = "https://api.buildkite.com/v2"
 
 
 class BuildkiteAdapter(CIAdapter):
     system_id = "buildkite"
 
-    def __init__(self, token: str | None = None, api_base: str = "https://api.buildkite.com/v2"):
-        self.api_base = api_base.rstrip("/")
+    def __init__(self, token: str | None = None, api_base: str | None = None):
+        self.registry = get_ci_system("buildkite")
+        reg_base = self.registry.get("api_base") or _BUILDKITE_DEFAULT_BASE
+        self.api_base = (api_base or reg_base).rstrip("/")
         self._token_explicit = token
         self._token_cached: str | None = None
         self._token_probed = False

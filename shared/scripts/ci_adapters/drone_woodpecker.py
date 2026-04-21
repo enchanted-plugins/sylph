@@ -14,13 +14,18 @@ from typing import Any
 
 from . import Check, CIAdapter, NotImplementedCIOp
 from ._http import resolve_token, get_json, CIHttpError
+from registry_loader import get_ci_system
 
 
 class _DroneFamilyBase(CIAdapter):
     env_vars = ["DRONE_TOKEN", "WOODPECKER_TOKEN"]
     credential_host_env = "DRONE_SERVER"
+    _registry_id = "drone"
 
     def __init__(self, token: str | None = None, api_base: str | None = None):
+        # Both Drone and Woodpecker are self-hosted. Registry carries
+        # auth modes + endpoint paths but no base URL (no SaaS).
+        self.registry = get_ci_system(self._registry_id)
         self.api_base = (api_base or os.environ.get("DRONE_SERVER") or "").rstrip("/")
         self._token_explicit = token
         self._token_cached: str | None = None
@@ -100,12 +105,14 @@ class _DroneFamilyBase(CIAdapter):
 
 class DroneAdapter(_DroneFamilyBase):
     system_id = "drone"
+    _registry_id = "drone"
 
 
 class WoodpeckerAdapter(_DroneFamilyBase):
     system_id = "woodpecker"
     env_vars = ["WOODPECKER_TOKEN", "DRONE_TOKEN"]
     credential_host_env = "WOODPECKER_SERVER"
+    _registry_id = "woodpecker"
 
     def __init__(self, token: str | None = None, api_base: str | None = None):
         super().__init__(

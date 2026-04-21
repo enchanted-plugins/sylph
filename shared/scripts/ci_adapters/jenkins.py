@@ -7,6 +7,7 @@ from typing import Any
 
 from . import Check, CIAdapter, NotImplementedCIOp
 from ._http import resolve_token, get_json, CIHttpError
+from registry_loader import get_ci_system
 
 
 class JenkinsAdapter(CIAdapter):
@@ -20,6 +21,10 @@ class JenkinsAdapter(CIAdapter):
         credential_host: str | None = None,
     ):
         import os
+        # Jenkins is always self-hosted — ci-registry carries path + auth
+        # modes but no base URL (there's no SaaS). JENKINS_URL env remains
+        # the runtime source of truth; registry supplies the contract.
+        self.registry = get_ci_system("jenkins")
         self.api_base = (api_base or os.environ.get("JENKINS_URL") or "").rstrip("/")
         self.username = username or os.environ.get("JENKINS_USER")
         self.credential_host = credential_host

@@ -23,6 +23,7 @@ import subprocess
 from typing import Any
 
 from . import HostAdapter, NotImplementedHostOp, PullRequest
+from registry_loader import get_host
 
 
 class CodeCommitAdapter(HostAdapter):
@@ -31,6 +32,12 @@ class CodeCommitAdapter(HostAdapter):
     def __init__(self, aws_bin: str = "aws", region: str | None = None):
         self.aws = aws_bin
         self.region = region  # optional; aws CLI picks default from config
+        # CodeCommit's api_base is templated per-region in the capability
+        # registry and reached via the AWS CLI, not a direct HTTP client.
+        # We still snapshot the registry entry so downstream callers
+        # (e.g., pr-lifecycle surfacing support-level strings) can read
+        # consistent capability data via adapter.registry.
+        self.registry = get_host("codecommit")
 
     def _aws_available(self) -> bool:
         return shutil.which(self.aws) is not None
