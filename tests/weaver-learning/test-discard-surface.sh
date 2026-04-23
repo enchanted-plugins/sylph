@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Test: /weaver:discard surface + pending_inbox.py discard CLI.
+# Test: /sylph:discard surface + pending_inbox.py discard CLI.
 #
 # Coverage:
 #   1. mark_discarded on middle record: file still has N lines, exactly one

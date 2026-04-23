@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Weaver shared metrics — JSONL append with atomic mkdir locks + 10MB rotation
+# Sylph shared metrics — JSONL append with atomic mkdir locks + 10MB rotation
 
 # Source constants if not already loaded
-if [[ -z "${WEAVER_LOCK_SUFFIX:-}" ]]; then
+if [[ -z "${SYLPH_LOCK_SUFFIX:-}" ]]; then
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   # shellcheck source=constants.sh
   source "${SCRIPT_DIR}/constants.sh"
@@ -26,8 +26,8 @@ release_lock() {
 log_metric() {
   local file="${1:-state/metrics.jsonl}"
   local payload="$2"
-  local lock_dir="${file}${WEAVER_LOCK_SUFFIX}"
-  local max_size="${WEAVER_MAX_METRICS_BYTES:-10485760}"
+  local lock_dir="${file}${SYLPH_LOCK_SUFFIX}"
+  local max_size="${SYLPH_MAX_METRICS_BYTES:-10485760}"
 
   # Validate JSON before writing
   if ! printf "%s" "$payload" | jq empty >/dev/null 2>&1; then

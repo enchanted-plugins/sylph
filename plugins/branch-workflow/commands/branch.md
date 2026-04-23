@@ -1,10 +1,10 @@
 ---
-name: weaver:branch
+name: sylph:branch
 description: Create or switch to a new branch for the current task boundary, named per the detected workflow (GitHub Flow uses type/slug, Trunk-Based uses user/slug, etc.). Prefers a suggestion from the pending-actions inbox when the hook listener has queued one; otherwise reads the active W2 cluster to slug the branch.
 allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/workflow_detect.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/workflow_detect.py *), Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pending_inbox.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pending_inbox.py *), Bash(git branch *), Bash(git checkout *), Bash(git status *), Read(plugins/boundary-segmenter/state/boundary-clusters.json), Read(plugins/branch-workflow/state/pending-actions.jsonl)
 ---
 
-# /weaver:branch
+# /sylph:branch
 
 Create and check out a branch named per the repo's detected workflow. When the
 `branch-workflow` hook listener has already queued a `branch.suggested` record
@@ -15,12 +15,12 @@ manual slug flow.
 ## Usage
 
 ```
-/weaver:branch                                # consume top pending suggestion, else infer from active W2 cluster
-/weaver:branch "add oauth pkce support"       # explicit slug (ignores pending inbox)
-/weaver:branch --type fix "null session token"  # override Conventional Commits type
-/weaver:branch --from-boundary <boundary-id>  # name based on a closed cluster
-/weaver:branch --no-pending                   # skip the inbox even when it has entries
-/weaver:branch --dry-run ...                  # show the chosen name, do not create
+/sylph:branch                                # consume top pending suggestion, else infer from active W2 cluster
+/sylph:branch "add oauth pkce support"       # explicit slug (ignores pending inbox)
+/sylph:branch --type fix "null session token"  # override Conventional Commits type
+/sylph:branch --from-boundary <boundary-id>  # name based on a closed cluster
+/sylph:branch --no-pending                   # skip the inbox even when it has entries
+/sylph:branch --dry-run ...                  # show the chosen name, do not create
 ```
 
 ## Flow
@@ -59,13 +59,13 @@ manual slug flow.
    `git checkout -b <name>`
 5. Mark the consumed record executed (if the branch came from the inbox):
    `shared/scripts/pending_inbox.py mark plugins/branch-workflow/state/pending-actions.jsonl <record_ts> branch_name=<name>`
-6. Publish `weaver.branch.created` to state/metrics.jsonl.
+6. Publish `sylph.branch.created` to state/metrics.jsonl.
 ```
 
 ## Guardrails
 
 - If the working tree is dirty when invoked on `main`/`master`/`trunk`,
-  refuse and suggest the user either commit with `/weaver:commit` or
+  refuse and suggest the user either commit with `/sylph:commit` or
   stash first. Creating a branch carries uncommitted work along, and
   that confuses the per-boundary cluster ownership story.
 - Never force-delete an existing branch. If the suggested name collides,

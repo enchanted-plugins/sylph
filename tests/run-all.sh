@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Weaver test runner — runs every test-*.sh under tests/<plugin>/, reports
+# Sylph test runner — runs every test-*.sh under tests/<plugin>/, reports
 # pass/fail per plugin + totals.
 #
 # Exit 0 iff every test passes. Nonzero with count otherwise.
@@ -37,7 +37,7 @@ $output")
 
 printf '\n'
 printf '══════════════════════════════════════════════════════════════\n'
-printf ' WEAVER TEST SUITE\n'
+printf ' SYLPH TEST SUITE\n'
 printf '══════════════════════════════════════════════════════════════\n'
 printf '\n'
 

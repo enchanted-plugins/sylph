@@ -2,10 +2,10 @@
 # commit-intelligence PostToolUse(Edit|Write|MultiEdit) — W1 listener.
 #
 # Tails plugins/boundary-segmenter/state/boundary-events.jsonl from this
-# plugin's persisted byte offset. For each new `weaver.task.boundary.detected`
+# plugin's persisted byte offset. For each new `sylph.task.boundary.detected`
 # event, derives a Conventional-Commits type hint from the closed cluster's
 # file paths + edit signatures, and appends a draft record to
-# state/pending-drafts.jsonl. The /weaver:commit skill (Sonnet drafter) picks
+# state/pending-drafts.jsonl. The /sylph:commit skill (Sonnet drafter) picks
 # up pending drafts on invocation.
 #
 # Advisory-only contract:
@@ -18,7 +18,7 @@
 set -euo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname "$(dirname "$(dirname "$0")")")}"
-PRODUCT_ROOT="${WEAVER_HOME:-$(dirname "$(dirname "$PLUGIN_ROOT")")}"
+PRODUCT_ROOT="${SYLPH_HOME:-$(dirname "$(dirname "$PLUGIN_ROOT")")}"
 SHARED="$PRODUCT_ROOT/shared/scripts"
 
 EVENTS="$PRODUCT_ROOT/plugins/boundary-segmenter/state/boundary-events.jsonl"
@@ -97,7 +97,7 @@ while IFS= read -r line; do
     if ! command -v jq >/dev/null 2>&1; then continue; fi
 
     event_name="$(printf '%s' "$line" | jq -r '.event // empty' 2>/dev/null)"
-    [[ "$event_name" != "weaver.task.boundary.detected" ]] && continue
+    [[ "$event_name" != "sylph.task.boundary.detected" ]] && continue
 
     files_json="$(printf '%s' "$line" | jq -c '[.closed_cluster.events[]?.files[]?] | unique' 2>/dev/null || printf '[]')"
     files_raw="$(printf '%s' "$line" | jq -r '[.closed_cluster.events[]?.files[]?] | unique | .[]' 2>/dev/null || true)"
@@ -155,7 +155,7 @@ fi
 set -e
 
 if (( new_count > 0 )); then
-    printf 'weaver[commit-intelligence]: %d boundary event(s) drafted → pending-drafts.jsonl\n' "$new_count" >&2
+    printf 'sylph[commit-intelligence]: %d boundary event(s) drafted → pending-drafts.jsonl\n' "$new_count" >&2
 fi
 
 exit 0

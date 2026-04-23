@@ -1,6 +1,6 @@
 ---
 name: pr-description-crafter
-description: Explains how Weaver composes PR descriptions — the 4-section template, the fallback ladder when Hornet V4 continuity or W2 cluster data is missing, and how to override the default template via PULL_REQUEST_TEMPLATE.md.
+description: Explains how Sylph composes PR descriptions — the 4-section template, the fallback ladder when Raven V4 continuity or W2 cluster data is missing, and how to override the default template via PULL_REQUEST_TEMPLATE.md.
 allowed-tools: Read
 ---
 
@@ -10,36 +10,36 @@ allowed-tools: Read
 
 ```
 ## What changed     — commit subjects, with short SHAs
-## Why              — session intent (Hornet V4) or inferred from commits
+## Why              — session intent (Raven V4) or inferred from commits
 ## How it was verified — observed test runs, or "inspection only"
 ## Rollback plan    — `git revert --no-commit <shas>` template
 ```
 
 ## Fallback ladder
 
-Weaver produces the best description it can from whatever signals are present:
+Sylph produces the best description it can from whatever signals are present:
 
-1. **Full signal** (Hornet V4 installed + W2 active + commits present)
+1. **Full signal** (Raven V4 installed + W2 active + commits present)
    → every section populated from distinct sources. Ideal state.
-2. **No Hornet V4** (most common today — Hornet is Phase-1 shipping)
+2. **No Raven V4** (most common today — Raven is Phase-1 shipping)
    → "Why" block notes the missing data and falls back to commit-subject
    synthesis.
 3. **No W2 cluster** (user hasn't adopted auto-orchestration)
    → Title uses the last commit's subject; body uses commit list only.
 4. **No commits** (rare — only if the branch has just been created)
-   → Refuse; `/weaver:pr` aborts with a hint to commit first.
+   → Refuse; `/sylph:pr` aborts with a hint to commit first.
 
 ## Overriding
 
-If the repo has a GitHub `.github/PULL_REQUEST_TEMPLATE.md`, Weaver honors
-it by **appending** the four Weaver sections below the template. Developers
-who want Weaver's sections to replace the template should delete the
-template file; developers who want Weaver to defer entirely can set:
+If the repo has a GitHub `.github/PULL_REQUEST_TEMPLATE.md`, Sylph honors
+it by **appending** the four Sylph sections below the template. Developers
+who want Sylph's sections to replace the template should delete the
+template file; developers who want Sylph to defer entirely can set:
 
 ```yaml
-# .weaver/config.yaml
+# .sylph/config.yaml
 pr_description:
-  mode: template-only    # "template-only" | "append" (default) | "weaver-only"
+  mode: template-only    # "template-only" | "append" (default) | "sylph-only"
 ```
 
 [Not yet implemented — roadmap.]
@@ -54,7 +54,7 @@ pr_description:
 ## Cost notes
 
 The pr-description-crafter agent is Opus-tier. Each PR open costs ~1 Opus
-call (typically 2k-6k input tokens, 500-1500 output). If Nook signals
-budget pressure via `nook.budget.threshold.crossed`, Weaver degrades to
+call (typically 2k-6k input tokens, 500-1500 output). If Pech signals
+budget pressure via `pech.budget.threshold.crossed`, Sylph degrades to
 Sonnet (produces a serviceable but terser description) and tags the PR
 body with a `*(budget-degraded)*` marker.

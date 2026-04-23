@@ -1,26 +1,26 @@
 ---
-name: weaver:learnings
-description: Show W5 Gauss Learning priors — what Weaver has learned about the developer's commit style, branch naming, reviewer overrides, and W2 boundary corrections. Surfaces the signals that drive per-developer adaptation.
-allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/gauss_learning.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/gauss_learning.py *), Read(plugins/weaver-learning/state/learnings.json), Read(plugins/weaver-learning/state/priors.json)
+name: sylph:learnings
+description: Show W5 Gauss Learning priors — what Sylph has learned about the developer's commit style, branch naming, reviewer overrides, and W2 boundary corrections. Surfaces the signals that drive per-developer adaptation.
+allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/gauss_learning.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/gauss_learning.py *), Read(plugins/sylph-learning/state/learnings.json), Read(plugins/sylph-learning/state/priors.json)
 ---
 
-# /weaver:learnings
+# /sylph:learnings
 
 Show what W5 has absorbed about your workflow patterns.
 
 ## Usage
 
 ```
-/weaver:learnings                    # print the priors summary
-/weaver:learnings --full             # print the raw learnings.json
-/weaver:learnings --reset            # wipe state (requires confirmation; destructive)
-/weaver:learnings --export path.json # copy priors to a shareable file
+/sylph:learnings                    # print the priors summary
+/sylph:learnings --full             # print the raw learnings.json
+/sylph:learnings --reset            # wipe state (requires confirmation; destructive)
+/sylph:learnings --export path.json # copy priors to a shareable file
 ```
 
 ## What it shows
 
 ```
-Weaver Learning — 47 samples observed, confident=True
+Sylph Learning — 47 samples observed, confident=True
 
 Commit style:
   Scope usage rate:         0.72   (most commits include a (scope))
@@ -62,10 +62,10 @@ Reviewer overrides:
 
 ## --reset semantics
 
-Wipes `plugins/weaver-learning/state/learnings.json`. Routed through
-weaver-gate as a destructive-op (reflog doesn't cover this). Useful when:
+Wipes `plugins/sylph-learning/state/learnings.json`. Routed through
+sylph-gate as a destructive-op (reflog doesn't cover this). Useful when:
 
-- You're shipping Weaver to a team machine and want fresh priors.
+- You're shipping Sylph to a team machine and want fresh priors.
 - The learning has drifted badly (rare but possible — bootstrap floor
   doesn't prevent poisoned samples).
 
@@ -74,7 +74,7 @@ from whatever `learnings.json` exists.
 
 ## Confidence flag
 
-Under the bootstrap floor (`WEAVER_GAUSS_BOOTSTRAP_MIN_SAMPLES`, default
+Under the bootstrap floor (`SYLPH_GAUSS_BOOTSTRAP_MIN_SAMPLES`, default
 10), priors are returned with `confident=False` and downstream engines
 ignore them — using `shared/constants.sh` defaults instead. The bar
 prevents sample-of-1 signals from dictating W1/W2/W3/W4 behavior.
@@ -84,4 +84,4 @@ prevents sample-of-1 signals from dictating W1/W2/W3/W4 behavior.
 | Code | Meaning |
 |------|---------|
 | 0 | Priors printed |
-| 1 | `learnings.json` missing (run a session with Weaver installed first) |
+| 1 | `learnings.json` missing (run a session with Sylph installed first) |

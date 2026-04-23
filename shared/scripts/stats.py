@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Weaver observability rollup — aggregates per-plugin metrics.jsonl feeds.
+"""Sylph observability rollup — aggregates per-plugin metrics.jsonl feeds.
 
-Every hook and script across Weaver appends JSONL records to its plugin's
+Every hook and script across Sylph appends JSONL records to its plugin's
 ``state/metrics.jsonl``. This script is the single reader surface that turns
-that raw event stream into a session/day/week rollup for ``/weaver:stats``.
+that raw event stream into a session/day/week rollup for ``/sylph:stats``.
 
 Contract:
     python stats.py [--period session|day|week|all] [--json] [--since YYYY-MM-DD]
 
 Stdlib only — no pandas, no rich. Missing files are treated as empty
-(no counts, not an error), so the tool works the moment Weaver is installed
+(no counts, not an error), so the tool works the moment Sylph is installed
 even before any hook has fired.
 """
 from __future__ import annotations
@@ -30,12 +30,12 @@ REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def _resolve_root(explicit: str | None) -> Path:
-    """Allow tests to pass WEAVER_REPO_ROOT env / --root override."""
+    """Allow tests to pass SYLPH_REPO_ROOT env / --root override."""
     import os
 
     if explicit:
         return Path(explicit).resolve()
-    env = os.environ.get("WEAVER_REPO_ROOT")
+    env = os.environ.get("SYLPH_REPO_ROOT")
     if env:
         return Path(env).resolve()
     return REPO_ROOT
@@ -161,7 +161,7 @@ def _count_pending(path: Path) -> int:
 # ── Gate decisions ─────────────────────────────────────────────────────
 
 def _categorise_gate(rec: dict[str, Any]) -> tuple[str, str]:
-    """Return (decision, category) from a weaver-gate audit record.
+    """Return (decision, category) from a sylph-gate audit record.
 
     Accepts a few field shapes gracefully: decision|outcome|action, and
     category|pattern|operation. Unknown → ("other", "unknown").
@@ -220,8 +220,8 @@ def build_rollup(root: Path, start: datetime, end: datetime) -> dict[str, Any]:
         if r.get("event") == "w1.boundary.observed"
     )
 
-    # Weaver-gate audit
-    gate_path = root / "plugins" / "weaver-gate" / "state" / "audit.jsonl"
+    # Sylph-gate audit
+    gate_path = root / "plugins" / "sylph-gate" / "state" / "audit.jsonl"
     gate_records = [r for r in _read_jsonl(gate_path) if _in_window(r, start, end)]
     gate_decisions: Counter[str] = Counter()
     gate_blocked_categories: Counter[str] = Counter()
@@ -251,7 +251,7 @@ def build_rollup(root: Path, start: datetime, end: datetime) -> dict[str, Any]:
             file_churn[str(p)] += 1
 
     # Learning state — pull sample_count + confident flag if present.
-    learnings_path = root / "plugins" / "weaver-learning" / "state" / "learnings.json"
+    learnings_path = root / "plugins" / "sylph-learning" / "state" / "learnings.json"
     learning_summary: dict[str, Any] = {}
     if learnings_path.is_file():
         try:
@@ -309,7 +309,7 @@ def _fmt_local(dt_iso: str) -> str:
 def render_human(rollup: dict[str, Any], period: str) -> str:
     window = rollup["window"]
     header = (
-        f"Weaver — {period} stats "
+        f"Sylph — {period} stats "
         f"({_fmt_local(window['start'])} → {_fmt_local(window['end'])})"
     )
     rule = "─" * max(len(header), 49)
@@ -388,8 +388,8 @@ def render_human(rollup: dict[str, Any], period: str) -> str:
 
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        prog="weaver-stats",
-        description="Rollup observability stats across every Weaver plugin.",
+        prog="sylph-stats",
+        description="Rollup observability stats across every Sylph plugin.",
     )
     p.add_argument(
         "--period",
@@ -409,7 +409,7 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument(
         "--root",
-        help="override repo root (testing). Falls back to WEAVER_REPO_ROOT env.",
+        help="override repo root (testing). Falls back to SYLPH_REPO_ROOT env.",
     )
     return p
 

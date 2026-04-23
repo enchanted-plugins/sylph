@@ -1,6 +1,6 @@
 ---
 name: destructive-gate-confirmation
-description: Surfaces the decision-gate to the user when a destructive git operation is detected, pausing the session for explicit confirmation before the command runs. Invoked by weaver-gate's PreToolUse hook when a Bash call is classified destructive or protected-destructive.
+description: Surfaces the decision-gate to the user when a destructive git operation is detected, pausing the session for explicit confirmation before the command runs. Invoked by sylph-gate's PreToolUse hook when a Bash call is classified destructive or protected-destructive.
 allowed-tools: Read, Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/destructive_patterns.py *)
 ---
 
@@ -50,7 +50,7 @@ For PROTECTED-DESTRUCTIVE:
   Op:       <git clean -fdx | force-push to protected branch>
   Reason:   <human explanation>
 
-This operation cannot be bypassed from within Weaver. If you genuinely
+This operation cannot be bypassed from within Sylph. If you genuinely
 intend to proceed, invoke git directly outside the session.
 
 Options:
@@ -61,13 +61,13 @@ Options:
 
 ## What to do when the user picks an option
 
-- **1 (proceed)**: emit an event `weaver.destructive.confirmed` and tell the user to re-run the original command with `--yes-i-know` appended. The hook has an escape hatch for that flag.
+- **1 (proceed)**: emit an event `sylph.destructive.confirmed` and tell the user to re-run the original command with `--yes-i-know` appended. The hook has an escape hatch for that flag.
 - **2 (swap)**: propose the concrete safer command as an edit. Example: `git push --force origin main` → `git push --force-with-lease origin main`. Let the user copy-paste or accept the proposal.
 - **3 (cancel)** or any protected-destructive: stop. Do not re-run.
 
 ## Audit trail
 
-The hook has already written a record to `plugins/weaver-gate/state/audit.jsonl`
+The hook has already written a record to `plugins/sylph-gate/state/audit.jsonl`
 with the blocked classification, command, recovery window, and timestamp. When
 the user confirms via option 1, append a second record with `{outcome:
 "confirmed", at: <ts>}` to the same file via `shared/scripts/atomic_json.py`'s
@@ -78,5 +78,5 @@ the user confirms via option 1, append a second record with `{outcome:
 - It does not run any git command itself. It proposes; the user disposes.
 - It does not invoke any LLM. Classification is already done by the Python
   rules module; the skill's job is the user-facing surface only.
-- It does not write to `audit.jsonl` in dry-run mode (the `weaver:dry-run`
+- It does not write to `audit.jsonl` in dry-run mode (the `sylph:dry-run`
   command path bypasses this skill).

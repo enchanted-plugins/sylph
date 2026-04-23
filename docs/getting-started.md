@@ -1,16 +1,16 @@
-# Getting started with Weaver
+# Getting started with Sylph
 
-Weaver is the git-workflow layer above git. It knows which host you're on (10 supported), which CI runs there (10 supported), classifies your workflow, gates destructive operations, suggests reviewers, and learns your preferences over time. This page gets you from zero to a first commit through Weaver in under 5 minutes.
+Sylph is the git-workflow layer above git. It knows which host you're on (10 supported), which CI runs there (10 supported), classifies your workflow, gates destructive operations, suggests reviewers, and learns your preferences over time. This page gets you from zero to a first commit through Sylph in under 5 minutes.
 
 ## 1. Install (60 seconds)
 
 ```
-/plugin marketplace add enchanted-plugins/weaver
-/plugin install full@weaver
+/plugin marketplace add enchanted-plugins/sylph
+/plugin install full@sylph
 /plugin list
 ```
 
-You should see eight Weaver sub-plugins including `capability-memory`, `weaver-gate`, `boundary-segmenter`, `branch-workflow`, `pr-lifecycle`, `commit-intelligence`, `ci-reader`, and `weaver-learning`. If any are missing, see [installation.md](installation.md).
+You should see eight Sylph sub-plugins including `capability-memory`, `sylph-gate`, `boundary-segmenter`, `branch-workflow`, `pr-lifecycle`, `commit-intelligence`, `ci-reader`, and `sylph-learning`. If any are missing, see [installation.md](installation.md).
 
 ## 2. One-time setup
 
@@ -61,7 +61,7 @@ Retry a flaky CI run:
 
 ## 6. The decision gate
 
-Destructive operations route through `weaver-gate`. A `git push --force`, a `git reset --hard`, a branch delete — all intercepted at PreToolUse. The gate is modeled on the Hornet pattern: advisory-first, honest about blast radius, never silently blocks. Decline, and the command is gone.
+Destructive operations route through `sylph-gate`. A `git push --force`, a `git reset --hard`, a branch delete — all intercepted at PreToolUse. The gate is modeled on the Raven pattern: advisory-first, honest about blast radius, never silently blocks. Decline, and the command is gone.
 
 Dry-run any staged operation:
 
@@ -75,7 +75,7 @@ Dry-run any staged operation:
 /learnings
 ```
 
-`weaver-learning` (W5 Gauss EMA) stores your per-developer preferences — commit-message style, review timing, revert patterns. It gets quieter as it learns what you already know.
+`sylph-learning` (W5 Gauss EMA) stores your per-developer preferences — commit-message style, review timing, revert patterns. It gets quieter as it learns what you already know.
 
 ## 8. Close the loop
 

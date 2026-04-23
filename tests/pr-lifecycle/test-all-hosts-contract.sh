@@ -20,7 +20,7 @@ sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 for v in ("GH_TOKEN","GITHUB_TOKEN","GITLAB_TOKEN","GL_TOKEN",
           "BITBUCKET_TOKEN","BB_TOKEN","BITBUCKET_DC_TOKEN",
           "AZURE_DEVOPS_TOKEN","AZURE_TOKEN","VSTS_TOKEN",
-          "GITEA_TOKEN","FORGEJO_TOKEN","WEAVER_SRHT_LIST"):
+          "GITEA_TOKEN","FORGEJO_TOKEN","SYLPH_SRHT_LIST"):
     os.environ.pop(v, None)
 
 from adapters import get_adapter, HostAdapter, NotImplementedHostOp, PullRequest

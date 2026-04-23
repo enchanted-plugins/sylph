@@ -1,10 +1,10 @@
 ---
-name: weaver:setup
+name: sylph:setup
 description: Detect the git host from the current project's `origin` remote, then install / configure only the credentials + tooling that host needs. One interactive pass per project. Covers all 10 supported hosts.
 allowed-tools: Bash(git remote get-url *), Bash(git config *), Bash(git credential *), Bash(git credential-manager *), Bash(gh *), Bash(glab *), Bash(aws *), Bash(kubectl *), Bash(winget *), Bash(brew *), Bash(apt *), Bash(apt-get *), Bash(dnf *), Bash(pacman *), Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/*), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/*), Read(.git/config)
 ---
 
-# /weaver:setup
+# /sylph:setup
 
 One-time per-project configuration. Detects which host you're using and
 does only the work that host needs.
@@ -12,10 +12,10 @@ does only the work that host needs.
 ## Usage
 
 ```
-/weaver:setup                   # detect + prompt + configure
-/weaver:setup --host github     # skip detection, pick manually
-/weaver:setup --dry-run         # show the planned setup without executing
-/weaver:setup --verify          # re-run the is_authenticated() probe on the current host
+/sylph:setup                   # detect + prompt + configure
+/sylph:setup --host github     # skip detection, pick manually
+/sylph:setup --dry-run         # show the planned setup without executing
+/sylph:setup --verify          # re-run the is_authenticated() probe on the current host
 ```
 
 ## Flow
@@ -37,7 +37,7 @@ does only the work that host needs.
 4. VERIFY
    ├─ Import the adapter via shared/scripts/adapters/
    ├─ Call adapter.is_authenticated()
-   ├─ If True: print "✓ Weaver can talk to <host> as <user>"
+   ├─ If True: print "✓ Sylph can talk to <host> as <user>"
    └─ If False: print the exact reason + the one command that fixes it
 ```
 
@@ -46,13 +46,13 @@ does only the work that host needs.
 ### github
 
 The cleanest path works without `gh` — git-credential-manager already
-stores the credential that authenticates `git push`. Weaver's urllib
+stores the credential that authenticates `git push`. Sylph's urllib
 adapter reads it via `git credential fill`.
 
 ```
 1. Check for token (in order):
    a. $GH_TOKEN / $GITHUB_TOKEN — skip setup, already authenticated.
-   b. `git credential fill` for github.com — skip setup, Weaver uses it.
+   b. `git credential fill` for github.com — skip setup, Sylph uses it.
    c. None of the above → proceed to install gh.
 
 2. Install gh (auto, per-platform):
@@ -65,7 +65,7 @@ adapter reads it via `git credential fill`.
 
 3. Run: gh auth login
    - Device flow, stores token via git-credential-manager.
-   - After login: Weaver's urllib path picks up the stored credential
+   - After login: Sylph's urllib path picks up the stored credential
      automatically — gh itself becomes optional.
 ```
 
@@ -82,7 +82,7 @@ adapter reads it via `git credential fill`.
    - Ask for the token; store via `git credential approve` so git-push
      and the urllib adapter share it.
    - For self-managed: ask for the api_base URL and store as
-     weaver.gitlab.api-base in git config.
+     sylph.gitlab.api-base in git config.
 
 3. Verify via adapter.is_authenticated().
 ```
@@ -108,7 +108,7 @@ adapter reads it via `git credential fill`.
 1. Prompt for api_base URL (self-hosted — no default).
 2. Check env tokens + git credential.
 3. If none: point user at the DC Personal Access Tokens page + prompt.
-4. Store weaver.bitbucket-dc.api-base in git config.
+4. Store sylph.bitbucket-dc.api-base in git config.
 5. Verify.
 ```
 
@@ -151,10 +151,10 @@ adapter reads it via `git credential fill`.
 ```
 1. This one is truly different — mailing-list PRs, not an API host.
 2. Ask for the project's mailing list address:
-   - Check `git config weaver.srht-list`
+   - Check `git config sylph.srht-list`
    - If unset: prompt for the list address (e.g.,
      ~user/project-devel@lists.sr.ht)
-   - Store via `git config weaver.srht-list <addr>`.
+   - Store via `git config sylph.srht-list <addr>`.
 3. Check `git send-email --version`:
    - If missing: install git-email (brew: bundled; apt: git-email;
      dnf: git-email; pacman: git).
@@ -166,7 +166,7 @@ adapter reads it via `git credential fill`.
 
 ## Auto-install behavior
 
-Weaver tries the platform's package manager in this order:
+Sylph tries the platform's package manager in this order:
 
 | Platform | Manager | Command flavor |
 |---|---|---|
@@ -176,17 +176,17 @@ Weaver tries the platform's package manager in this order:
 | Fedora/RHEL | dnf | `sudo dnf install -y <pkg>` |
 | Arch | pacman | `sudo pacman -S --noconfirm <pkg>` |
 
-If no manager matches, Weaver prints the install URL + skips the
+If no manager matches, Sylph prints the install URL + skips the
 auto-install step. Verification still runs — adapter reports unavailable
 until the user installs manually.
 
-## What Weaver does not do
+## What Sylph does not do
 
 - **Does not modify your `.gitconfig` globally.** All stored credentials
   go through the existing credential-manager OR per-repo `git config`.
 - **Does not phone home.** The verify step is a local adapter call; the
   only network traffic is the real API call that validates the token.
-- **Does not refuse to run in degraded mode.** If you skip /weaver:setup,
+- **Does not refuse to run in degraded mode.** If you skip /sylph:setup,
   commit drafting + W2 clustering + destructive-op gate still work.
   PR-opening degrades to "manual handoff required" cleanly.
 

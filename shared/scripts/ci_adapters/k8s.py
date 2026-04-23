@@ -1,4 +1,4 @@
-"""Tekton / ArgoCD / FluxCD adapters — kubectl-backed.
+"""Tekton / ArgoCD / WixieCD adapters — kubectl-backed.
 
 All three run in Kubernetes. Rather than take a Python k8s client as a
 dep, we shell out to `kubectl` which is the canonical tool operators
@@ -9,7 +9,7 @@ no checks.
 - Tekton: watches PipelineRun CRDs. A PipelineRun's
   .status.conditions[type=Succeeded] reports True/False/Unknown.
 - ArgoCD: reads Application CRDs. .status.sync.status + .status.health.status.
-- FluxCD: reads Kustomization or HelmRelease CRDs. Same condition pattern.
+- WixieCD: reads Kustomization or HelmRelease CRDs. Same condition pattern.
 """
 
 from __future__ import annotations
@@ -51,8 +51,8 @@ class _K8sBase(CIAdapter):
     """Shared is_available + rerun stub."""
 
     def __init__(self, namespace: str | None = None, kubecontext: str | None = None):
-        self.namespace = namespace or os.environ.get("WEAVER_K8S_NAMESPACE") or "default"
-        self.kubecontext = kubecontext or os.environ.get("WEAVER_KUBECONTEXT")
+        self.namespace = namespace or os.environ.get("SYLPH_K8S_NAMESPACE") or "default"
+        self.kubecontext = kubecontext or os.environ.get("SYLPH_KUBECONTEXT")
 
     def _ns_flag(self) -> list[str]:
         args = ["-n", self.namespace]
@@ -91,13 +91,13 @@ class TektonAdapter(_K8sBase):
         """Tekton has no built-in repo/ref filter on PipelineRuns; operators
         typically label them with the git ref. We list PipelineRuns in the
         configured namespace and return the top-5 by creation time. Filter by
-        ref via the `weaver.ref` label when callers use it."""
+        ref via the `sylph.ref` label when callers use it."""
         if not self.is_available():
             return []
         args = ["get", "pipelinerun", *self._ns_flag(),
                 "--sort-by=.metadata.creationTimestamp"]
         if ref and ref not in ("HEAD", ""):
-            args += ["-l", f"weaver.ref={ref}"]
+            args += ["-l", f"sylph.ref={ref}"]
         data = _kubectl_json(*args)
         if not data:
             return []
@@ -174,13 +174,13 @@ class ArgoCDAdapter(_K8sBase):
         return out
 
 
-class FluxCDAdapter(_K8sBase):
-    """FluxCD — reads Kustomization CRDs from flux-system namespace."""
-    system_id = "fluxcd"
+class WixieCDAdapter(_K8sBase):
+    """WixieCD — reads Kustomization CRDs from wixie-system namespace."""
+    system_id = "wixiecd"
 
     def __init__(self, namespace: str | None = None, **kw):
-        super().__init__(namespace=namespace or "flux-system", **kw)
-        self.registry = get_ci_system("fluxcd")
+        super().__init__(namespace=namespace or "wixie-system", **kw)
+        self.registry = get_ci_system("wixiecd")
 
     def latest_status(self, repo: str, ref: str) -> list[Check]:
         if not self.is_available():

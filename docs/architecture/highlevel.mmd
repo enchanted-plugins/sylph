@@ -34,14 +34,14 @@ graph TD
     pr_lifecycle_out(["state/metrics.jsonl"])
     pr_lifecycle --> pr_lifecycle_out
     style pr_lifecycle fill:#161b22,stroke:#3fb950,color:#e6edf3
-    weaver_gate["weaver-gate<br/><small>PreToolUse</small>"]
-    CC --> weaver_gate
-    weaver_gate_out(["state/metrics.jsonl"])
-    weaver_gate --> weaver_gate_out
-    style weaver_gate fill:#161b22,stroke:#58a6ff,color:#e6edf3
-    weaver_learning["weaver-learning<br/><small>PreCompact + SessionStart</small>"]
-    CC --> weaver_learning
-    weaver_learning_out(["state/metrics.jsonl"])
-    weaver_learning --> weaver_learning_out
-    style weaver_learning fill:#161b22,stroke:#bc8cff,color:#e6edf3
+    sylph_gate["sylph-gate<br/><small>PreToolUse</small>"]
+    CC --> sylph_gate
+    sylph_gate_out(["state/metrics.jsonl"])
+    sylph_gate --> sylph_gate_out
+    style sylph_gate fill:#161b22,stroke:#58a6ff,color:#e6edf3
+    sylph_learning["sylph-learning<br/><small>PreCompact + SessionStart</small>"]
+    CC --> sylph_learning
+    sylph_learning_out(["state/metrics.jsonl"])
+    sylph_learning --> sylph_learning_out
+    style sylph_learning fill:#161b22,stroke:#bc8cff,color:#e6edf3
     style CC fill:#0d1117,stroke:#bc8cff,color:#e6edf3

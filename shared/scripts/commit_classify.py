@@ -2,7 +2,7 @@
 W1 Stage 2 — Myers-Diff Conventional Classifier, validator half.
 
 Takes a draft commit message (from Stage 1 Sonnet agent) and validates it
-against the Conventional Commits 1.0 spec + Weaver-specific policy.
+against the Conventional Commits 1.0 spec + Sylph-specific policy.
 
 Stage 1 (drafting) is LLM work; Stage 2 (validating) is pure rules and lives
 here in Python stdlib so it runs without an LLM call. This is the cost-control

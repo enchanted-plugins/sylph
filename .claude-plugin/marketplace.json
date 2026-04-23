@@ -1,10 +1,10 @@
 {
-  "name": "weaver",
-  "display_name": "Weaver — Git Workflow Layer",
+  "name": "sylph",
+  "display_name": "Sylph — Git Workflow Layer",
   "description": "Auto-orchestrates branch/commit/PR per task boundary; reads CI status across 10 hosts and 10 CI systems. Enchanted-plugins Phase 4 plugin #21.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "license": "MIT",
-  "homepage": "https://github.com/enchanted-plugins/weaver",
+  "homepage": "https://github.com/enchanted-plugins/sylph",
   "author": "enchanted-plugins",
   "plugins": [
     {
@@ -21,11 +21,11 @@
     },
     {
       "name": "pr-lifecycle",
-      "description": "W4 — Path-History Reviewer Routing. Idempotent PR state machine + reviewer ranking from blame + CODEOWNERS + Hornet availability."
+      "description": "W4 — Path-History Reviewer Routing. Idempotent PR state machine + reviewer ranking from blame + CODEOWNERS + Raven availability."
     },
     {
-      "name": "weaver-gate",
-      "description": "Destructive-op decision-gate modeled after Hornet's pattern. Routes force-push, history-rewrite, branch/tag deletion, clean -fdx, merge-queue bypass."
+      "name": "sylph-gate",
+      "description": "Destructive-op decision-gate modeled after Raven's pattern. Routes force-push, history-rewrite, branch/tag deletion, clean -fdx, merge-queue bypass."
     },
     {
       "name": "capability-memory",
@@ -33,11 +33,11 @@
     },
     {
       "name": "ci-reader",
-      "description": "Read-only CI status + log streaming across GitHub Actions, GitLab CI, CircleCI, Jenkins, Buildkite, Drone/Woodpecker, Tekton, ArgoCD/FluxCD."
+      "description": "Read-only CI status + log streaming across GitHub Actions, GitLab CI, CircleCI, Jenkins, Buildkite, Drone/Woodpecker, Tekton, ArgoCD/WixieCD."
     },
     {
-      "name": "weaver-learning",
-      "description": "W5 — Gauss Learning (Weaver). Developer preference persistence across sessions via Allay-A4 atomic serialization."
+      "name": "sylph-learning",
+      "description": "W5 — Gauss Learning (Sylph). Developer preference persistence across sessions via Fae-A4 atomic serialization."
     },
     {
       "name": "full",
@@ -47,10 +47,10 @@
         "boundary-segmenter",
         "branch-workflow",
         "pr-lifecycle",
-        "weaver-gate",
+        "sylph-gate",
         "capability-memory",
         "ci-reader",
-        "weaver-learning"
+        "sylph-learning"
       ]
     }
   ]

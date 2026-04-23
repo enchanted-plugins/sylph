@@ -1,12 +1,12 @@
 cff-version: 1.2.0
-title: "Weaver"
+title: "Sylph"
 message: "If you use this software, please cite it as below."
 type: software
 authors:
   - alias: klaiderman
     affiliation: "enchanted-plugins"
-repository-code: "https://github.com/enchanted-plugins/weaver"
-url: "https://github.com/enchanted-plugins/weaver"
+repository-code: "https://github.com/enchanted-plugins/sylph"
+url: "https://github.com/enchanted-plugins/sylph"
 license: MIT
 version: "0.0.1"
 date-released: "2026-04-20"

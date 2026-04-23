@@ -1,10 +1,10 @@
 ---
-name: weaver:status
+name: sylph:status
 description: Show the aggregate state of the current branch — active W2 cluster, committed-but-unpushed commits, any open PR, CI status (via ci-reader when installed), reviewer ranking, and merge-queue state.
 allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pr_lifecycle.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pr_lifecycle.py *), Bash(gh pr *), Bash(git status *), Bash(git log *), Read(plugins/boundary-segmenter/state/*.json)
 ---
 
-# /weaver:status
+# /sylph:status
 
 Dashboard for the current branch.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# weaver-gate PreToolUse(Bash) — destructive-op decision-gate.
+# sylph-gate PreToolUse(Bash) — destructive-op decision-gate.
 #
 # Reads a PreToolUse payload from stdin (Claude Code hook protocol), extracts
 # the Bash command, and delegates classification to shared/scripts/destructive_patterns.py.
@@ -55,7 +55,7 @@ cmd="$(printf '%s' "$payload" | jq -r '.tool_input.command // empty' 2>/dev/null
 # context-dependent rules (e.g. amend_of_pushed_head) can probe `git rev-list`
 # for the actual HEAD state. cwd works for Claude Code hooks, which execute
 # with the project dir as cwd.
-REPO_PATH="${WEAVER_REPO_PATH:-$(pwd)}"
+REPO_PATH="${SYLPH_REPO_PATH:-$(pwd)}"
 
 # Classify. Python exits 0 (safe), 1 (destructive), 2 (protected-destructive).
 # Capture stdout first, then run a second invocation purely for the exit code.
@@ -88,7 +88,7 @@ fi
 # the model context. The model then decides whether to proceed after the
 # decision-gate skill fires.
 cat <<EOF >&2
-[weaver-gate] Destructive git operation detected.
+[sylph-gate] Destructive git operation detected.
 
   Command: $cmd
   Op:      $op

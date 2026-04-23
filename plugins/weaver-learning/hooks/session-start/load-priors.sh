@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# weaver-learning SessionStart — load W5 priors into a session cache so W1/W2/W3/W4
+# sylph-learning SessionStart — load W5 priors into a session cache so W1/W2/W3/W4
 # can consult them without re-reading the full learnings.json on every event.
 #
 # Emits a one-line status to stderr:
-#   "[weaver-learning] priors loaded (N samples, confident=true|false)"
+#   "[sylph-learning] priors loaded (N samples, confident=true|false)"
 #
 # Dependencies: bash, python3. jq optional.
 
@@ -32,7 +32,7 @@ fi
 if command -v jq >/dev/null 2>&1; then
     samples="$(jq -r '.sample_count // 0' "$PRIORS_CACHE")"
     confident="$(jq -r '.confident // false' "$PRIORS_CACHE")"
-    printf '[weaver-learning] priors loaded (%s samples, confident=%s)\n' "$samples" "$confident" >&2
+    printf '[sylph-learning] priors loaded (%s samples, confident=%s)\n' "$samples" "$confident" >&2
 fi
 
 exit 0

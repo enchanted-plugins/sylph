@@ -11,7 +11,7 @@ from registry_loader import get_ci_system
 
 # CircleCI's host for REST is circleci.com/api/v2. The ci-registry entry
 # records the status_api_path but not the host base (CircleCI is SaaS-
-# only for Weaver's purposes). We keep the host base here as a module-
+# only for Sylph's purposes). We keep the host base here as a module-
 # level constant derived from the registry entry when available, but the
 # registry does not expose it directly — CircleCI's registry `status_api_path`
 # is a path template, not a full URL. Keep the default here with a
@@ -49,7 +49,7 @@ class CircleCIAdapter(CIAdapter):
 
     def latest_status(self, repo: str, ref: str) -> list[Check]:
         """CircleCI addresses projects by slug: `{vcs}/{org}/{repo}`.
-        We default to github/{repo} since Weaver's main host is GitHub."""
+        We default to github/{repo} since Sylph's main host is GitHub."""
         tok = self._token()
         if not tok:
             return []

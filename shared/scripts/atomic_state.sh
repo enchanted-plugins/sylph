@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Weaver atomic-state helper — pure-bash wrapper over the Allay-A4 pattern.
+# Sylph atomic-state helper — pure-bash wrapper over the Fae-A4 pattern.
 #
 # Hooks that don't want to spawn Python source this file and call:
 #
@@ -11,8 +11,8 @@
 # Zero external runtime deps (brand standard).
 
 # Guard against multiple sourcing.
-if [ -n "${_WEAVER_ATOMIC_STATE_SH_SOURCED:-}" ]; then return 0 2>/dev/null || exit 0; fi
-_WEAVER_ATOMIC_STATE_SH_SOURCED=1
+if [ -n "${_SYLPH_ATOMIC_STATE_SH_SOURCED:-}" ]; then return 0 2>/dev/null || exit 0; fi
+_SYLPH_ATOMIC_STATE_SH_SOURCED=1
 
 # ── atomic_read <path> ────────────────────────────────────────────────
 # Prints the file contents, or `{}` if the file is missing or empty.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# weaver-learning PreCompact — fsync the learnings state so the EMA survives
+# sylph-learning PreCompact — fsync the learnings state so the EMA survives
 # context compaction.
 #
 # The record-* hooks write atomically via tempfile+rename already; this is

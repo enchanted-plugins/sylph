@@ -1,15 +1,15 @@
 ---
-name: weaver:review-boundary
+name: sylph:review-boundary
 description: Review the oldest pending W2 boundary escalation. Loads the pending record from escalations.jsonl, hands the cluster previews to the Opus boundary-detector agent for judgment, and records the verdict to escalation-verdicts.jsonl. Non-destructive; verdicts feed W5 Gauss Learning.
 allowed-tools: Read, Bash(git status *), Bash(git diff --stat *), Bash(git log --oneline -n 10), Bash(jq *), Bash(wc *), Bash(tail *), Bash(date *)
 ---
 
-# /weaver:review-boundary
+# /sylph:review-boundary
 
 Resolve a low-confidence W2 boundary by consulting the Opus
-`boundary-detector` agent. Weaver's PostToolUse hook appends an escalation
+`boundary-detector` agent. Sylph's PostToolUse hook appends an escalation
 record whenever the Jaccard-Cosine segmenter emits a boundary with
-`confidence < WEAVER_BOUNDARY_CONFIDENCE_THRESHOLD` (default 0.7) or the
+`confidence < SYLPH_BOUNDARY_CONFIDENCE_THRESHOLD` (default 0.7) or the
 distance lands in the `±uncertainty_band` around θ. This slash-command is
 the human-invoked bridge between that escalation and the agent — the hook
 itself never calls Opus (hooks are advisory and must not make network
@@ -18,9 +18,9 @@ calls).
 ## Usage
 
 ```
-/weaver:review-boundary              # pop the oldest pending escalation
-/weaver:review-boundary --list       # show pending escalations without resolving
-/weaver:review-boundary --ts <TS>    # resolve a specific escalation by ts
+/sylph:review-boundary              # pop the oldest pending escalation
+/sylph:review-boundary --list       # show pending escalations without resolving
+/sylph:review-boundary --ts <TS>    # resolve a specific escalation by ts
 ```
 
 ## What it does
@@ -42,7 +42,7 @@ calls).
    ```json
    {
      "ts": "<iso-8601 now>",
-     "event": "weaver.boundary.escalation.resolved",
+     "event": "sylph.boundary.escalation.resolved",
      "source_escalation_ts": "<ts of the escalation>",
      "decision": "close" | "absorb",
      "rationale": "<agent's one-liner>",
@@ -65,9 +65,9 @@ exits 0 with `no pending escalations`.
   their own pending-action records if they care about the Opus decision.
 - It will not auto-rewrite git history. If the verdict flips a boundary
   from `close` to `absorb` after a commit has already been drafted, the
-  correction routes through `/weaver:commit --amend-last` (which itself
-  goes through `weaver-gate` per the destructive-op contract).
-- It will not call any non-Weaver remote. Opus judgment is the only
+  correction routes through `/sylph:commit --amend-last` (which itself
+  goes through `sylph-gate` per the destructive-op contract).
+- It will not call any non-Sylph remote. Opus judgment is the only
   network surface this command touches.
 
 ## Why a skill, not a hook
@@ -93,5 +93,5 @@ pay the judgment cost.
   agent that renders the verdict.
 - `plugins/boundary-segmenter/hooks/post-tool-use/boundary-segment.sh` —
   the PostToolUse hook that emits escalations.
-- `shared/constants.sh` — tune `WEAVER_BOUNDARY_CONFIDENCE_THRESHOLD`
+- `shared/constants.sh` — tune `SYLPH_BOUNDARY_CONFIDENCE_THRESHOLD`
   via env override.

@@ -1,5 +1,5 @@
 """
-Safe-amend detection for weaver-gate.
+Safe-amend detection for sylph-gate.
 
 Closes CLAUDE.md anti-pattern #2: auto-amending pushed commits.
 

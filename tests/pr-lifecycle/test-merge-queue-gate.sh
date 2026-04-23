@@ -4,7 +4,7 @@
 # pr_lifecycle.promote_to_ready routing.
 #
 # The adapters themselves are never called — we override CI status via
-# the `WEAVER_TEST_CI_STATUS` env var (a JSON fixture path). This keeps
+# the `SYLPH_TEST_CI_STATUS` env var (a JSON fixture path). This keeps
 # the test offline and independent of `gh`, kubeconfig, etc.
 set -euo pipefail
 
@@ -31,7 +31,7 @@ cat > "$FIXTURE_DIR/green.json" <<'JSON'
 JSON
 FIXTURE_PATH="$(py_path "$FIXTURE_DIR/green.json")"
 
-out="$(WEAVER_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
+out="$(SYLPH_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
 import sys, json
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from merge_queue_gate import check_gate
@@ -60,7 +60,7 @@ cat > "$FIXTURE_DIR/red.json" <<'JSON'
 JSON
 FIXTURE_PATH="$(py_path "$FIXTURE_DIR/red.json")"
 
-out="$(WEAVER_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
+out="$(SYLPH_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
 import sys, json
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from merge_queue_gate import check_gate
@@ -87,7 +87,7 @@ cat > "$FIXTURE_DIR/yellow.json" <<'JSON'
 JSON
 FIXTURE_PATH="$(py_path "$FIXTURE_DIR/yellow.json")"
 
-out="$(WEAVER_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
+out="$(SYLPH_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
 import sys, json
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from merge_queue_gate import check_gate
@@ -108,7 +108,7 @@ cat > "$FIXTURE_DIR/empty.json" <<'JSON'
 JSON
 FIXTURE_PATH="$(py_path "$FIXTURE_DIR/empty.json")"
 
-out="$(WEAVER_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
+out="$(SYLPH_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
 import sys, json
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from merge_queue_gate import check_gate
@@ -124,7 +124,7 @@ ok "case 4: empty status -> unknown (never silent allow)"
 # ──────────────────────────────────────────────────────────────────────
 # Case 5: --strict promotes unknown to block
 # ──────────────────────────────────────────────────────────────────────
-out="$(WEAVER_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
+out="$(SYLPH_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
 import sys, json
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from merge_queue_gate import check_gate
@@ -153,12 +153,12 @@ assert_contains "$out" "no registry entry for host unknown" "unknown host reason
 ok "case 6: unknown host -> unknown with explicit reason"
 
 # ──────────────────────────────────────────────────────────────────────
-# Case 7: read-only CI (ArgoCD/FluxCD) is not auto-queried.
-# A red fixture for FluxCD should be ignored — it's not gate-eligible.
+# Case 7: read-only CI (ArgoCD/WixieCD) is not auto-queried.
+# A red fixture for WixieCD should be ignored — it's not gate-eligible.
 # ──────────────────────────────────────────────────────────────────────
-cat > "$FIXTURE_DIR/fluxcd-red.json" <<'JSON'
+cat > "$FIXTURE_DIR/wixiecd-red.json" <<'JSON'
 {
-  "fluxcd": [
+  "wixiecd": [
     {"name": "reconcile", "status": "completed", "conclusion": "ReconciliationFailed"}
   ],
   "github-actions": [
@@ -169,9 +169,9 @@ cat > "$FIXTURE_DIR/fluxcd-red.json" <<'JSON'
   ]
 }
 JSON
-FIXTURE_PATH="$(py_path "$FIXTURE_DIR/fluxcd-red.json")"
+FIXTURE_PATH="$(py_path "$FIXTURE_DIR/wixiecd-red.json")"
 
-out="$(WEAVER_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
+out="$(SYLPH_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
 import sys, json
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from merge_queue_gate import check_gate
@@ -180,7 +180,7 @@ print(json.dumps(r))
 PYEOF
 )"
 
-assert_contains "$out" '"decision": "allow"' "fluxcd red is ignored (not gate-eligible)"
+assert_contains "$out" '"decision": "allow"' "wixiecd red is ignored (not gate-eligible)"
 ok "case 7: read-only CI systems skipped per registry"
 
 # ──────────────────────────────────────────────────────────────────────
@@ -196,7 +196,7 @@ cat > "$FIXTURE_DIR/promote-red.json" <<'JSON'
 JSON
 FIXTURE_PATH="$(py_path "$FIXTURE_DIR/promote-red.json")"
 
-out="$(WEAVER_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
+out="$(SYLPH_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
 import sys, json
 from pathlib import Path
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
@@ -229,7 +229,7 @@ cat > "$FIXTURE_DIR/promote-green.json" <<'JSON'
 JSON
 FIXTURE_PATH="$(py_path "$FIXTURE_DIR/promote-green.json")"
 
-out="$(WEAVER_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
+out="$(SYLPH_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" - <<PYEOF
 import sys, json
 from pathlib import Path
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
@@ -251,7 +251,7 @@ ok "case 9: promote_to_ready allows on green CI"
 # ──────────────────────────────────────────────────────────────────────
 FIXTURE_PATH="$(py_path "$FIXTURE_DIR/green.json")"
 set +e
-WEAVER_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" "$SHARED_SCRIPTS_PY/merge_queue_gate.py" \
+SYLPH_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" "$SHARED_SCRIPTS_PY/merge_queue_gate.py" \
     --host github --ref abc123 --json >/dev/null 2>&1
 rc_allow=$?
 set -e
@@ -259,7 +259,7 @@ assert_exit_code 0 "$rc_allow" "CLI exit 0 on allow"
 
 FIXTURE_PATH="$(py_path "$FIXTURE_DIR/red.json")"
 set +e
-WEAVER_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" "$SHARED_SCRIPTS_PY/merge_queue_gate.py" \
+SYLPH_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" "$SHARED_SCRIPTS_PY/merge_queue_gate.py" \
     --host github --ref abc123 --json >/dev/null 2>&1
 rc_block=$?
 set -e
@@ -267,7 +267,7 @@ assert_exit_code 1 "$rc_block" "CLI exit 1 on block"
 
 FIXTURE_PATH="$(py_path "$FIXTURE_DIR/empty.json")"
 set +e
-WEAVER_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" "$SHARED_SCRIPTS_PY/merge_queue_gate.py" \
+SYLPH_TEST_CI_STATUS="$FIXTURE_PATH" "$PY" "$SHARED_SCRIPTS_PY/merge_queue_gate.py" \
     --host github --ref abc123 --json >/dev/null 2>&1
 rc_unknown=$?
 set -e

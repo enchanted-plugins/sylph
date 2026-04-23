@@ -34,16 +34,16 @@ graph LR
         pr_lifecycle_h0_script["on-commit.sh<br/><small>timeout: 10s</small>"]
         pr_lifecycle_h0_trigger --> pr_lifecycle_h0_script
     end
-    subgraph weaver_gate["weaver-gate"]
-        weaver_gate_h0_trigger["PreToolUse<br/>Bash"]
-        weaver_gate_h0_script["inspect-git-command.sh<br/><small>timeout: 5s</small>"]
-        weaver_gate_h0_trigger --> weaver_gate_h0_script
+    subgraph sylph_gate["sylph-gate"]
+        sylph_gate_h0_trigger["PreToolUse<br/>Bash"]
+        sylph_gate_h0_script["inspect-git-command.sh<br/><small>timeout: 5s</small>"]
+        sylph_gate_h0_trigger --> sylph_gate_h0_script
     end
-    subgraph weaver_learning["weaver-learning"]
-        weaver_learning_h0_trigger["SessionStart<br/>*"]
-        weaver_learning_h0_script["load-priors.sh<br/><small>timeout: 5s</small>"]
-        weaver_learning_h0_trigger --> weaver_learning_h0_script
-        weaver_learning_h1_trigger["PreCompact<br/>*"]
-        weaver_learning_h1_script["checkpoint-learnings.sh<br/><small>timeout: 5s</small>"]
-        weaver_learning_h1_trigger --> weaver_learning_h1_script
+    subgraph sylph_learning["sylph-learning"]
+        sylph_learning_h0_trigger["SessionStart<br/>*"]
+        sylph_learning_h0_script["load-priors.sh<br/><small>timeout: 5s</small>"]
+        sylph_learning_h0_trigger --> sylph_learning_h0_script
+        sylph_learning_h1_trigger["PreCompact<br/>*"]
+        sylph_learning_h1_script["checkpoint-learnings.sh<br/><small>timeout: 5s</small>"]
+        sylph_learning_h1_trigger --> sylph_learning_h1_script
     end

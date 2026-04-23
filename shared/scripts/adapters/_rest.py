@@ -7,7 +7,7 @@ fit this pattern (modulo header flavor). SourceHut and CodeCommit don't
 
 Tokens resolved in order:
   1. Adapter-specified env var name ($GITLAB_TOKEN, $GITHUB_TOKEN, etc.)
-  2. Generic $WEAVER_<HOST>_TOKEN
+  2. Generic $SYLPH_<HOST>_TOKEN
   3. `git credential fill` for the adapter's canonical host
 
 Stdlib only.
@@ -23,7 +23,7 @@ import urllib.parse
 import urllib.request
 from typing import Any
 
-USER_AGENT = "weaver/0.1.0"
+USER_AGENT = "sylph/0.1.0"
 
 
 def resolve_token(env_vars: list[str], credential_host: str) -> str | None:

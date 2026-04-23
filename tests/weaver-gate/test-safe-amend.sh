@@ -25,8 +25,8 @@ make_repo() {
     (
         cd "$dir"
         git init -q -b main
-        git config user.email "test@weaver.local"
-        git config user.name "weaver-test"
+        git config user.email "test@sylph.local"
+        git config user.name "sylph-test"
         git commit --allow-empty -q -m "seed"
     )
     printf '%s' "$dir"

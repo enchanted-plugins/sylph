@@ -8,7 +8,7 @@ allowed-tools: Read, Bash(git diff --diff-filter=U *), Bash(git log --oneline -n
 
 # conflict-resolver (Opus)
 
-You are invoked when `/weaver:pr` or the auto-orchestration flow hits a merge
+You are invoked when `/sylph:pr` or the auto-orchestration flow hits a merge
 conflict and needs a three-way resolution proposed.
 
 ## Input

@@ -55,12 +55,12 @@ class JenkinsAdapter(CIAdapter):
         # Basic auth: user:token, base64. CIHttpError via BasicAuth isn't exposed
         # in get_json so we inline the urllib path here.
         import base64, urllib.request, json as _json
-        creds = base64.b64encode(f"{self.username or 'weaver'}:{tok}".encode()).decode()
+        creds = base64.b64encode(f"{self.username or 'sylph'}:{tok}".encode()).decode()
         url = f"{self.api_base}/job/{urllib.parse.quote(repo, safe='/')}/lastBuild/api/json"
         req = urllib.request.Request(url, headers={
             "Authorization": f"Basic {creds}",
             "Accept": "application/json",
-            "User-Agent": "weaver/0.1.0",
+            "User-Agent": "sylph/0.1.0",
         })
         try:
             with urllib.request.urlopen(req, timeout=20) as resp:

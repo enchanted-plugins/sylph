@@ -5,7 +5,7 @@
 #       ├─→ branch-workflow/on-boundary.sh       (→ pending-actions.jsonl)
 #       └─→ commit-intelligence/on-boundary.sh   (→ pending-drafts.jsonl)
 #                                                     │
-#                                    (Agent 1: /weaver:commit executes the
+#                                    (Agent 1: /sylph:commit executes the
 #                                     commit + appends to executed-commits.jsonl
 #                                     — simulated here by writing the feed
 #                                     directly, matching the Agent-1 contract)
@@ -28,7 +28,7 @@ source "$SCRIPT_DIR/../shared/helpers.sh"
 
 # Stage a sandbox mirroring the product layout.
 new_sandbox >/dev/null
-fake_product="$SANDBOX/weaver-sim"
+fake_product="$SANDBOX/sylph-sim"
 mkdir -p "$fake_product/plugins/boundary-segmenter/hooks/post-tool-use"
 mkdir -p "$fake_product/plugins/boundary-segmenter/state"
 mkdir -p "$fake_product/plugins/branch-workflow/hooks/post-tool-use"
@@ -94,7 +94,7 @@ run_upstream "$payload_3"
 
 assert_file_exists "$events" "boundary-events.jsonl should exist after event 3"
 
-boundary_lines=$(grep -c 'weaver.task.boundary.detected' "$events" || true)
+boundary_lines=$(grep -c 'sylph.task.boundary.detected' "$events" || true)
 assert_eq "$boundary_lines" "1" "exactly one boundary detected across the three edits"
 
 # Branch + commit listeners reacted.
@@ -110,9 +110,9 @@ ci_off=$(jq -r '.last_offset' "$ci_offset")
 [[ "$ci_off" -gt 0 ]] || fail "commit-intelligence offset did not advance"
 ok "Phase 1: 3 edits → 1 boundary → 2 upstream listeners reacted"
 
-# ── Phase 2: Agent-1 contract — /weaver:commit appends to executed-commits.jsonl ──
+# ── Phase 2: Agent-1 contract — /sylph:commit appends to executed-commits.jsonl ──
 # Simulate the contract Agent 1 is wiring: on successful `git commit`,
-# /weaver:commit appends a `weaver.commit.committed` record to
+# /sylph:commit appends a `sylph.commit.committed` record to
 # plugins/commit-intelligence/state/executed-commits.jsonl and flips the
 # matching pending-drafts record to executed:true. This test focuses on the
 # event-file side (pr-lifecycle only cares about that).
@@ -122,7 +122,7 @@ commit_message="$(jq -r '"\(.suggested_type)(auth): harden token verify"' "$ci_p
 executed_ts="2026-04-20T10:00:00Z"
 jq -nc \
     --arg ts "$executed_ts" \
-    --arg event "weaver.commit.committed" \
+    --arg event "sylph.commit.committed" \
     --arg sha "abcdef1234567890feedface" \
     --arg branch "feat/verify-token" \
     --arg message "$commit_message" \
@@ -146,10 +146,10 @@ pr_off=$(jq -r '.last_offset' "$pr_offset")
 [[ "$pr_off" -gt 0 ]] || fail "pr-lifecycle offset did not advance"
 
 # Record schema end-to-end.
-assert_jq "$pr_pending" '.event' "weaver.pr.drafted" "pr-lifecycle event name"
+assert_jq "$pr_pending" '.event' "sylph.pr.drafted" "pr-lifecycle event name"
 assert_jq "$pr_pending" '.branch' "feat/verify-token" "pr-lifecycle carries branch through"
 assert_jq "$pr_pending" '.sha' "abcdef1234567890feedface" "pr-lifecycle carries sha through"
-assert_jq "$pr_pending" '.source_event.event' "weaver.commit.committed" "pr-lifecycle preserves source event"
+assert_jq "$pr_pending" '.source_event.event' "sylph.commit.committed" "pr-lifecycle preserves source event"
 assert_jq "$pr_pending" '.source_draft_ts' "$pending_draft_ts" "pr-lifecycle carries source_draft_ts (links back to commit-intelligence record)"
 ok "Phase 3: executed-commit event → PR draft record"
 

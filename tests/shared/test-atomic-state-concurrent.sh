@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Test: 20 parallel append_jsonl invocations must produce exactly 20 lines,
 # no truncation, no interleaving. Skipped on Windows — fcntl.flock is a
-# POSIX primitive and Weaver's primary target is POSIX.
+# POSIX primitive and Sylph's primary target is POSIX.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

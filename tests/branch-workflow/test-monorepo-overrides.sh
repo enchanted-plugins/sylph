@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Test: .weaver/workflow-map.yaml overlays surface in detect() output.
+# Test: .sylph/workflow-map.yaml overlays surface in detect() output.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -12,9 +12,9 @@ git -C "$dir" config user.email t@w.l
 git -C "$dir" config user.name t
 echo x > "$dir/README.md"
 git -C "$dir" add . && git -C "$dir" commit -q -m "chore: seed"
-mkdir -p "$dir/.weaver"
+mkdir -p "$dir/.sylph"
 
-cat > "$dir/.weaver/workflow-map.yaml" <<'EOF'
+cat > "$dir/.sylph/workflow-map.yaml" <<'EOF'
 # monorepo overlay
 packages/mobile: release-flow
 packages/web: trunk-based

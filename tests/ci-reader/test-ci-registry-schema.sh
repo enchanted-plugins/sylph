@@ -18,7 +18,7 @@ assert_jq "$REGISTRY" '.source_of_truth | type' "string" "source_of_truth is a s
 # Every CI system listed in the architecture document.
 expected_systems=(
     "github_actions" "gitlab_ci" "circleci" "jenkins" "buildkite"
-    "drone" "woodpecker" "tekton" "argocd" "fluxcd"
+    "drone" "woodpecker" "tekton" "argocd" "wixiecd"
 )
 
 system_count="$(jq '.systems | length' "$REGISTRY")"
@@ -92,8 +92,8 @@ done
 first_class="$(jq -r '[.systems[] | select(.support_level == "first-class") | .id] | sort | join(",")' "$REGISTRY")"
 assert_eq "$first_class" "github_actions" "only github_actions is first-class"
 
-# GitOps systems must be read-only (ArgoCD and FluxCD).
-for gitops in "argocd" "fluxcd"; do
+# GitOps systems must be read-only (ArgoCD and WixieCD).
+for gitops in "argocd" "wixiecd"; do
     level="$(jq -r --arg s "$gitops" '.systems[$s].support_level' "$REGISTRY")"
     assert_eq "$level" "read-only" "$gitops is read-only (GitOps, not gate-ready)"
     gmq="$(jq -r --arg s "$gitops" '.systems[$s].gate_merge_queue' "$REGISTRY")"

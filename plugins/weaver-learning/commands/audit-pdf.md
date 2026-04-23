@@ -1,10 +1,10 @@
 ---
-name: weaver:audit-pdf
-description: Dark-themed Weaver session audit — renders a self-contained HTML report (GitHub dark palette, @media print tuned) from the same rollup /weaver:stats consumes, then attempts best-effort PDF conversion via wkhtmltopdf / chromium / chrome / msedge if any of them are on PATH. Primary artifact is always the HTML; if the automatic PDF path did not complete, open the HTML in a browser and Print → Save as PDF.
-allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pdf_audit.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pdf_audit.py *), Read(plugins/*/state/metrics.jsonl), Read(plugins/weaver-gate/state/audit.jsonl), Read(plugins/weaver-learning/state/learnings.json)
+name: sylph:audit-pdf
+description: Dark-themed Sylph session audit — renders a self-contained HTML report (GitHub dark palette, @media print tuned) from the same rollup /sylph:stats consumes, then attempts best-effort PDF conversion via wkhtmltopdf / chromium / chrome / msedge if any of them are on PATH. Primary artifact is always the HTML; if the automatic PDF path did not complete, open the HTML in a browser and Print → Save as PDF.
+allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pdf_audit.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pdf_audit.py *), Read(plugins/*/state/metrics.jsonl), Read(plugins/sylph-gate/state/audit.jsonl), Read(plugins/sylph-learning/state/learnings.json)
 ---
 
-# /weaver:audit-pdf
+# /sylph:audit-pdf
 
 Ship the brand-standard dark-themed PDF audit (CLAUDE.md §Brand standard
 compliance — "Dark-themed PDF audit. Ships from each plugin on final
@@ -13,13 +13,13 @@ release.").
 ## Usage
 
 ```
-/weaver:audit-pdf                         # current session → ./weaver-audit-<YYYY-MM-DD>.html(.pdf)
-/weaver:audit-pdf --period day            # today UTC
-/weaver:audit-pdf --period week           # last 7 days
-/weaver:audit-pdf --period all            # everything on disk
-/weaver:audit-pdf --since 2026-04-15      # explicit start date
-/weaver:audit-pdf --out ./audits/session  # custom prefix (writes .html and .pdf)
-/weaver:audit-pdf --no-convert            # HTML only, skip PDF attempt
+/sylph:audit-pdf                         # current session → ./sylph-audit-<YYYY-MM-DD>.html(.pdf)
+/sylph:audit-pdf --period day            # today UTC
+/sylph:audit-pdf --period week           # last 7 days
+/sylph:audit-pdf --period all            # everything on disk
+/sylph:audit-pdf --since 2026-04-15      # explicit start date
+/sylph:audit-pdf --out ./audits/session  # custom prefix (writes .html and .pdf)
+/sylph:audit-pdf --no-convert            # HTML only, skip PDF attempt
 ```
 
 ## What it produces

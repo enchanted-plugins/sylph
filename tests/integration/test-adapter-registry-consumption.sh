@@ -3,7 +3,7 @@
 # literals). We prove this by:
 #   1. Asserting adapter.api_base matches the value in capability-registry.json
 #      for each HTTP-based host adapter.
-#   2. Mutating a temp copy of the capability registry, pointing WEAVER_HOME
+#   2. Mutating a temp copy of the capability registry, pointing SYLPH_HOME
 #      at it, and confirming the adapter's api_base reflects the mutation.
 #   3. Same mutation path for the CI registry via a CI adapter.
 #
@@ -95,7 +95,7 @@ doc["hosts"]["gitlab"]["api_base"] = "https://mutated-gitlab.example.com/api/v4"
 with open(cap_dst, "w", encoding="utf-8") as f:
     json.dump(doc, f)
 
-os.environ["WEAVER_HOME"] = sandbox
+os.environ["SYLPH_HOME"] = sandbox
 
 import registry_loader
 registry_loader.clear_cache()
@@ -136,7 +136,7 @@ doc["systems"]["gitlab_ci"]["support_level"] = "MUTATED-MARKER"
 with open(ci_dst, "w", encoding="utf-8") as f:
     json.dump(doc, f)
 
-os.environ["WEAVER_HOME"] = sandbox
+os.environ["SYLPH_HOME"] = sandbox
 import registry_loader
 registry_loader.clear_cache()
 

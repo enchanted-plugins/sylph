@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Test: W4 reviewer_route.py scores blame + CODEOWNERS + recency correctly,
-# caps at WEAVER_REVIEWER_MAX_SUGGEST (3).
+# caps at SYLPH_REVIEWER_MAX_SUGGEST (3).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

@@ -4,20 +4,20 @@
 
 Engine: **W2 — Jaccard-Cosine Boundary Segmentation.**
 
-Each `PostToolUse(Edit|Write)` event produces a feature vector `{files, hornet_v1_embedding, timestamp}`. Distance between two events combines file-set Jaccard (α=0.4), Hornet-V1 semantic-diff cosine (β=0.4), and idle-time gap with `tanh((Δt)/τ=300s)` (γ=0.2). Events stream into an online agglomerative cluster; boundary fires when the next event's min cluster-distance exceeds θ=0.55. Multi-signal avoids Graphite's 2023 idle-timer-only failure mode.
+Each `PostToolUse(Edit|Write)` event produces a feature vector `{files, raven_v1_embedding, timestamp}`. Distance between two events combines file-set Jaccard (α=0.4), Raven-V1 semantic-diff cosine (β=0.4), and idle-time gap with `tanh((Δt)/τ=300s)` (γ=0.2). Events stream into an online agglomerative cluster; boundary fires when the next event's min cluster-distance exceeds θ=0.55. Multi-signal avoids Graphite's 2023 idle-timer-only failure mode.
 
-Late-boundary correction surfaces as a skill invocation ("merge last N commits?") rather than silent history rewrite — destructive corrections always route through `weaver-gate`.
+Late-boundary correction surfaces as a skill invocation ("merge last N commits?") rather than silent history rewrite — destructive corrections always route through `sylph-gate`.
 
 ## Install
 
-Part of the [Weaver](../..) bundle:
+Part of the [Sylph](../..) bundle:
 
 ```
-/plugin marketplace add enchanted-plugins/weaver
-/plugin install full@weaver
+/plugin marketplace add enchanted-plugins/sylph
+/plugin install full@sylph
 ```
 
-Standalone: `/plugin install boundary-segmenter@weaver`. This is Weaver's core engine — without it, auto-orchestration doesn't exist.
+Standalone: `/plugin install boundary-segmenter@sylph`. This is Sylph's core engine — without it, auto-orchestration doesn't exist.
 
 ## Components
 
@@ -30,7 +30,7 @@ Standalone: `/plugin install boundary-segmenter@weaver`. This is Weaver's core e
 
 ## Cross-plugin
 
-- **Requires** `hornet.change.classified` (Hornet V1 embedding is the substrate).
-- **Publishes** `weaver.task.boundary.detected`.
+- **Requires** `raven.change.classified` (Raven V1 embedding is the substrate).
+- **Publishes** `sylph.task.boundary.detected`.
 
 Full architecture: [../../docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md#layer-6-task-boundary-segmentation-w2--defining-engine).

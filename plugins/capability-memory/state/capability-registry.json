@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "last_updated": "2026-04-20",
-  "source_of_truth": "docs/architecture/ (generated), output-reference at flux/prompts/weaver-architecture/",
+  "source_of_truth": "docs/architecture/ (generated), output-reference at wixie/prompts/sylph-architecture/",
   "schema_changelog": [
     {
       "version": "1.1",
@@ -50,7 +50,7 @@
       "commit_status_api_shape": "check-runs",
       "supports_draft_protected_branch_override": true,
       "known_quirks": [
-        "Status API (legacy) and Check Runs API (current) coexist — Weaver prefers Check Runs for gating"
+        "Status API (legacy) and Check Runs API (current) coexist — Sylph prefers Check Runs for gating"
       ],
       "support_level": "first-class"
     },
@@ -326,8 +326,8 @@
       "commit_status_api_shape": "statuses",
       "supports_draft_protected_branch_override": false,
       "known_quirks": [
-        "Soft-fork of Gitea — API shape substantially identical; Weaver's Gitea adapter works",
-        "ActivityPub federation experimental; not yet in Weaver scope",
+        "Soft-fork of Gitea — API shape substantially identical; Sylph's Gitea adapter works",
+        "ActivityPub federation experimental; not yet in Sylph scope",
         "Sigstore mechanism not supported [verify: 2026-04-20]"
       ],
       "support_level": "best-effort",
@@ -468,9 +468,9 @@
       "supports_draft_protected_branch_override": false,
       "known_quirks": [
         "PR workflow is email-based: git send-email to a mailing list, not POST /pulls",
-        "No pull-request resource — Weaver generates git format-patch output and posts to the configured list address",
-        "Review workflow is entirely in-mailing-list; Weaver cannot track review state except via mailing-list archive scraping",
-        "Weaver support downgraded to read-only — outgoing patches possible, PR lifecycle impossible",
+        "No pull-request resource — Sylph generates git format-patch output and posts to the configured list address",
+        "Review workflow is entirely in-mailing-list; Sylph cannot track review state except via mailing-list archive scraping",
+        "Sylph support downgraded to read-only — outgoing patches possible, PR lifecycle impossible",
         "Signature verification performed by mailing-list consumer rather than a REST field [verify: 2026-04-20]"
       ],
       "support_level": "read-only"

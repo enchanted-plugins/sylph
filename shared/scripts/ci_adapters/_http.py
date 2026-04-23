@@ -16,7 +16,7 @@ import urllib.error
 import urllib.request
 from typing import Any
 
-USER_AGENT = "weaver/0.1.0"
+USER_AGENT = "sylph/0.1.0"
 
 
 def resolve_token(env_vars: list[str], credential_host: str | None) -> str | None:

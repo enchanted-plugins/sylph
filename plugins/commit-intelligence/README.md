@@ -4,18 +4,18 @@
 
 Engine: **W1 — Myers-Diff Conventional Classifier.**
 
-Takes the Myers-diff + `git status` + file paths; if the raw diff exceeds 1500 tokens, substitutes Hornet V1's compressed form. Stage 1 (Sonnet) emits `type(scope)!: subject\n\nbody`. Stage 2 (Haiku) validates type, subject length, breaking-change marker vs exported-API paths, sign-off policy, body wrapping. Safe-amend detection blocks `git commit --amend` when the target has been pushed to any remote.
+Takes the Myers-diff + `git status` + file paths; if the raw diff exceeds 1500 tokens, substitutes Raven V1's compressed form. Stage 1 (Sonnet) emits `type(scope)!: subject\n\nbody`. Stage 2 (Haiku) validates type, subject length, breaking-change marker vs exported-API paths, sign-off policy, body wrapping. Safe-amend detection blocks `git commit --amend` when the target has been pushed to any remote.
 
 ## Install
 
-Part of the [Weaver](../..) bundle:
+Part of the [Sylph](../..) bundle:
 
 ```
-/plugin marketplace add enchanted-plugins/weaver
-/plugin install full@weaver
+/plugin marketplace add enchanted-plugins/sylph
+/plugin install full@sylph
 ```
 
-Standalone: `/plugin install commit-intelligence@weaver`. Without `boundary-segmenter`, commits must be developer-triggered via `/weaver commit` — the auto-orchestration flow breaks without W2.
+Standalone: `/plugin install commit-intelligence@sylph`. Without `boundary-segmenter`, commits must be developer-triggered via `/sylph commit` — the auto-orchestration flow breaks without W2.
 
 ## Components
 
@@ -23,18 +23,18 @@ Standalone: `/plugin install commit-intelligence@weaver`. Without `boundary-segm
 |------|------|------|
 | Agent | commit-drafter (Sonnet) | W1 Stage 1 |
 | Agent | message-validator (Haiku) | W1 Stage 2 |
-| Command | `/weaver commit` | Manual invocation |
+| Command | `/sylph commit` | Manual invocation |
 | Hook | PreToolUse(Bash) filter | Inspects `git commit` invocations |
 
 ## Hook chain
 
-`commit-intelligence` registers a `PostToolUse(Edit|Write|MultiEdit)` hook (`hooks/post-tool-use/on-boundary.sh`) that tails `plugins/boundary-segmenter/state/boundary-events.jsonl` from its persisted byte offset in `state/listener-offset.json`. For each new `weaver.task.boundary.detected` line, it infers a Conventional-Commits type from the closed cluster's file paths and appends a `commit.drafted` record to `state/pending-drafts.jsonl`. The hook never calls an LLM — drafting happens when the developer invokes `/weaver:commit`, which reads pending drafts and hands them to the Sonnet commit-drafter agent.
+`commit-intelligence` registers a `PostToolUse(Edit|Write|MultiEdit)` hook (`hooks/post-tool-use/on-boundary.sh`) that tails `plugins/boundary-segmenter/state/boundary-events.jsonl` from its persisted byte offset in `state/listener-offset.json`. For each new `sylph.task.boundary.detected` line, it infers a Conventional-Commits type from the closed cluster's file paths and appends a `commit.drafted` record to `state/pending-drafts.jsonl`. The hook never calls an LLM — drafting happens when the developer invokes `/sylph:commit`, which reads pending drafts and hands them to the Sonnet commit-drafter agent.
 
 Architecture note: **independent listener (Option 1)** — each plugin owns its own offset; the hook is advisory-only (exits 0 regardless).
 
 ## Cross-plugin
 
-- **Consumes** `hornet.change.classified` for V1 compressed-diff when diff > 1500 tokens.
-- **Publishes** `weaver.commit.drafted`, `weaver.commit.committed`.
+- **Consumes** `raven.change.classified` for V1 compressed-diff when diff > 1500 tokens.
+- **Publishes** `sylph.commit.drafted`, `sylph.commit.committed`.
 
 Full architecture: [../../docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md#layer-5-commit-intelligence-w1-myers-diff-conventional-classifier).

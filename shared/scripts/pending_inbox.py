@@ -1,11 +1,11 @@
-"""Weaver pending-inbox helper — the consumer side of the hook-driven inbox.
+"""Sylph pending-inbox helper — the consumer side of the hook-driven inbox.
 
-Two Weaver hook scripts append advisory records to JSONL inboxes:
+Two Sylph hook scripts append advisory records to JSONL inboxes:
 
     plugins/branch-workflow/state/pending-actions.jsonl
     plugins/commit-intelligence/state/pending-drafts.jsonl
 
-The ``/weaver:branch`` and ``/weaver:commit`` skill commands are the consumers.
+The ``/sylph:branch`` and ``/sylph:commit`` skill commands are the consumers.
 This module gives them two small primitives:
 
     read_pending(path) -> list[dict]
@@ -60,7 +60,7 @@ from pathlib import Path
 from typing import Any, Union
 
 # Re-use the canonical atomic primitives — keep one source of truth for the
-# Allay-A4 pattern.
+# Fae-A4 pattern.
 _here = Path(__file__).resolve().parent
 if str(_here) not in sys.path:
     sys.path.insert(0, str(_here))
@@ -146,7 +146,7 @@ def mark_executed(path: PathLike, record_ts: str, **fields: Any) -> bool:
     """Flip the record with matching ``ts`` to ``executed:true``.
 
     Any keyword args are merged into the record — commonly ``branch_name``
-    for /weaver:branch or ``sha`` for /weaver:commit. An ``executed_at``
+    for /sylph:branch or ``sha`` for /sylph:commit. An ``executed_at``
     UTC ISO-8601 timestamp is always set.
 
     Returns True iff a matching record was found. When False, the file is
@@ -234,7 +234,7 @@ def mark_discarded(
     record no longer shows up in ``read_pending`` and W5 can treat the
     original suggestion as a negative signal.
 
-    # TODO: emit discard signal to weaver-learning for W5 EMA
+    # TODO: emit discard signal to sylph-learning for W5 EMA
     """
     p = Path(path)
     if not p.exists():

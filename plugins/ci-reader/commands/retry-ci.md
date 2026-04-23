@@ -1,30 +1,30 @@
 ---
-name: weaver:retry-ci
+name: sylph:retry-ci
 description: Rerun failing CI checks on the current ref. Only re-runs EXISTING runs — never triggers a fresh build from scratch.
 allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/ci_reader.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/ci_reader.py *), Bash(gh run rerun *), Bash(git remote get-url *), Bash(git rev-parse HEAD)
 ---
 
-# /weaver:retry-ci
+# /sylph:retry-ci
 
 Rerun failing CI checks on the current branch's HEAD commit.
 
 ## Usage
 
 ```
-/weaver:retry-ci                   # rerun all failing checks on HEAD
-/weaver:retry-ci --name "tests"    # only rerun checks matching a name substring
-/weaver:retry-ci --all             # rerun ALL checks, not just failures (incl. skipped/cancelled)
-/weaver:retry-ci --ref <sha>       # explicit ref instead of HEAD
+/sylph:retry-ci                   # rerun all failing checks on HEAD
+/sylph:retry-ci --name "tests"    # only rerun checks matching a name substring
+/sylph:retry-ci --all             # rerun ALL checks, not just failures (incl. skipped/cancelled)
+/sylph:retry-ci --ref <sha>       # explicit ref instead of HEAD
 ```
 
 ## What "retry" means
 
-- **Weaver re-runs existing builds** — e.g., `gh run rerun <run-id>`,
+- **Sylph re-runs existing builds** — e.g., `gh run rerun <run-id>`,
   GitLab's `/jobs/:id/retry`, CircleCI's `/workflow/:id/rerun`.
-- **Weaver does NOT trigger NEW builds.** New builds from scratch are
-  out of scope — Weaver is a git-workflow plugin, and CI execution
+- **Sylph does NOT trigger NEW builds.** New builds from scratch are
+  out of scope — Sylph is a git-workflow plugin, and CI execution
   belongs to your existing CI pipelines (push-triggered workflows, etc.).
-  When no existing run can be re-run, Weaver reports and stops.
+  When no existing run can be re-run, Sylph reports and stops.
 
 ## Flow
 
@@ -32,8 +32,8 @@ Rerun failing CI checks on the current branch's HEAD commit.
 1. Read CI status via ci-reader.
 2. Filter to failing (or all with --all) checks.
 3. For each: call adapter.rerun(check_id). Adapters that don't
-   support retry (Tekton — re-apply the CRD; ArgoCD/FluxCD — GitOps)
-   emit weaver.ci.trigger.requested instead.
+   support retry (Tekton — re-apply the CRD; ArgoCD/WixieCD — GitOps)
+   emit sylph.ci.trigger.requested instead.
 4. Poll status once after 5s; print the new state.
 ```
 
@@ -48,7 +48,7 @@ Rerun failing CI checks on the current branch's HEAD commit.
 | Buildkite | `PUT /builds/{id}/retry` |
 | Drone / Woodpecker | `POST /api/repos/{repo}/builds/{n}` (new-build trigger) |
 | Tekton | `kubectl delete pipelinerun/X && kubectl apply ...` — manual for now |
-| ArgoCD / FluxCD | GitOps — no retry. Refuses with pointer to drift surface. |
+| ArgoCD / WixieCD | GitOps — no retry. Refuses with pointer to drift surface. |
 | Github Actions / Jenkins / circleci on self-hosted | Honors is_available flag |
 
 ## Exit codes
@@ -57,5 +57,5 @@ Rerun failing CI checks on the current branch's HEAD commit.
 |------|---------|
 | 0 | At least one check rerun (or no failing checks to rerun) |
 | 1 | No CI detected on the current repo |
-| 2 | All failing checks are on read-only systems (ArgoCD/FluxCD) |
+| 2 | All failing checks are on read-only systems (ArgoCD/WixieCD) |
 | 3 | Adapter error on every rerun attempt |

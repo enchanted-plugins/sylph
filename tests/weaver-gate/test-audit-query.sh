@@ -118,7 +118,7 @@ ok "malformed lines: skipped with warning, not fatal"
 
 # ── Case 11: human-readable rendering sanity ─────────────────────────
 human="$("$PY" "$QUERY_PY" --audit-log "$audit_py")"
-assert_contains "$human" "Weaver audit" "human header present"
+assert_contains "$human" "Sylph audit" "human header present"
 assert_contains "$human" "force_push_protected" "human output lists pattern"
 assert_contains "$human" "BLOCKED" "human output uppercases verdict"
 assert_contains "$human" "bypass: --yes-i-know" "bypass tag surfaced"

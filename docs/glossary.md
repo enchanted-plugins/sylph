@@ -1,6 +1,6 @@
-# Weaver glossary
+# Sylph glossary
 
-Terms of art used across Weaver. Short definitions; the algorithms live in [docs/science/README.md](science/README.md).
+Terms of art used across Sylph. Short definitions; the algorithms live in [docs/science/README.md](science/README.md).
 
 ## Engines (W1–W5)
 
@@ -25,25 +25,25 @@ The workflow classifier (W3) tags the active repo into one of these classes. Eve
 | **release-branch** | Long-lived release branches alongside main; cherry-picks between them. | Merge-commit |
 | **feature-branch** | Named feature branches, opened per task, merged into main. | Squash or Rebase |
 | **stacked-diff** | Dependent PRs opened as a stack (Phabricator / Graphite style). | Rebase |
-| **other** | Doesn't match a canonical class; Weaver defaults conservatively. | Merge-commit with confirmation |
+| **other** | Doesn't match a canonical class; Sylph defaults conservatively. | Merge-commit with confirmation |
 
-Weaver never *forces* a classification. Every command that depends on class prints the detected class first; the user can override.
+Sylph never *forces* a classification. Every command that depends on class prints the detected class first; the user can override.
 
 ## H-suffix references
 
-Some Weaver engines cite Hornet's engines explicitly because Weaver reuses the pattern that Hornet established for its pre-tool gate.
+Some Sylph engines cite Raven's engines explicitly because Sylph reuses the pattern that Raven established for its pre-tool gate.
 
-| H-suffix | Hornet engine | Where Weaver uses it |
+| H-suffix | Raven engine | Where Sylph uses it |
 |----------|---------------|----------------------|
-| H2 | Bayesian Trust | `weaver-gate` uses the same gate pattern: advisory-first, blast-radius honest, never silently blocks. |
+| H2 | Bayesian Trust | `sylph-gate` uses the same gate pattern: advisory-first, blast-radius honest, never silently blocks. |
 | H5 | Adversarial Robustness | Hardening the decision-gate against "benign-looking destructive commands" (re-label exploits, typo'd flags) uses the H5 pattern. |
 | H6 | Session Learning | W5 Gauss Learning shares the EMA update shape. |
 
-The cross-ref isn't a dependency — Weaver runs standalone — it's an acknowledgement that the patterns originated in Hornet and stay aligned.
+The cross-ref isn't a dependency — Sylph runs standalone — it's an acknowledgement that the patterns originated in Raven and stay aligned.
 
 ## Conventional Commits shorthand
 
-Weaver's `commit-intelligence` emits [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). The short reference:
+Sylph's `commit-intelligence` emits [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). The short reference:
 
 | Prefix | When to use |
 |--------|-------------|
@@ -59,13 +59,13 @@ Weaver's `commit-intelligence` emits [Conventional Commits](https://www.conventi
 | `chore` | Miscellaneous maintenance. |
 | `revert` | Revert of a previous commit. |
 
-**Scope** is the sub-plugin slug for Weaver internal commits (e.g., `feat(pr-lifecycle): …`). For application repos Weaver is operating on, scope follows the local convention — if the repo uses module names, so does Weaver.
+**Scope** is the sub-plugin slug for Sylph internal commits (e.g., `feat(pr-lifecycle): …`). For application repos Sylph is operating on, scope follows the local convention — if the repo uses module names, so does Sylph.
 
 **Breaking changes** — append `!` after the type, or include a `BREAKING CHANGE:` footer. The classifier respects both.
 
 ## Destructive-op classification
 
-`weaver-gate` classifies pre-tool Bash commands into four bands. Advisory only — per the hooks contract, the user or orchestrator decides.
+`sylph-gate` classifies pre-tool Bash commands into four bands. Advisory only — per the hooks contract, the user or orchestrator decides.
 
 | Band | Examples | Gate behavior |
 |------|----------|---------------|
@@ -76,7 +76,7 @@ Weaver's `commit-intelligence` emits [Conventional Commits](https://www.conventi
 
 ## CI systems recognized
 
-Weaver's `ci-reader` is read-only across these systems: GitHub Actions, GitLab CI, Bitbucket Pipelines, Jenkins, CircleCI, Buildkite, TeamCity, Azure Pipelines, Drone, Woodpecker. It never *triggers* builds — Weaver is a git-workflow plugin; CI execution belongs to your existing CI pipelines.
+Sylph's `ci-reader` is read-only across these systems: GitHub Actions, GitLab CI, Bitbucket Pipelines, Jenkins, CircleCI, Buildkite, TeamCity, Azure Pipelines, Drone, Woodpecker. It never *triggers* builds — Sylph is a git-workflow plugin; CI execution belongs to your existing CI pipelines.
 
 ## Git hosts recognized
 
@@ -84,7 +84,7 @@ Weaver's `ci-reader` is read-only across these systems: GitHub Actions, GitLab C
 
 ## See also
 
-- [README.md](../README.md) — what Weaver does end-to-end.
+- [README.md](../README.md) — what Sylph does end-to-end.
 - [docs/getting-started.md](getting-started.md) — 5-minute first run.
 - [docs/science/README.md](science/README.md) — derivations for W1–W5.
 - [docs/architecture/](architecture/) — auto-generated diagram.

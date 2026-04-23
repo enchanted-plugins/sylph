@@ -12,7 +12,7 @@ assert_file_exists "$HOOK"
 
 # Sandbox mimicking the real product layout so the hook can resolve SHARED/PY.
 new_sandbox > /dev/null
-fake_product="$SANDBOX/weaver-sim"
+fake_product="$SANDBOX/sylph-sim"
 mkdir -p "$fake_product/plugins/boundary-segmenter/hooks/post-tool-use"
 mkdir -p "$fake_product/plugins/boundary-segmenter/state"
 cp "$HOOK" "$fake_product/plugins/boundary-segmenter/hooks/post-tool-use/boundary-segment.sh"
@@ -54,8 +54,8 @@ assert_eq "$boundary_fired" "true" "second event fires a boundary"
 # Read the boundary event.
 last_event="$(tail -n1 "$events")"
 event_name="$(printf '%s' "$last_event" | jq -r '.event')"
-assert_eq "$event_name" "weaver.task.boundary.detected" "boundary event schema"
+assert_eq "$event_name" "sylph.task.boundary.detected" "boundary event schema"
 
 closed_files="$(printf '%s' "$last_event" | jq -r '.closed_cluster.events[0].files[0]')"
 assert_eq "$closed_files" "src/auth.py" "closed cluster references original file"
-ok "event 2: boundary fires, events.jsonl records weaver.task.boundary.detected"
+ok "event 2: boundary fires, events.jsonl records sylph.task.boundary.detected"

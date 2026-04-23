@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Weaver shared sanitization utilities
+# Sylph shared sanitization utilities
 
 sanitize_path() {
   local path="$1"

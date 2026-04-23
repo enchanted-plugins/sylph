@@ -2,16 +2,16 @@
 # pr-lifecycle PostToolUse(Bash) — W4 listener.
 #
 # Tails plugins/commit-intelligence/state/executed-commits.jsonl from this
-# plugin's persisted byte offset. For each new `weaver.commit.committed`
+# plugin's persisted byte offset. For each new `sylph.commit.committed`
 # event, drafts a PR record (title, body, reviewer suggestions) and appends
-# it to state/pending-prs.jsonl. The /weaver:pr skill picks up pending PRs
+# it to state/pending-prs.jsonl. The /sylph:pr skill picks up pending PRs
 # on invocation.
 #
 # Architectural note — this listener reacts to *executed* commits, not
 # boundary events. That one-step-further offset closes the
 # boundary → branch → commit → PR chain (per CLAUDE.md Lifecycle table).
 # The matcher is Bash (not Edit|Write|MultiEdit) because the signal is a
-# successful `git commit` invocation; commit-intelligence's /weaver:commit
+# successful `git commit` invocation; commit-intelligence's /sylph:commit
 # skill appends to executed-commits.jsonl on each successful commit.
 #
 # Advisory-only contract (shared/conduct/hooks.md):
@@ -27,7 +27,7 @@
 set -euo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname "$(dirname "$(dirname "$0")")")}"
-PRODUCT_ROOT="${WEAVER_HOME:-$(dirname "$(dirname "$PLUGIN_ROOT")")}"
+PRODUCT_ROOT="${SYLPH_HOME:-$(dirname "$(dirname "$PLUGIN_ROOT")")}"
 SHARED="$PRODUCT_ROOT/shared/scripts"
 
 EVENTS="$PRODUCT_ROOT/plugins/commit-intelligence/state/executed-commits.jsonl"
@@ -85,10 +85,10 @@ if ! tail_bytes=$(dd if="$EVENTS" bs=1 skip="$last_offset" 2>/dev/null); then
     tail_bytes="$(tail -c +$((last_offset + 1)) "$EVENTS" 2>/dev/null || printf '')"
 fi
 
-# Build a minimal title/body from a commit message. /weaver:pr upgrades this
-# with boundary-cluster + Hornet V4 continuity when actually opening the PR.
+# Build a minimal title/body from a commit message. /sylph:pr upgrades this
+# with boundary-cluster + Raven V4 continuity when actually opening the PR.
 # Title = first line of the message (truncated to 72 chars). Body = the full
-# message plus a Weaver footer.
+# message plus a Sylph footer.
 while IFS= read -r line; do
     [[ -z "$line" ]] && continue
     if ! command -v jq >/dev/null 2>&1; then continue; fi
@@ -96,7 +96,7 @@ while IFS= read -r line; do
     # Advisory contract: a malformed feed line must never crash the hook.
     # jq on non-JSON exits 4/5; the `|| true` neutralizes that under pipefail.
     event_name="$(printf '%s' "$line" | jq -r '.event // empty' 2>/dev/null || true)"
-    [[ "$event_name" != "weaver.commit.committed" ]] && continue
+    [[ "$event_name" != "sylph.commit.committed" ]] && continue
 
     branch="$(printf '%s' "$line" | jq -r '.branch // empty' 2>/dev/null || true)"
     sha="$(printf '%s' "$line" | jq -r '.sha // empty' 2>/dev/null || true)"
@@ -108,9 +108,9 @@ while IFS= read -r line; do
     if [[ ${#title} -gt 72 ]]; then
         title="${title:0:72}"
     fi
-    [[ -z "$title" ]] && title="chore: weaver-drafted PR"
+    [[ -z "$title" ]] && title="chore: sylph-drafted PR"
 
-    # Body: simple draft that /weaver:pr will replace with the rich
+    # Body: simple draft that /sylph:pr will replace with the rich
     # PRDescription.from_cluster output. Keep it structured so a developer
     # reviewing pending-prs.jsonl directly can still use it.
     body_text="## What changed
@@ -120,15 +120,15 @@ while IFS= read -r line; do
 ## Why
 
 _PR draft queued by pr-lifecycle chain-listener. Full description will
-be composed from W2 cluster state + Hornet V4 continuity when
-\`/weaver:pr\` is invoked._
+be composed from W2 cluster state + Raven V4 continuity when
+\`/sylph:pr\` is invoked._
 
 ---
-*Drafted by [Weaver](https://github.com/enchanted-plugins/weaver) (W4 pr-lifecycle).*"
+*Drafted by [Sylph](https://github.com/enchanted-plugins/sylph) (W4 pr-lifecycle).*"
 
     record="$(jq -nc \
         --arg ts "$ts" \
-        --arg event "weaver.pr.drafted" \
+        --arg event "sylph.pr.drafted" \
         --arg branch "$branch" \
         --arg sha "$sha" \
         --arg title "$title" \
@@ -175,7 +175,7 @@ fi
 set -e
 
 if (( new_count > 0 )); then
-    printf 'weaver[pr-lifecycle]: %d commit event(s) drafted → pending-prs.jsonl\n' "$new_count" >&2
+    printf 'sylph[pr-lifecycle]: %d commit event(s) drafted → pending-prs.jsonl\n' "$new_count" >&2
 fi
 
 exit 0

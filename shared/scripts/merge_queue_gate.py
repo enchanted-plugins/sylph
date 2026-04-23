@@ -1,5 +1,5 @@
 """
-Weaver merge-queue gate.
+Sylph merge-queue gate.
 
 Closes the contract promised in `CLAUDE.md` (row: ci-reader — "gates
 merge-queue entry"). When a PR promotes from draft → ready-for-review,
@@ -8,10 +8,10 @@ declared in `plugins/ci-reader/state/ci-registry.json` and returns a
 three-valued decision: `allow` | `block` | `unknown`.
 
 Boundary contract (CLAUDE.md §"CI/CD boundary"):
-  - Weaver READS status; Weaver never triggers a build.
+  - Sylph READS status; Sylph never triggers a build.
   - If an adapter's own is_available() is False we surface it as
     "unknown"; we do NOT degrade silently to "allow".
-  - Read-only CI systems (ArgoCD / FluxCD) have `gate_merge_queue: false`
+  - Read-only CI systems (ArgoCD / WixieCD) have `gate_merge_queue: false`
     in the registry and are skipped here — GitOps surfaces drift, not
     gate-ready status.
 
@@ -23,7 +23,7 @@ Decision logic — see the test fixture for the canonical matrix:
     unknown host  → unknown (allow unless --strict)
     no eligible   → unknown (nothing to gate on)
 
-Test-mode override: when `WEAVER_TEST_CI_STATUS` is set to a path, the
+Test-mode override: when `SYLPH_TEST_CI_STATUS` is set to a path, the
 JSON at that path stands in for every adapter's `latest_status()` call.
 Shape:
 
@@ -121,7 +121,7 @@ _SYSTEM_ID_MAP = {
     "woodpecker": "woodpecker",
     "tekton": "tekton",
     "argocd": "argocd",
-    "fluxcd": "fluxcd",
+    "wixiecd": "wixiecd",
 }
 
 # Coarse "which CI does this host typically pair with" hint, derived from
@@ -171,13 +171,13 @@ def _eligible_systems(
 
 
 def _load_test_fixture() -> dict[str, list[dict[str, Any]]] | None:
-    """If WEAVER_TEST_CI_STATUS is set, return the parsed fixture; else None.
+    """If SYLPH_TEST_CI_STATUS is set, return the parsed fixture; else None.
 
     The env var holds a filesystem path. We deliberately don't support
     inline JSON in the env var — keeps the audit-log of fixture contents
     outside of the process environment.
     """
-    path = os.environ.get("WEAVER_TEST_CI_STATUS")
+    path = os.environ.get("SYLPH_TEST_CI_STATUS")
     if not path:
         return None
     p = Path(path)
@@ -252,7 +252,7 @@ def check_gate(
 
     Args:
       pr_record: Minimum shape is `{"head_sha": "<sha>"}`. Extras are
-        ignored; anything else is Hornet session-continuity / W2 cluster
+        ignored; anything else is Raven session-continuity / W2 cluster
         metadata the caller may choose to carry.
       host_id: capability-registry id (e.g. "github", "gitlab",
         "sourcehut"). Used for the ci_event hint and to lookup the host
@@ -275,7 +275,7 @@ def check_gate(
     """
     # Lazy import of registry_loader to keep this module importable in
     # contexts where the registry path walker hasn't fired yet (e.g. some
-    # test harnesses that monkey-patch WEAVER_HOME).
+    # test harnesses that monkey-patch SYLPH_HOME).
     sys.path.insert(0, str(Path(__file__).parent))
 
     try:

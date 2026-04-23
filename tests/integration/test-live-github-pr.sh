@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# LIVE integration test — opens a real draft PR against the weaver repo,
+# LIVE integration test — opens a real draft PR against the sylph repo,
 # round-trips it via the adapter, then closes it to avoid leaving cruft.
 #
-# Gated by $WEAVER_INTEGRATION=1. Not run by the default suite — this
+# Gated by $SYLPH_INTEGRATION=1. Not run by the default suite — this
 # makes real network calls to api.github.com, needs push credentials
 # (git credential-manager or $GH_TOKEN / $GITHUB_TOKEN), and leaves a
 # brief closed PR in the repo's timeline.
@@ -12,17 +12,17 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=../shared/helpers.sh
 source "$SCRIPT_DIR/../shared/helpers.sh"
 
-if [[ "${WEAVER_INTEGRATION:-0}" != "1" ]]; then
-    echo "  skipped (set WEAVER_INTEGRATION=1 to run)"
+if [[ "${SYLPH_INTEGRATION:-0}" != "1" ]]; then
+    echo "  skipped (set SYLPH_INTEGRATION=1 to run)"
     exit 0
 fi
 
 cd "$REPO_ROOT"
 export PYTHONIOENCODING=utf-8
 
-# Pre-flight: must be on the weaver repo, on main, clean tree.
+# Pre-flight: must be on the sylph repo, on main, clean tree.
 remote="$(git remote get-url origin 2>&1)"
-assert_contains "$remote" "enchanted-plugins/weaver" "remote points at weaver repo"
+assert_contains "$remote" "enchanted-plugins/sylph" "remote points at sylph repo"
 current="$(git branch --show-current)"
 assert_eq "$current" "main" "must start on main"
 if [[ -n "$(git status --porcelain)" ]]; then
@@ -31,7 +31,7 @@ fi
 
 # Disposable feature branch + marker file so the PR has real content.
 ts="$(date -u +%Y%m%d-%H%M%S)"
-branch="weaver-integration-test-${ts}"
+branch="sylph-integration-test-${ts}"
 marker_file="tests/.integration-marker-${ts}.txt"
 
 cleanup() {
@@ -47,7 +47,7 @@ trap cleanup EXIT
 git checkout -q -b "$branch"
 printf 'Marker for live integration test %s\n' "$ts" > "$marker_file"
 git add "$marker_file"
-git -c user.email=weaver-test@local -c user.name="weaver-integration-test" \
+git -c user.email=sylph-test@local -c user.name="sylph-integration-test" \
     commit -q -m "test: live-integration marker ${ts}"
 git push -q -u origin "$branch"
 ok "feature branch pushed: $branch"
@@ -63,17 +63,17 @@ if not adapter.is_authenticated():
     print(json.dumps({"error": "adapter could not resolve a token"}))
     sys.exit(2)
 
-repo = "enchanted-plugins/weaver"
-title = "test: weaver live integration ${ts}"
+repo = "enchanted-plugins/sylph"
+title = "test: sylph live integration ${ts}"
 body = (
     "## What changed\n\n"
-    "- Opened by tests/integration/test-live-github-pr.sh via Weaver's "
+    "- Opened by tests/integration/test-live-github-pr.sh via Sylph's "
     "GitHubAdapter urllib path. Auto-closed by the same test.\n\n"
     "## Why\n\n"
     "Verifying W4 pr-lifecycle end-to-end against real GitHub.\n\n"
     "## How it was verified\n\n"
     "- is_authenticated() returned True via git-credential-manager.\n"
-    "- open_pr POST /repos/enchanted-plugins/weaver/pulls returned HTTP 201.\n"
+    "- open_pr POST /repos/enchanted-plugins/sylph/pulls returned HTTP 201.\n"
     "- get_pr GET /repos/.../pulls/{number} round-tripped state + title.\n\n"
     "## Rollback plan\n\n"
     "PR is auto-closed; branch ${branch} is deleted locally + on the remote.\n"
@@ -82,7 +82,7 @@ pr = adapter.open_pr(repo, "main", "${branch}", title, body, draft=True)
 print(json.dumps({
     "number": pr.number, "url": pr.url, "state": pr.state,
     "title": pr.title, "base": pr.base, "head": pr.head,
-    "body_has_signature": "Weaver" in (pr.body or ""),
+    "body_has_signature": "Sylph" in (pr.body or ""),
 }))
 PYEOF
 )"
@@ -99,7 +99,7 @@ fi
 
 assert_eq "$pr_state" "draft" "PR opened in draft state"
 assert_eq "$pr_head" "$branch" "PR head = feature branch"
-assert_eq "$body_ok" "True" "PR body carries the Weaver signature"
+assert_eq "$body_ok" "True" "PR body carries the Sylph signature"
 ok "live open_pr: #${pr_number} opened as draft"
 
 # Round-trip via get_pr.
@@ -108,7 +108,7 @@ import json, sys
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from adapters.github import GitHubAdapter
 adapter = GitHubAdapter()
-pr = adapter.get_pr("enchanted-plugins/weaver", ${pr_number})
+pr = adapter.get_pr("enchanted-plugins/sylph", ${pr_number})
 print(json.dumps({"number": pr.number, "state": pr.state, "title": pr.title,
                   "base": pr.base, "head": pr.head}))
 PYEOF
@@ -126,7 +126,7 @@ import sys
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from adapters.github import GitHubAdapter
 adapter = GitHubAdapter()
-adapter.close_pr("enchanted-plugins/weaver", ${pr_number})
+adapter.close_pr("enchanted-plugins/sylph", ${pr_number})
 PYEOF
 ok "close_pr: PR #${pr_number} closed"
 

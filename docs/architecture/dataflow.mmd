@@ -5,20 +5,20 @@ graph TB
         Write["Write / Edit"]
         Glob["Glob / Grep"]
     end
-    boundary_segmenter_metrics["boundary-segmenter/state/metrics.jsonl<br/><small>weaver.task.boundary.detected</small>"]
+    boundary_segmenter_metrics["boundary-segmenter/state/metrics.jsonl<br/><small>sylph.task.boundary.detected</small>"]
     Write --> boundary_segmenter_metrics
-    branch_workflow_metrics["branch-workflow/state/metrics.jsonl<br/><small>weaver.workflow.detected<br/>weaver.branch.created</small>"]
+    branch_workflow_metrics["branch-workflow/state/metrics.jsonl<br/><small>sylph.workflow.detected<br/>sylph.branch.created</small>"]
     Write --> branch_workflow_metrics
     capability_memory_metrics["capability-memory/state/metrics.jsonl<br/><small>capability_loaded<br/>gitlab_version_probed</small>"]
-    ci_reader_metrics["ci-reader/state/metrics.jsonl<br/><small>weaver.ci.status.observed</small>"]
-    commit_intelligence_metrics["commit-intelligence/state/metrics.jsonl<br/><small>weaver.commit.drafted<br/>weaver.commit.committed</small>"]
+    ci_reader_metrics["ci-reader/state/metrics.jsonl<br/><small>sylph.ci.status.observed</small>"]
+    commit_intelligence_metrics["commit-intelligence/state/metrics.jsonl<br/><small>sylph.commit.drafted<br/>sylph.commit.committed</small>"]
     Write --> commit_intelligence_metrics
     full_metrics["full/state/metrics.jsonl<br/><small></small>"]
-    pr_lifecycle_metrics["pr-lifecycle/state/metrics.jsonl<br/><small>weaver.pr.drafted<br/>weaver.pr.ready<br/>weaver.pr.merged</small>"]
+    pr_lifecycle_metrics["pr-lifecycle/state/metrics.jsonl<br/><small>sylph.pr.drafted<br/>sylph.pr.ready<br/>sylph.pr.merged</small>"]
     Bash --> pr_lifecycle_metrics
-    weaver_gate_metrics["weaver-gate/state/metrics.jsonl<br/><small>weaver.destructive.detected<br/>weaver.destructive.confirmed</small>"]
-    Bash --> weaver_gate_metrics
-    weaver_learning_metrics["weaver-learning/state/metrics.jsonl<br/><small>priors_loaded<br/>preferences_checkpointed</small>"]
+    sylph_gate_metrics["sylph-gate/state/metrics.jsonl<br/><small>sylph.destructive.detected<br/>sylph.destructive.confirmed</small>"]
+    Bash --> sylph_gate_metrics
+    sylph_learning_metrics["sylph-learning/state/metrics.jsonl<br/><small>priors_loaded<br/>preferences_checkpointed</small>"]
     bus["🌐 mcp-event-bus<br/>Cross-plugin coordination"]
     boundary_segmenter_metrics --> bus
     branch_workflow_metrics --> bus
@@ -27,5 +27,5 @@ graph TB
     commit_intelligence_metrics --> bus
     full_metrics --> bus
     pr_lifecycle_metrics --> bus
-    weaver_gate_metrics --> bus
-    weaver_learning_metrics --> bus
+    sylph_gate_metrics --> bus
+    sylph_learning_metrics --> bus

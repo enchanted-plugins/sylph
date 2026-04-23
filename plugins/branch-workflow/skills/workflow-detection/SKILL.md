@@ -1,6 +1,6 @@
 ---
 name: workflow-detection
-description: Explains the W3 decision tree — how Weaver chooses between GitHub Flow, Trunk-Based, GitFlow, Release Flow, Stacked Diffs, and Unknown. Helpful when a developer asks "why did Weaver pick this branch name?" or wants to override detection via .weaver/workflow-map.yaml.
+description: Explains the W3 decision tree — how Sylph chooses between GitHub Flow, Trunk-Based, GitFlow, Release Flow, Stacked Diffs, and Unknown. Helpful when a developer asks "why did Sylph pick this branch name?" or wants to override detection via .sylph/workflow-map.yaml.
 allowed-tools: Read
 ---
 
@@ -23,8 +23,8 @@ W3 runs these rules in order. First match wins.
    `trunk-based`. Confidence 0.75.
 7. **Median branch age 3–14 days OR 2 ≤ active branches < 50** →
    `github-flow`. Confidence 0.70.
-8. **Fallback** → `unknown`. Confidence 0.30. The /weaver:workflow-detect
-   command surfaces this as "please pick via .weaver/workflow-map.yaml".
+8. **Fallback** → `unknown`. Confidence 0.30. The /sylph:workflow-detect
+   command surfaces this as "please pick via .sylph/workflow-map.yaml".
 
 ## Branch naming per workflow
 
@@ -42,7 +42,7 @@ W3 runs these rules in order. First match wins.
 In a monorepo where different teams use different workflows, drop:
 
 ```yaml
-# .weaver/workflow-map.yaml
+# .sylph/workflow-map.yaml
 packages/mobile: release-flow
 packages/web: trunk-based
 services/api: github-flow
@@ -54,14 +54,14 @@ even on a repo where root-level classification picked something else.
 
 ## When signals disagree
 
-If you run `/weaver:workflow-detect` and the rationale says something like
+If you run `/sylph:workflow-detect` and the rationale says something like
 "feature-branch pattern + default branch (main), median age 9.0d (GitHub
 Flow)" but your team actually uses Trunk-Based with feature flags, the
 heuristic is fooled by long-running branches that probably shouldn't exist.
 Two fixes:
 
 1. Short-lived your branches and rerun detection after a week.
-2. Hardcode it in `.weaver/workflow-map.yaml`:
+2. Hardcode it in `.sylph/workflow-map.yaml`:
    ```yaml
    .: trunk-based
    ```
@@ -85,7 +85,7 @@ plugins/branch-workflow/state/pending-actions.jsonl
 ```
 
 Each record carries `{ts, event:"branch.suggested", workflow, dominant_file,
-confidence, source_event, executed:false}`. The `/weaver:branch` command is
+confidence, source_event, executed:false}`. The `/sylph:branch` command is
 the consumer — on next invocation it reads the inbox via
 `shared/scripts/pending_inbox.py read`, sorts by descending confidence,
 presents the top record as the default, and calls
@@ -94,5 +94,5 @@ record to `executed:true` once a branch has been created.
 
 This keeps the loop auto-detect-on / auto-execute-off: W3 always classifies
 on every observed boundary, but the branch is created only when the developer
-runs `/weaver:branch` (or accepts the default in the next turn). No silent
+runs `/sylph:branch` (or accepts the default in the next turn). No silent
 branch switches — that would violate "silent by default, loud when risky."

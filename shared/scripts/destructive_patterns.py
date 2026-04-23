@@ -1,11 +1,11 @@
 """
 Destructive-op classifier for git subcommands.
 
-Consumed by weaver-gate's PreToolUse(Bash) hook. Takes a shell command
+Consumed by sylph-gate's PreToolUse(Bash) hook. Takes a shell command
 string and returns a classification: safe | destructive | protected-destructive.
 
 Rules-only — no LLM in the hot path. Matches the destructive-op table
-in the Weaver architecture output-reference.md.
+in the Sylph architecture output-reference.md.
 
 Recovery windows are advisory (used in the gate confirmation prompt);
 protected-destructive ops are never bypassed regardless of the flag.

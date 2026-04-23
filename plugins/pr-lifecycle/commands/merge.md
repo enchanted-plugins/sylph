@@ -1,28 +1,28 @@
 ---
-name: weaver:merge
+name: sylph:merge
 description: Merge the current branch's PR with the chosen strategy. Defaults to squash when the target branch is trunk-based/github-flow (short-lived feature branches); to merge-commit for gitflow/release-flow (long-lived branches that need history preservation). Respects merge queues — when one is configured, enqueues via auto-merge rather than merging directly.
 allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pr_lifecycle.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pr_lifecycle.py *), Bash(gh pr *), Bash(git branch --show-current), Bash(git remote get-url *), Read(plugins/branch-workflow/state/workflow-map.json)
 ---
 
-# /weaver:merge
+# /sylph:merge
 
 Merge the PR for the current branch.
 
 ## Usage
 
 ```
-/weaver:merge                      # pick strategy from W3 workflow detection
-/weaver:merge --squash             # force squash
-/weaver:merge --rebase             # force rebase
-/weaver:merge --merge-commit       # force 3-way merge commit
-/weaver:merge --auto               # enable auto-merge (enqueue on merge queue)
-/weaver:merge --pr 142             # explicit PR number; defaults to current branch's PR
-/weaver:merge --dry-run            # show the planned call without executing
+/sylph:merge                      # pick strategy from W3 workflow detection
+/sylph:merge --squash             # force squash
+/sylph:merge --rebase             # force rebase
+/sylph:merge --merge-commit       # force 3-way merge commit
+/sylph:merge --auto               # enable auto-merge (enqueue on merge queue)
+/sylph:merge --pr 142             # explicit PR number; defaults to current branch's PR
+/sylph:merge --dry-run            # show the planned call without executing
 ```
 
 ## Strategy defaults (when unspecified)
 
-Inferred from `/weaver:workflow-detect`:
+Inferred from `/sylph:workflow-detect`:
 
 | Workflow | Default strategy | Why |
 |---|---|---|
@@ -45,14 +45,14 @@ Inferred from `/weaver:workflow-detect`:
 4. Decide enqueue vs direct merge:
    ├─ --auto flag OR repo has merge queue + CI pending → adapter.enqueue_merge()
    └─ else adapter.merge_pr(strategy)
-5. Publish weaver.pr.merged OR weaver.pr.enqueued to state/metrics.jsonl.
+5. Publish sylph.pr.merged OR sylph.pr.enqueued to state/metrics.jsonl.
 6. Offer to delete the local feature branch (unless user declines).
 ```
 
 ## Guardrails
 
 - **Never merges with failing required checks.** `--force-merge` bypasses
-  but routes through weaver-gate as a destructive-op for audit.
+  but routes through sylph-gate as a destructive-op for audit.
 - **Protected branch rules honored.** If GitHub rejects because a required
   review is missing, surfaces the reason verbatim rather than retrying.
 - **Merge-queue-configured repos auto-enqueue by default** — direct merge

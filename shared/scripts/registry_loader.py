@@ -1,5 +1,5 @@
 """
-Weaver registry loader — single source of truth for adapter config.
+Sylph registry loader — single source of truth for adapter config.
 
 Two registry JSON files live under `plugins/`:
 
@@ -12,11 +12,11 @@ registry is the data-rich source; the adapter code is the behavior.
 
 Path resolution:
 
-  1. $WEAVER_HOME/plugins/{capability-memory,ci-reader}/state/*-registry.json
+  1. $SYLPH_HOME/plugins/{capability-memory,ci-reader}/state/*-registry.json
   2. Walk up from this module's __file__ looking for `plugins/.../state/*.json`
 
 If a registry can't be found, every top-level lookup raises
-RegistryError — we fail loudly (per the Weaver contract) rather than
+RegistryError — we fail loudly (per the Sylph contract) rather than
 silently degrade.
 
 Stdlib only. Results cached with functools.lru_cache.
@@ -38,8 +38,8 @@ class RegistryError(RuntimeError):
     """Raised when a registry file can't be located or parsed."""
 
 
-def _weaver_home_candidate(parts: tuple[str, ...]) -> Path | None:
-    home = os.environ.get("WEAVER_HOME")
+def _sylph_home_candidate(parts: tuple[str, ...]) -> Path | None:
+    home = os.environ.get("SYLPH_HOME")
     if not home:
         return None
     p = Path(home).joinpath(*parts)
@@ -58,12 +58,12 @@ def _walk_up_candidate(parts: tuple[str, ...]) -> Path | None:
 
 def _resolve_registry_path(parts: tuple[str, ...], label: str) -> Path:
     """Find a registry JSON on disk; raise RegistryError if it's missing."""
-    p = _weaver_home_candidate(parts) or _walk_up_candidate(parts)
+    p = _sylph_home_candidate(parts) or _walk_up_candidate(parts)
     if p is None:
         raise RegistryError(
             f"{label} registry not found: expected "
-            f"{os.path.sep.join(parts)} under $WEAVER_HOME or an ancestor of "
-            f"{__file__}. Set WEAVER_HOME or run from within the Weaver repo."
+            f"{os.path.sep.join(parts)} under $SYLPH_HOME or an ancestor of "
+            f"{__file__}. Set SYLPH_HOME or run from within the Sylph repo."
         )
     return p
 

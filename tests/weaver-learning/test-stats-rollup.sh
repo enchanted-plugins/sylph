@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=../shared/helpers.sh
 source "$SCRIPT_DIR/../shared/helpers.sh"
 
-# ── Sandbox: synthesise a mini Weaver repo layout ─────────────────────
+# ── Sandbox: synthesise a mini Sylph repo layout ─────────────────────
 new_sandbox > /dev/null
 SBX_PY="$(py_path "$SANDBOX")"
 
@@ -15,8 +15,8 @@ plugins=(
     "boundary-segmenter"
     "branch-workflow"
     "commit-intelligence"
-    "weaver-gate"
-    "weaver-learning"
+    "sylph-gate"
+    "sylph-learning"
     "pr-lifecycle"
     "capability-memory"
 )
@@ -45,8 +45,8 @@ cat >"$SANDBOX/plugins/commit-intelligence/state/metrics.jsonl" <<'JSONL'
 {"ts":"2026-04-20T10:16:00Z","event":"w1.boundary.observed","suggested_type":"fix","cluster_event_count":2}
 JSONL
 
-# Weaver-gate audit: 1 blocked force-push, 1 allowed amend
-cat >"$SANDBOX/plugins/weaver-gate/state/audit.jsonl" <<'JSONL'
+# Sylph-gate audit: 1 blocked force-push, 1 allowed amend
+cat >"$SANDBOX/plugins/sylph-gate/state/audit.jsonl" <<'JSONL'
 {"ts":"2026-04-20T10:03:00Z","decision":"blocked","category":"force-push","reason":"protected branch"}
 {"ts":"2026-04-20T10:04:00Z","decision":"allowed","category":"amend","reason":"--yes-i-know"}
 JSONL
@@ -65,7 +65,7 @@ JSONL
 # pr-lifecycle: no pending file at all → must count as 0 without erroring.
 
 # Learnings object
-cat >"$SANDBOX/plugins/weaver-learning/state/learnings.json" <<'JSONL'
+cat >"$SANDBOX/plugins/sylph-learning/state/learnings.json" <<'JSONL'
 {"schema_version":"1.0","sample_count":12,"confident":true,"signals":{}}
 JSONL
 

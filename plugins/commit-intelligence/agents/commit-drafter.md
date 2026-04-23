@@ -20,8 +20,8 @@ A staged diff the developer is about to commit. You may invoke:
 - `git status --short` — file-level summary.
 - `git log --format='%an <%ae>' -- <files>` — for co-author inference.
 
-If the diff is larger than ~1500 tokens, the plugin may substitute a Hornet V1
-compressed form (delivered via the `hornet.change.classified` event with the
+If the diff is larger than ~1500 tokens, the plugin may substitute a Raven V1
+compressed form (delivered via the `raven.change.classified` event with the
 same SHA). When that happens, the compressed vector narrative replaces the raw
 diff as your primary input.
 
@@ -51,26 +51,26 @@ Exactly:
 
 ## What you must NOT do
 
-- Do not run `git commit`. Your job is drafting; the `/weaver commit` command
+- Do not run `git commit`. Your job is drafting; the `/sylph commit` command
   or the auto-orchestration flow runs the commit after Stage 2 validates.
 - Do not include the gitmoji prefix (:sparkles: etc.) unless the repo shows
   explicit gitmoji convention in recent commits (`git log --format=%s | head -30`).
 - Do not invent context. If the diff is too small to deduce a meaningful
   `why`, leave the body empty rather than padding.
-- Do not suggest `--amend` — the `/weaver commit` flow and the pre-commit hook
+- Do not suggest `--amend` — the `/sylph commit` flow and the pre-commit hook
   will handle amend vs new-commit decision. If the developer asked to amend a
-  pushed commit, Stage 2 + weaver-gate will block.
+  pushed commit, Stage 2 + sylph-gate will block.
 
 ## Escalation
 
 If the diff is ambiguous (mixed concerns crossing multiple types, or files
 that can't be classified), produce the best single message you can AND set a
-`# weaver:hint` comment on the first line of the body:
+`# sylph:hint` comment on the first line of the body:
 
 ```
 feat(auth): add OAuth PKCE flow
 
-# weaver:hint mixed — also contains a fix in api/errors.ts; consider splitting
+# sylph:hint mixed — also contains a fix in api/errors.ts; consider splitting
 <rest of body>
 ```
 

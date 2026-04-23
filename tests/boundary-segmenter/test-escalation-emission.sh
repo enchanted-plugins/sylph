@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Test: when W2 fires a boundary with confidence < WEAVER_BOUNDARY_CONFIDENCE_THRESHOLD
+# Test: when W2 fires a boundary with confidence < SYLPH_BOUNDARY_CONFIDENCE_THRESHOLD
 # (or uncertain:true), the hook must
-#   1. still emit the weaver.task.boundary.detected event on boundary-events.jsonl
+#   1. still emit the sylph.task.boundary.detected event on boundary-events.jsonl
 #   2. mark that event record with escalated:true
-#   3. append a weaver.boundary.escalation.requested record to escalations.jsonl
+#   3. append a sylph.boundary.escalation.requested record to escalations.jsonl
 #
 # The drive: two edits on src/auth.py, followed by a context switch to docs/README.md
 # after a 15-minute gap — that's the same pattern tests/boundary-segmenter/test-boundary-fires.sh
@@ -20,7 +20,7 @@ assert_file_exists "$HOOK"
 
 # Sandbox mimicking the real product layout so the hook resolves SHARED/PY.
 new_sandbox > /dev/null
-fake_product="$SANDBOX/weaver-sim"
+fake_product="$SANDBOX/sylph-sim"
 mkdir -p "$fake_product/plugins/boundary-segmenter/hooks/post-tool-use"
 mkdir -p "$fake_product/plugins/boundary-segmenter/state"
 cp "$HOOK" "$fake_product/plugins/boundary-segmenter/hooks/post-tool-use/boundary-segment.sh"
@@ -47,7 +47,7 @@ printf '%s' "$payload_3" | bash "$fake_plugin_root/hooks/post-tool-use/boundary-
 
 # Boundary event must exist.
 assert_file_exists "$events" "boundary-events.jsonl exists after context-switch"
-boundary_lines=$(grep -c 'weaver.task.boundary.detected' "$events" || true)
+boundary_lines=$(grep -c 'sylph.task.boundary.detected' "$events" || true)
 assert_eq "$boundary_lines" "1" "exactly one boundary event emitted"
 
 # The boundary event must carry escalated:true.
@@ -62,12 +62,12 @@ assert_ne "$confidence_val" "" "boundary event carries a non-empty confidence"
 
 # The escalation feed must have exactly one matching record.
 assert_file_exists "$escalations" "escalations.jsonl created on first escalation"
-esc_lines=$(grep -c 'weaver.boundary.escalation.requested' "$escalations" || true)
+esc_lines=$(grep -c 'sylph.boundary.escalation.requested' "$escalations" || true)
 assert_eq "$esc_lines" "1" "exactly one escalation record appended"
 
 esc_record="$(tail -n1 "$escalations")"
 esc_event="$(printf '%s' "$esc_record" | jq -r '.event')"
-assert_eq "$esc_event" "weaver.boundary.escalation.requested" "escalation schema: event field"
+assert_eq "$esc_event" "sylph.boundary.escalation.requested" "escalation schema: event field"
 
 esc_agent="$(printf '%s' "$esc_record" | jq -r '.agent')"
 assert_eq "$esc_agent" "boundary-detector" "escalation targets the boundary-detector agent"

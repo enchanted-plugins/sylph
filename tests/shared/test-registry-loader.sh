@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Test: registry_loader provides cached, stdlib-only access to the two
-# Weaver registries (capability + CI). Fails loudly when a registry is
+# Sylph registries (capability + CI). Fails loudly when a registry is
 # missing; roundtrips through get_host / get_ci_system; respects cache;
 # cache can be invalidated via clear_cache().
 set -euo pipefail
@@ -84,7 +84,7 @@ out="$("$PY" - <<PYEOF
 import sys, json, os, shutil
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 
-# Prepare a sandboxed WEAVER_HOME with a mutated capability registry.
+# Prepare a sandboxed SYLPH_HOME with a mutated capability registry.
 sandbox = r"$tmp"
 os.makedirs(os.path.join(sandbox, "plugins", "capability-memory", "state"), exist_ok=True)
 os.makedirs(os.path.join(sandbox, "plugins", "ci-reader", "state"), exist_ok=True)
@@ -102,7 +102,7 @@ doc["hosts"]["github"]["api_base"] = "https://mutated.example.com"
 with open(os.path.join(sandbox, "plugins", "capability-memory", "state", "capability-registry.json"), "w", encoding="utf-8") as f:
     json.dump(doc, f)
 
-os.environ["WEAVER_HOME"] = sandbox
+os.environ["SYLPH_HOME"] = sandbox
 
 # Re-import + clear cache — because registry_loader cached the real file
 # at module import time, we call clear_cache() to force re-probe.
@@ -112,15 +112,15 @@ h = registry_loader.get_host("github")
 print("mutated_base=" + h["api_base"])
 PYEOF
 )"
-assert_contains "$out" "mutated_base=https://mutated.example.com" "clear_cache + WEAVER_HOME picks up mutation"
-ok "clear_cache() + WEAVER_HOME honor registry mutations"
+assert_contains "$out" "mutated_base=https://mutated.example.com" "clear_cache + SYLPH_HOME picks up mutation"
+ok "clear_cache() + SYLPH_HOME honor registry mutations"
 
-# ── 6. Walk-up fallback finds registries when WEAVER_HOME is bogus ────
+# ── 6. Walk-up fallback finds registries when SYLPH_HOME is bogus ────
 empty="$(mktemp -d)"
 empty_py="$(py_path "$empty")"
 out="$("$PY" - <<PYEOF 2>&1 || true
 import sys, os
-os.environ["WEAVER_HOME"] = r"$empty_py"
+os.environ["SYLPH_HOME"] = r"$empty_py"
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 # Walk-up from registry_loader.__file__ should still land on the real
 # repo's plugins/… registries. Import must succeed.
@@ -132,4 +132,4 @@ PYEOF
 )"
 rm -rf "$empty"
 assert_contains "$out" "fallback_count=10" "walk-up fallback finds real registry"
-ok "walk-up from __file__ finds registries when WEAVER_HOME is bogus"
+ok "walk-up from __file__ finds registries when SYLPH_HOME is bogus"

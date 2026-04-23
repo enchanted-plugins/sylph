@@ -1,5 +1,5 @@
 """
-Weaver atomic-state helper — Allay-A4 pattern.
+Sylph atomic-state helper — Fae-A4 pattern.
 
 Stdlib-only (json, os, pathlib, tempfile, fcntl). Used by hook scripts and
 engines that persist per-plugin state under ``plugins/*/state/``. The three
@@ -10,7 +10,7 @@ call against:
     write_state(path, state)
     append_jsonl(path, record)
 
-Pattern (Allay-A4):
+Pattern (Fae-A4):
     1. Write payload to a tempfile in the **same directory** as the target.
     2. ``flush()`` + ``os.fsync()`` the tempfile descriptor.
     3. ``os.replace(tmp, target)`` — POSIX-atomic rename, same-volume on NT.
@@ -18,7 +18,7 @@ Pattern (Allay-A4):
 Windows note:
     ``fcntl`` is POSIX-only. On Windows (``os.name == "nt"``) the JSONL
     append path degrades to best-effort: O_APPEND is still used and every
-    write fsyncs, but we skip the cross-process ``flock(LOCK_EX)``. Weaver's
+    write fsyncs, but we skip the cross-process ``flock(LOCK_EX)``. Sylph's
     primary target is POSIX; Windows is the developer environment only.
 """
 
@@ -46,7 +46,7 @@ def read_state(path: PathLike, default: Any = None) -> Any:
 
     Returns ``default`` (or ``{}`` when ``default is None``) if the file is
     missing, empty, or contains corrupt JSON. Never raises on I/O — the
-    Weaver hooks layer must be resilient to half-written state inherited
+    Sylph hooks layer must be resilient to half-written state inherited
     from a crashed prior session.
     """
     fallback = {} if default is None else default

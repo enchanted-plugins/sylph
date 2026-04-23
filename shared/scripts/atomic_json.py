@@ -1,5 +1,5 @@
 """
-Atomic JSON serialization — Allay-A4 pattern.
+Atomic JSON serialization — Fae-A4 pattern.
 
 Writes to a tempfile in the same directory, fsyncs, then renames atomically.
 Appends are line-oriented (jsonl) with O_APPEND + fsync. No partial writes,
@@ -71,7 +71,7 @@ def read_json(path: str | Path, default: Any = None, retry_once: bool = True) ->
 def append_jsonl(path: str | Path, record: dict) -> None:
     """Append a single JSON object as a line to a .jsonl file.
 
-    Append-only audit pattern (weaver-gate audit.jsonl).
+    Append-only audit pattern (sylph-gate audit.jsonl).
     O_APPEND is atomic for single writes up to PIPE_BUF on POSIX;
     on Windows, fsync + append is used. Each line is a self-contained
     JSON object, so a torn read can skip malformed lines safely.

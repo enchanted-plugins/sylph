@@ -1,28 +1,28 @@
 ---
-name: weaver:release
-description: Cut a release — tag the current commit, compute the next semantic version from Conventional Commits since the last tag, generate a changelog entry, and hand off to semantic-release / release-please / changesets if the repo uses one of them. Weaver picks the tool automatically.
+name: sylph:release
+description: Cut a release — tag the current commit, compute the next semantic version from Conventional Commits since the last tag, generate a changelog entry, and hand off to semantic-release / release-please / changesets if the repo uses one of them. Sylph picks the tool automatically.
 allowed-tools: Bash(git tag *), Bash(git push *), Bash(git log --format=*), Bash(git describe --tags *), Bash(semantic-release *), Bash(release-please *), Bash(changeset *), Read(package.json), Read(.release-please-manifest.json), Read(.changeset/config.json), Read(release.config.js)
 ---
 
-# /weaver:release
+# /sylph:release
 
 Cut a release: tag + changelog + handoff to the repo's release tool.
 
 ## Usage
 
 ```
-/weaver:release                          # detect tool + bump version from commits
-/weaver:release --major                  # force major bump
-/weaver:release --minor
-/weaver:release --patch
-/weaver:release --version 1.4.0          # explicit version (skips commit analysis)
-/weaver:release --dry-run                # show planned bump + changelog, do nothing
-/weaver:release --tool release-please    # force a specific tool
+/sylph:release                          # detect tool + bump version from commits
+/sylph:release --major                  # force major bump
+/sylph:release --minor
+/sylph:release --patch
+/sylph:release --version 1.4.0          # explicit version (skips commit analysis)
+/sylph:release --dry-run                # show planned bump + changelog, do nothing
+/sylph:release --tool release-please    # force a specific tool
 ```
 
 ## Tool detection
 
-Weaver picks the release tool from repo signals (first match wins):
+Sylph picks the release tool from repo signals (first match wins):
 
 | Signal | Tool chosen |
 |---|---|
@@ -30,9 +30,9 @@ Weaver picks the release tool from repo signals (first match wins):
 | `.release-please-manifest.json` OR `release-please-config.json` | **release-please** |
 | `.changeset/config.json` | **changesets** |
 | `.goreleaser.yml` | **goreleaser** |
-| None of the above | **built-in** (Weaver tags + writes CHANGELOG.md itself) |
+| None of the above | **built-in** (Sylph tags + writes CHANGELOG.md itself) |
 
-## Version bump (when Weaver computes it)
+## Version bump (when Sylph computes it)
 
 Reads `git log <last-tag>..HEAD --format='%s'` and runs the W1
 Conventional Commits classifier on each subject:
@@ -72,11 +72,11 @@ Produces a changelog grouped by type:
    b. Run classifier on every commit since that tag.
    c. Compute new version.
    d. Update CHANGELOG.md (prepend the new section).
-   e. `git add CHANGELOG.md && /weaver:commit -m "chore(release): {version}"`.
+   e. `git add CHANGELOG.md && /sylph:commit -m "chore(release): {version}"`.
    f. `git tag -s v{version} -m "release: {version}"` (signed if user.signingkey).
-   g. weaver-gate inspects the tag push — `git push origin v{version}` is
+   g. sylph-gate inspects the tag push — `git push origin v{version}` is
       safe (new refs); `git push --delete` on existing tags is gated.
-4. Publish weaver.release.tagged to state/metrics.jsonl.
+4. Publish sylph.release.tagged to state/metrics.jsonl.
 ```
 
 ## SBOM + provenance (opt-in)

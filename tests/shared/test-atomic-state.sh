@@ -95,7 +95,7 @@ from pathlib import Path
 from atomic_state import append_jsonl
 p = Path(r"$tmp_py") / "audit.jsonl"
 for i in range(5):
-    append_jsonl(p, {"event": "weaver.test", "seq": i})
+    append_jsonl(p, {"event": "sylph.test", "seq": i})
 lines = p.read_text(encoding="utf-8").splitlines()
 recs = [json.loads(l) for l in lines]
 ok = len(recs) == 5 and all(r["seq"] == i for i, r in enumerate(recs))
@@ -112,7 +112,7 @@ sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from pathlib import Path
 from atomic_state import append_jsonl
 p = Path(r"$tmp_py") / "deep" / "nested" / "log.jsonl"
-append_jsonl(p, {"event": "weaver.test"})
+append_jsonl(p, {"event": "sylph.test"})
 print("ok" if p.exists() else "fail")
 PYEOF
 )"

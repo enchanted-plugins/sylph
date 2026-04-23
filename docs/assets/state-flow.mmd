@@ -1,5 +1,5 @@
 ---
-title: Weaver per-session state flow
+title: Sylph per-session state flow
 config:
   look: neo
   theme: dark
@@ -14,7 +14,7 @@ config:
       bottom: 18
 ---
 flowchart TB
-    TitleBlock["<div style='font-family:ui-monospace,SFMono-Regular,Consolas,monospace;text-align:center;min-width:940px;padding:6px 10px;line-height:1.8'><div style='color:#58a6ff;font-size:15px;letter-spacing:6px;border-bottom:1px solid #1e3a5f;padding-bottom:10px;margin-bottom:10px'>WEAVER &nbsp;·&nbsp; STATE&nbsp;FLOW &nbsp;·&nbsp; GIT&nbsp;WORKFLOW&nbsp;JOURNALS</div><div style='display:flex;gap:40px;justify-content:center;font-size:11px;color:#8b949e;letter-spacing:2px'><span>DWG&nbsp;&nbsp;<b style='color:#e6edf3'>WVR-003</b></span><span>REV&nbsp;&nbsp;<b style='color:#e6edf3'>A.1</b></span><span>SCALE&nbsp;&nbsp;<b style='color:#e6edf3'>1:1</b></span><span>JOURNALS&nbsp;&nbsp;<b style='color:#e6edf3'>n&nbsp;=&nbsp;6</b></span><span>SHEET&nbsp;&nbsp;<b style='color:#e6edf3'>01&nbsp;/&nbsp;01</b></span></div></div>"]
+    TitleBlock["<div style='font-family:ui-monospace,SFMono-Regular,Consolas,monospace;text-align:center;min-width:940px;padding:6px 10px;line-height:1.8'><div style='color:#58a6ff;font-size:15px;letter-spacing:6px;border-bottom:1px solid #1e3a5f;padding-bottom:10px;margin-bottom:10px'>SYLPH &nbsp;·&nbsp; STATE&nbsp;FLOW &nbsp;·&nbsp; GIT&nbsp;WORKFLOW&nbsp;JOURNALS</div><div style='display:flex;gap:40px;justify-content:center;font-size:11px;color:#8b949e;letter-spacing:2px'><span>DWG&nbsp;&nbsp;<b style='color:#e6edf3'>WVR-003</b></span><span>REV&nbsp;&nbsp;<b style='color:#e6edf3'>A.1</b></span><span>SCALE&nbsp;&nbsp;<b style='color:#e6edf3'>1:1</b></span><span>JOURNALS&nbsp;&nbsp;<b style='color:#e6edf3'>n&nbsp;=&nbsp;6</b></span><span>SHEET&nbsp;&nbsp;<b style='color:#e6edf3'>01&nbsp;/&nbsp;01</b></span></div></div>"]
 
     subgraph sources["<div style='text-align:center;min-width:940px;font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>EVENT&nbsp;SOURCES&nbsp;&nbsp;·&nbsp;&nbsp;HOOK&nbsp;FIRES</div>"]
         direction LR
@@ -34,7 +34,7 @@ flowchart TB
         cm_reg["<div style='text-align:center;line-height:1.7'><code>capability-registry.json</code><br/><small style='color:#6e7681'>10-host capability data · nightly-refreshed</small></div>"]
     end
 
-    subgraph wg["<div style='text-align:center;min-width:940px;line-height:2'><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>JOURNAL&nbsp;03</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>weaver-gate / state /</b></div>"]
+    subgraph wg["<div style='text-align:center;min-width:940px;line-height:2'><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>JOURNAL&nbsp;03</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>sylph-gate / state /</b></div>"]
         wg_aud["<div style='text-align:center;line-height:1.7'><code>audit.jsonl</code><br/><small style='color:#6e7681'>Every gated/blocked destructive op</small></div>"]
     end
 
@@ -44,14 +44,14 @@ flowchart TB
         ci_pr["<div style='text-align:center;line-height:1.7'><code>pr-lifecycle / last-reviewer-suggestion.json</code><br/><small style='color:#6e7681'>W4 blame-graph reviewer ranking</small></div>"]
     end
 
-    subgraph wl["<div style='text-align:center;min-width:940px;line-height:2'><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>JOURNAL&nbsp;05</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>weaver-learning / state /</b></div>"]
+    subgraph wl["<div style='text-align:center;min-width:940px;line-height:2'><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>JOURNAL&nbsp;05</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>sylph-learning / state /</b></div>"]
         direction LR
         wl_learn["<div style='text-align:center;line-height:1.7'><code>learnings.json</code><br/><small style='color:#6e7681'>W5 EMA priors · cross-session</small></div>"]
         wl_pr["<div style='text-align:center;line-height:1.7'><code>priors.json</code><br/><small style='color:#6e7681'>Session-cached slice downstream engines read</small></div>"]
     end
 
-    Bus["<div style='text-align:center;line-height:1.8;padding:4px 12px'><b style='letter-spacing:1.5px;color:#79c0ff'>ENCHANTED-MCP&nbsp;BUS</b><br/><em style='color:#8b949e;font-size:12px'>weaver.task.boundary.detected · weaver.commit.committed · weaver.pr.ready · weaver.destructive.detected · weaver.ci.status.observed</em></div>"]
-    Query(["<b>/weaver:commit · /weaver:branch · /weaver:pr · /weaver:status · /weaver:review</b><br/><small style='color:#8b949e'>skill-invoked pull surface · 15 slash commands</small>"])
+    Bus["<div style='text-align:center;line-height:1.8;padding:4px 12px'><b style='letter-spacing:1.5px;color:#79c0ff'>ENCHANTED-MCP&nbsp;BUS</b><br/><em style='color:#8b949e;font-size:12px'>sylph.task.boundary.detected · sylph.commit.committed · sylph.pr.ready · sylph.destructive.detected · sylph.ci.status.observed</em></div>"]
+    Query(["<b>/sylph:commit · /sylph:branch · /sylph:pr · /sylph:status · /sylph:review</b><br/><small style='color:#8b949e'>skill-invoked pull surface · 15 slash commands</small>"])
 
     TitleBlock ~~~ sources
     Start --> cm_reg

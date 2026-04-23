@@ -23,7 +23,7 @@ from ci_adapters import get_adapter, NotImplementedCIOp
 
 failures = 0
 for sys_id in ("gitlab-ci", "circleci", "jenkins", "buildkite", "drone",
-               "woodpecker", "tekton", "argocd", "fluxcd"):
+               "woodpecker", "tekton", "argocd", "wixiecd"):
     a = get_adapter(sys_id)
     # Force no-token path on HTTP adapters.
     if hasattr(a, "_token_cached"):

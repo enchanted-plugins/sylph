@@ -1,23 +1,23 @@
 ---
-name: weaver:audit
-description: Query the weaver-gate destructive-op audit log — "did Weaver block anything this week?" answered in one line. Filters by date window, pattern, verdict.
+name: sylph:audit
+description: Query the sylph-gate destructive-op audit log — "did Sylph block anything this week?" answered in one line. Filters by date window, pattern, verdict.
 ---
 
-# /weaver:audit
+# /sylph:audit
 
-Every destructive git op weaver-gate evaluates lands in
-`plugins/weaver-gate/state/audit.jsonl` — one record per decision. This
+Every destructive git op sylph-gate evaluates lands in
+`plugins/sylph-gate/state/audit.jsonl` — one record per decision. This
 command is the read-only query surface over that log.
 
 ## Usage
 
 ```
-/weaver:audit                               # full log, human table
-/weaver:audit --since 2026-04-14            # last week
-/weaver:audit --verdict blocked             # what did Weaver actually stop?
-/weaver:audit --pattern force_push_protected
-/weaver:audit --since 2026-04-01 --until 2026-04-15 --json
-/weaver:audit --tail 20                     # most-recent 20 after filtering
+/sylph:audit                               # full log, human table
+/sylph:audit --since 2026-04-14            # last week
+/sylph:audit --verdict blocked             # what did Sylph actually stop?
+/sylph:audit --pattern force_push_protected
+/sylph:audit --since 2026-04-01 --until 2026-04-15 --json
+/sylph:audit --tail 20                     # most-recent 20 after filtering
 ```
 
 ## Filters

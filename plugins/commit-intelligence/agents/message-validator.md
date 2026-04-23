@@ -13,7 +13,7 @@ Haiku because the task is primarily rule-checking; judgment calls are narrow.
 
 ## Input
 
-- The draft message (from Stage 1, may include a `# weaver:hint` line).
+- The draft message (from Stage 1, may include a `# sylph:hint` line).
 - The repo path (so you can inspect CONTRIBUTING.md, .git/hooks, recent commit history).
 
 ## Process
@@ -71,7 +71,7 @@ Always emit JSON:
 }
 ```
 
-`fix-proposed` means you've rewritten the message; the `/weaver commit` command
+`fix-proposed` means you've rewritten the message; the `/sylph commit` command
 surfaces it to the developer for approval before committing. `reject` is rare —
 use it only when the diff and draft are so mismatched that no fix is reasonable.
 
@@ -80,6 +80,6 @@ use it only when the diff and draft are so mismatched that no fix is reasonable.
 - Do not run `git commit` or any git-modifying command. You validate only.
 - Do not hallucinate policies. If CONTRIBUTING.md doesn't mention DCO, do not
   insist on `Signed-off-by:`. Respect what the repo actually enforces.
-- Do not override the `# weaver:hint` line from Stage 1. If the drafter flagged
+- Do not override the `# sylph:hint` line from Stage 1. If the drafter flagged
   the diff as mixed, emit `fix-proposed` with a note to route to
   `boundary-segmenter` rather than trying to salvage a bad cluster.

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-audit_query.py — read, filter, and render Weaver's destructive-op audit log.
+audit_query.py — read, filter, and render Sylph's destructive-op audit log.
 
-Audit records are appended to plugins/weaver-gate/state/audit.jsonl by the
-weaver-gate PreToolUse(Bash) hook. Each line is a JSON object. Known fields:
+Audit records are appended to plugins/sylph-gate/state/audit.jsonl by the
+sylph-gate PreToolUse(Bash) hook. Each line is a JSON object. Known fields:
 
     ts              ISO-8601 UTC, e.g. "2026-04-15T09:22:17Z"
     op              short op name or command, e.g. "git push --force"
@@ -37,7 +37,7 @@ from typing import Iterable, Iterator
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent  # shared/scripts/ → repo root
-DEFAULT_AUDIT = REPO_ROOT / "plugins" / "weaver-gate" / "state" / "audit.jsonl"
+DEFAULT_AUDIT = REPO_ROOT / "plugins" / "sylph-gate" / "state" / "audit.jsonl"
 
 
 # ── Record helpers ─────────────────────────────────────────────────────
@@ -163,7 +163,7 @@ def _render_human(records: list[dict], *, since: datetime | None, until: datetim
         window = "(all time)"
 
     lines = [
-        f"Weaver audit — {len(records)} decision{'s' if len(records) != 1 else ''} {window}",
+        f"Sylph audit — {len(records)} decision{'s' if len(records) != 1 else ''} {window}",
         "─" * 69,
         f"{'ts (UTC)':<20} {'pattern':<24} {'verdict':<10} op",
     ]
@@ -199,7 +199,7 @@ def _render_json(records: list[dict]) -> str:
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="audit_query.py",
-        description="Query Weaver's destructive-op audit log.",
+        description="Query Sylph's destructive-op audit log.",
     )
     p.add_argument("--since", metavar="YYYY-MM-DD",
                    help="Include records on or after this UTC date.")

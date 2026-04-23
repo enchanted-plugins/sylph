@@ -1,5 +1,5 @@
 """
-Weaver host-adapter package.
+Sylph host-adapter package.
 
 Provides a typed interface for git-host operations (open PR, merge, list
 checks, resolve CODEOWNERS) plus a registry that picks the right adapter

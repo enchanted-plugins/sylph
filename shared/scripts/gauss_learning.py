@@ -1,8 +1,8 @@
 """
-W5 — Gauss Learning (Weaver).
+W5 — Gauss Learning (Sylph).
 
 Per-developer preference persistence via exponential moving averages
-with Allay-A4 atomic serialization. Tracks:
+with Fae-A4 atomic serialization. Tracks:
 
   - commit_style: dict of signals
       - scope_usage_rate            float in [0,1]  — fraction of commits with (scope)
@@ -28,9 +28,9 @@ with Allay-A4 atomic serialization. Tracks:
       - boundary_overrides: int  — times developer merged/split vs W2 decision
 
 EMA update: `new = alpha * signal + (1 - alpha) * old` with alpha from
-WEAVER_GAUSS_ALPHA (0.3 default). Bootstrap floor at
-WEAVER_GAUSS_BOOTSTRAP_MIN_SAMPLES — below the floor, confidence is low
-and Weaver ignores the learned priors.
+SYLPH_GAUSS_ALPHA (0.3 default). Bootstrap floor at
+SYLPH_GAUSS_BOOTSTRAP_MIN_SAMPLES — below the floor, confidence is low
+and Sylph ignores the learned priors.
 
 Stdlib only.
 """
@@ -222,7 +222,7 @@ def priors(state: dict[str, Any]) -> dict[str, Any]:
 
 
 # ──────────────────────────────────────────────────────────────────────
-# Persistence (Allay-A4)
+# Persistence (Fae-A4)
 # ──────────────────────────────────────────────────────────────────────
 
 def load_state(path: Path) -> dict[str, Any]:

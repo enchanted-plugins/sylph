@@ -2,13 +2,13 @@ graph TD
     start(["Session Start"]) --> turns
     subgraph turns["Active Session"]
         t1["Turn N: Tool Call"]
-        t1 --> pre["PreToolUse<br/>weaver-gate"]
+        t1 --> pre["PreToolUse<br/>sylph-gate"]
         pre --> exec["Tool Executes"]
         exec --> post["PostToolUse<br/>boundary-segmenter, branch-workflow, commit-intelligence, pr-lifecycle"]
         post --> t1
     end
     turns -->|"Context full"| compact["⚠️ Compaction"]
-    compact --> precompact["PreCompact<br/>boundary-segmenter, weaver-learning"]
+    compact --> precompact["PreCompact<br/>boundary-segmenter, sylph-learning"]
     precompact --> wipe["Context Wiped"]
     wipe --> restore["Restore context"]
     restore --> resume(["Session Continues"])

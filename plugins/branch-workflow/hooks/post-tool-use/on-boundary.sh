@@ -2,10 +2,10 @@
 # branch-workflow PostToolUse(Edit|Write|MultiEdit) — W3 listener.
 #
 # Tails plugins/boundary-segmenter/state/boundary-events.jsonl from this
-# plugin's persisted byte offset. For each new `weaver.task.boundary.detected`
+# plugin's persisted byte offset. For each new `sylph.task.boundary.detected`
 # event, runs the W3 workflow classifier and appends a "branch-suggested"
 # record to state/pending-actions.jsonl. Auto-detection on; auto-execution
-# gated (the /weaver:branch skill picks up pending actions).
+# gated (the /sylph:branch skill picks up pending actions).
 #
 # Advisory-only contract (shared/conduct/hooks.md):
 #   - Never blocks tool execution (always exits 0).
@@ -19,7 +19,7 @@
 set -euo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname "$(dirname "$(dirname "$0")")")}"
-PRODUCT_ROOT="${WEAVER_HOME:-$(dirname "$(dirname "$PLUGIN_ROOT")")}"
+PRODUCT_ROOT="${SYLPH_HOME:-$(dirname "$(dirname "$PLUGIN_ROOT")")}"
 SHARED="$PRODUCT_ROOT/shared/scripts"
 
 EVENTS="$PRODUCT_ROOT/plugins/boundary-segmenter/state/boundary-events.jsonl"
@@ -85,7 +85,7 @@ while IFS= read -r line; do
     if ! command -v jq >/dev/null 2>&1; then continue; fi
 
     event_name="$(printf '%s' "$line" | jq -r '.event // empty' 2>/dev/null)"
-    [[ "$event_name" != "weaver.task.boundary.detected" ]] && continue
+    [[ "$event_name" != "sylph.task.boundary.detected" ]] && continue
 
     # Extract slug hint from the closed cluster's dominant file path.
     files_raw="$(printf '%s' "$line" | jq -r '[.closed_cluster.events[]?.files[]?] | unique | .[]' 2>/dev/null || true)"
@@ -105,7 +105,7 @@ while IFS= read -r line; do
         fi
     fi
 
-    # Build the pending-action record. /weaver:branch consumes this.
+    # Build the pending-action record. /sylph:branch consumes this.
     record="$(jq -nc \
         --arg ts "$ts" \
         --arg event "branch.suggested" \
@@ -153,7 +153,7 @@ fi
 set -e
 
 if (( new_count > 0 )); then
-    printf 'weaver[branch-workflow]: %d boundary event(s) processed → pending-actions.jsonl\n' "$new_count" >&2
+    printf 'sylph[branch-workflow]: %d boundary event(s) processed → pending-actions.jsonl\n' "$new_count" >&2
 fi
 
 exit 0

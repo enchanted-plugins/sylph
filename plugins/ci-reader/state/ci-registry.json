@@ -38,7 +38,7 @@
       "supports_required_status": true,
       "gate_merge_queue": true,
       "known_quirks": [
-        "Legacy Status API and current Check Runs API coexist — Weaver prefers Check Runs for gating",
+        "Legacy Status API and current Check Runs API coexist — Sylph prefers Check Runs for gating",
         "gh CLI is the fast-path; absence degrades to raw REST via PAT",
         "workflow_run events fire separately from check_run — de-dupe on run_id"
       ],
@@ -109,7 +109,7 @@
       "gate_merge_queue": false,
       "known_quirks": [
         "Uses Circle-Token header, not Bearer auth",
-        "Project slug format is {vcs}/{org}/{repo} — Weaver defaults to gh/ prefix",
+        "Project slug format is {vcs}/{org}/{repo} — Sylph defaults to gh/ prefix",
         "Workflow is the gating unit, not pipeline; a pipeline may contain multiple workflows",
         "'on_hold' is mid-run (approval gate), not terminal"
       ],
@@ -144,7 +144,7 @@
       "supports_required_status": false,
       "gate_merge_queue": false,
       "known_quirks": [
-        "UNSTABLE is NOT success — Weaver maps it to failure per the 2021 semantic-release incident",
+        "UNSTABLE is NOT success — Sylph maps it to failure per the 2021 semantic-release incident",
         "Rebuild endpoint requires CSRF crumb fetched separately — out of scope for stub adapter",
         "lastBuild implicit; `ref` parameter is ignored since Jenkins resolves via job state not git ref",
         "Basic auth with username:api_token base64-encoded, not Bearer"
@@ -185,7 +185,7 @@
       "supports_required_status": true,
       "gate_merge_queue": false,
       "known_quirks": [
-        "'blocked' state means paused on a manual step — not a terminal failure, but Weaver treats it as failure for gating",
+        "'blocked' state means paused on a manual step — not a terminal failure, but Sylph treats it as failure for gating",
         "Repo path is {org}/{pipeline-slug}, not git owner/repo",
         "Emits signed webhooks via X-Buildkite-Signature header (opt-in)"
       ],
@@ -243,7 +243,7 @@
       "supports_required_status": false,
       "gate_merge_queue": false,
       "known_quirks": [
-        "Soft-fork of Drone — API shape substantially identical; Weaver's Drone adapter class is shared",
+        "Soft-fork of Drone — API shape substantially identical; Sylph's Drone adapter class is shared",
         "v2+ uses /pipelines; pre-v2 still accepts /builds — adapter tries both in order",
         "Requires WOODPECKER_SERVER env"
       ],
@@ -252,7 +252,7 @@
     "tekton": {
       "id": "tekton",
       "display_name": "Tekton Pipelines",
-      "status_api_path": "kubectl get pipelinerun -n {ns} -l weaver.ref={ref}",
+      "status_api_path": "kubectl get pipelinerun -n {ns} -l sylph.ref={ref}",
       "log_stream_api": "kubectl logs -f {pod}",
       "rerun_api": "kubectl create -f <pipelinerun.yaml>",
       "auth_modes": ["kubeconfig", "service_account_token"],
@@ -277,7 +277,7 @@
       "supports_required_status": false,
       "gate_merge_queue": false,
       "known_quirks": [
-        "No built-in repo/ref filter on PipelineRuns — operators must label with weaver.ref for Weaver to correlate",
+        "No built-in repo/ref filter on PipelineRuns — operators must label with sylph.ref for Sylph to correlate",
         "Reads .status.conditions[type=Succeeded].status (True/False/Unknown) for terminal mapping",
         "Shells out to kubectl — degraded when no current-context",
         "Cluster-scoped: no public SaaS endpoint"
@@ -316,22 +316,22 @@
       "known_quirks": [
         "GitOps — CI runs upstream; ArgoCD surface is drift/health, not gate-ready",
         "Application sync + health are orthogonal axes; success = Synced AND Healthy",
-        "Read-only in Weaver: no auto-sync or rollback triggering",
-        "Sync triggering not implemented — Weaver observes-only for ArgoCD"
+        "Read-only in Sylph: no auto-sync or rollback triggering",
+        "Sync triggering not implemented — Sylph observes-only for ArgoCD"
       ],
       "support_level": "read-only"
     },
-    "fluxcd": {
-      "id": "fluxcd",
-      "display_name": "FluxCD",
-      "status_api_path": "kubectl get kustomization -n flux-system",
+    "wixiecd": {
+      "id": "wixiecd",
+      "display_name": "WixieCD",
+      "status_api_path": "kubectl get kustomization -n wixie-system",
       "log_stream_api": null,
       "rerun_api": null,
       "auth_modes": ["kubeconfig", "service_account_token"],
       "rate_limits": {
         "authenticated_per_hour": null,
         "app_per_hour": null,
-        "notes": "Governed by kube-apiserver QPS/burst; no dedicated Flux rate limit"
+        "notes": "Governed by kube-apiserver QPS/burst; no dedicated Wixie rate limit"
       },
       "webhook_event_taxonomy": [
         "Kustomization.ReconciliationSucceeded",
@@ -346,9 +346,9 @@
       "gate_merge_queue": false,
       "known_quirks": [
         "GitOps — drift detection only, never gate-ready",
-        "Reads Kustomization and HelmRelease CRDs from flux-system namespace",
+        "Reads Kustomization and HelmRelease CRDs from wixie-system namespace",
         "Ready condition is authoritative: status=True means reconciled",
-        "Read-only in Weaver: flux reconcile is operator territory"
+        "Read-only in Sylph: wixie reconcile is operator territory"
       ],
       "support_level": "read-only"
     }

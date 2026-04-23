@@ -1,6 +1,6 @@
-# weaver-gate
+# sylph-gate
 
-**Destructive-op decision-gate. Hornet's pattern, Weaver's domain.**
+**Destructive-op decision-gate. Raven's pattern, Sylph's domain.**
 
 Inspects every `git` invocation via `PreToolUse(Bash)`. If the command matches a destructive-op pattern (force-push, `filter-branch`, `reset --hard` past pushed tip, `branch -D`, `tag -d`, `clean -fdx`, remote-branch deletion, `commit --amend` of a pushed HEAD, merge-queue `--admin` bypass), routes through a confirmation surface before allowing it.
 
@@ -23,11 +23,11 @@ No engine — rules-only. Haiku classifies destructive vs safe per the pattern t
 
 ## Install
 
-Part of the [Weaver](../..) bundle. **Installing Weaver without weaver-gate is not supported** — it's the safety floor.
+Part of the [Sylph](../..) bundle. **Installing Sylph without sylph-gate is not supported** — it's the safety floor.
 
 ```
-/plugin marketplace add enchanted-plugins/weaver
-/plugin install full@weaver
+/plugin marketplace add enchanted-plugins/sylph
+/plugin install full@sylph
 ```
 
 ## Components
@@ -36,11 +36,11 @@ Part of the [Weaver](../..) bundle. **Installing Weaver without weaver-gate is n
 |------|------|------|
 | Hook | PreToolUse(Bash) | Primary inspection point |
 | Skill | destructive-gate-confirmation | Decision surface |
-| State | audit.jsonl | Append-only, Allay-A4 atomic pattern |
+| State | audit.jsonl | Append-only, Fae-A4 atomic pattern |
 
 ## Cross-plugin
 
-- **Consumes** `reaper.action.dangerous` (blocks Weaver ops when Reaper flags the session).
-- **Publishes** `weaver.destructive.detected`, `weaver.destructive.confirmed`, `weaver.destructive.cancelled`.
+- **Consumes** `hydra.action.dangerous` (blocks Sylph ops when Hydra flags the session).
+- **Publishes** `sylph.destructive.detected`, `sylph.destructive.confirmed`, `sylph.destructive.cancelled`.
 
 Full architecture: [../../docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md#destructive-op-confirmation-contract).

@@ -8,10 +8,10 @@ reviewers weighted by:
     touching root-level dirs only)
   - CODEOWNERS membership (union, not replace — CODEOWNERS entries get
     a hard boost but don't crowd out blame-graph suggestions)
-  - availability signal (optional — from hornet.reviewer.availability.changed
+  - availability signal (optional — from raven.reviewer.availability.changed
     events; when absent, assume all candidates are available)
 
-Output: top-K reviewer logins, capped at WEAVER_REVIEWER_MAX_SUGGEST (3).
+Output: top-K reviewer logins, capped at SYLPH_REVIEWER_MAX_SUGGEST (3).
 
 Stdlib only. Delegates all git interaction to `git log`.
 """

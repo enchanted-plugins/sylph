@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Shared test helpers for Weaver test suite.
+# Shared test helpers for Sylph test suite.
 #
 # Sourced by every test-*.sh script. Provides:
 #   - REPO_ROOT, SHARED_SCRIPTS, PY (resolved once)
@@ -84,8 +84,8 @@ mock_git_repo() {
     (
         cd "$dir"
         git init -q -b main
-        git config user.email "test@weaver.local"
-        git config user.name "weaver-test"
+        git config user.email "test@sylph.local"
+        git config user.name "sylph-test"
         echo "# test" > README.md
         git add README.md
         git commit -q -m "chore: seed"

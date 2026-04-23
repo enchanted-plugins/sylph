@@ -18,7 +18,7 @@ source "$SCRIPT_DIR/../shared/helpers.sh"
 
 # Stage a sandbox mirroring the product layout so hooks resolve paths correctly.
 new_sandbox >/dev/null
-fake_product="$SANDBOX/weaver-sim"
+fake_product="$SANDBOX/sylph-sim"
 mkdir -p "$fake_product/plugins/boundary-segmenter/hooks/post-tool-use"
 mkdir -p "$fake_product/plugins/boundary-segmenter/state"
 mkdir -p "$fake_product/plugins/branch-workflow/hooks/post-tool-use"
@@ -83,7 +83,7 @@ run_chain "$payload_3"
 assert_file_exists "$events" "boundary-events.jsonl should exist after event 3"
 
 # Exactly one boundary line should have been emitted.
-boundary_lines=$(grep -c 'weaver.task.boundary.detected' "$events" || true)
+boundary_lines=$(grep -c 'sylph.task.boundary.detected' "$events" || true)
 assert_eq "$boundary_lines" "1" "exactly one boundary detected across the three events"
 
 # Both listener offsets should have advanced past zero, up to the current file size.
@@ -104,9 +104,9 @@ assert_eq "$ci_count" "1" "commit-intelligence wrote one pending-draft line"
 
 # Record schema sanity.
 assert_jq "$bw_pending" '.event' "branch.suggested" "branch-workflow event name"
-assert_jq "$bw_pending" '.source_event.event' "weaver.task.boundary.detected" "branch-workflow preserves source event"
+assert_jq "$bw_pending" '.source_event.event' "sylph.task.boundary.detected" "branch-workflow preserves source event"
 assert_jq "$ci_pending" '.event' "commit.drafted" "commit-intelligence event name"
-assert_jq "$ci_pending" '.source_event.event' "weaver.task.boundary.detected" "commit-intelligence preserves source event"
+assert_jq "$ci_pending" '.source_event.event' "sylph.task.boundary.detected" "commit-intelligence preserves source event"
 
 ok "hook chain fires end to end: 3 events → 1 boundary → 2 downstream reactions"
 

@@ -1,12 +1,12 @@
 """
 ci-reader orchestrator.
 
-Consumed by the pr-lifecycle state machine and the /weaver:status command.
+Consumed by the pr-lifecycle state machine and the /sylph:status command.
 Detects which CI systems are configured in the current repo, queries them
 for the status of a ref, normalizes into `Check` objects, and returns a
 summary.
 
-Weaver reads CI; it never triggers builds. Weaver is a git-workflow
+Sylph reads CI; it never triggers builds. Sylph is a git-workflow
 plugin; CI execution belongs to your existing CI pipelines
 (push-triggered workflows, etc.).
 

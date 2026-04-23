@@ -47,7 +47,7 @@ class PRDescription:
         session_continuity: dict[str, Any] | None = None,
     ) -> "PRDescription":
         """Build a PR title + body from a W2 cluster + commit messages +
-        optional Hornet V4 session-continuity data.
+        optional Raven V4 session-continuity data.
 
         Falls back gracefully when V4 is unavailable.
         """
@@ -70,7 +70,7 @@ class PRDescription:
                 title = f"chore({slug}): {top_token}" if top_token else f"chore({slug}): update"
 
         if not title:
-            title = "chore: weaver-drafted PR"
+            title = "chore: sylph-drafted PR"
 
         # Body: structured markdown. Fall back when V4 is missing.
         body_parts: list[str] = []
@@ -107,8 +107,8 @@ class PRDescription:
         else:
             body_parts.append("## Why\n")
             body_parts.append(
-                "_Hornet V4 session-continuity data unavailable — this PR description "
-                "reflects W2 cluster metadata + commit messages only. Install hornet "
+                "_Raven V4 session-continuity data unavailable — this PR description "
+                "reflects W2 cluster metadata + commit messages only. Install raven "
                 "to upgrade._\n"
             )
             body_parts.append("## How it was verified\n")
@@ -128,7 +128,7 @@ class PRDescription:
 
         body_parts.append("")
         body_parts.append(
-            "---\n*Opened by [Weaver](https://github.com/enchanted-plugins/weaver) (W4 pr-lifecycle).*"
+            "---\n*Opened by [Sylph](https://github.com/enchanted-plugins/sylph) (W4 pr-lifecycle).*"
         )
 
         return cls(title=title[:72], body="\n".join(body_parts))
@@ -212,7 +212,7 @@ def collect_changed_paths(cwd: Path, base: str, head: str) -> list[str]:
 
 
 # ──────────────────────────────────────────────────────────────────────
-# Top-level actions (consumed by /weaver:pr)
+# Top-level actions (consumed by /sylph:pr)
 # ──────────────────────────────────────────────────────────────────────
 
 def open_or_update(
@@ -346,10 +346,10 @@ def promote_to_ready(
 
       - `allow`  → adapter.mark_ready (when implemented); returns `promoted:True`.
       - `block`  → returns `promoted:False` with the gate reasons. Caller
-                    (the /weaver:pr --ready command) surfaces this to the
+                    (the /sylph:pr --ready command) surfaces this to the
                     developer; nothing is mutated on the host.
       - `unknown` → same as block unless `force=True` (developer override,
-                    audited upstream by weaver-gate when invoked from a
+                    audited upstream by sylph-gate when invoked from a
                     destructive-op context).
 
     Advisory-only: this function never mutates refs or rewrites history.
@@ -387,7 +387,7 @@ def promote_to_ready(
 
     if gate["decision"] == "allow" or (force and gate["decision"] != "block"):
         # Permission granted. Real adapter call is a no-op stub here —
-        # the /weaver:pr --ready command owns the `gh pr ready` shell-out
+        # the /sylph:pr --ready command owns the `gh pr ready` shell-out
         # so this layer stays pure Python.
         return {
             "promoted": True,
@@ -409,7 +409,7 @@ def _try_load_cluster_state(cwd: Path) -> dict[str, Any] | None:
     """Load the W2 cluster state if boundary-segmenter is installed locally."""
     # Look for the cluster state in plugins/boundary-segmenter/state/.
     # When called from a hook, the plugin path may be absolute; when called
-    # from /weaver:pr in the repo being worked on, the state file is under
+    # from /sylph:pr in the repo being worked on, the state file is under
     # the plugin install location, not the repo — so this returns None and
     # the PR description falls back to commits-only mode.
     possible = cwd / "plugins" / "boundary-segmenter" / "state" / "boundary-clusters.json"
@@ -426,11 +426,11 @@ def _try_load_cluster_state(cwd: Path) -> dict[str, Any] | None:
 
 
 def _try_load_session_continuity(cwd: Path) -> dict[str, Any] | None:
-    """Load Hornet V4 session-continuity if hornet is installed. None otherwise."""
-    # Lookup path: plugins/hornet-session-memory/state/session-graph.json
-    # (or wherever hornet v1.0.0 puts it).
+    """Load Raven V4 session-continuity if raven is installed. None otherwise."""
+    # Lookup path: plugins/raven-session-memory/state/session-graph.json
+    # (or wherever raven v1.0.0 puts it).
     for rel in (
-        "plugins/hornet-session-memory/state/session-graph.json",
+        "plugins/raven-session-memory/state/session-graph.json",
         "plugins/session-memory/state/session-graph.json",
     ):
         p = cwd / rel

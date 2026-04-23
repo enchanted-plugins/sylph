@@ -104,7 +104,7 @@ class GitHubActionsAdapter(CIAdapter):
             proc.wait(timeout=5)
 
     def rerun(self, check_id: str) -> bool:
-        """Rerun a workflow run. Weaver only re-runs existing runs; it never
+        """Rerun a workflow run. Sylph only re-runs existing runs; it never
         triggers a fresh run from scratch."""
         if not self.is_available():
             raise NotImplementedCIOp(self.system_id, "rerun: gh not available")

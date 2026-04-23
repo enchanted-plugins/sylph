@@ -1,6 +1,6 @@
 ---
 name: reviewer-router
-description: Explains how W4 Path-History Reviewer Routing ranks candidate reviewers — recency-weighted blame, path-depth specificity, CODEOWNERS boost, and optional Hornet reviewer-availability filtering. Helpful when a developer asks "why did Weaver suggest these reviewers?"
+description: Explains how W4 Path-History Reviewer Routing ranks candidate reviewers — recency-weighted blame, path-depth specificity, CODEOWNERS boost, and optional Raven reviewer-availability filtering. Helpful when a developer asks "why did Sylph suggest these reviewers?"
 allowed-tools: Read
 ---
 
@@ -22,13 +22,13 @@ Where:
 - `path_depth_weight(path) = 1.0 + min(0.5, depth × 0.1)` — deeper paths
   are worth more than root-level changes, capped at 1.5×.
 
-Top-K is capped by `WEAVER_REVIEWER_MAX_SUGGEST` (default 3) to avoid the
+Top-K is capped by `SYLPH_REVIEWER_MAX_SUGGEST` (default 3) to avoid the
 Kubernetes-style "review storm" anti-pattern.
 
 ## CODEOWNERS
 
 Parsed from (in order): `.github/CODEOWNERS`, `CODEOWNERS`,
-`docs/CODEOWNERS`. Weaver uses the GitHub CODEOWNERS glob dialect:
+`docs/CODEOWNERS`. Sylph uses the GitHub CODEOWNERS glob dialect:
 
 - `*` matches within a path segment
 - `**` matches across segments
@@ -43,21 +43,21 @@ merged on top. An @-handle from CODEOWNERS and a "Name <email>" from
 blame can both be suggested — the PR adapter (W4) does de-dup at the
 `gh pr create --reviewer` level.
 
-## Availability (Hornet integration)
+## Availability (Raven integration)
 
-If Hornet is installed and publishes `hornet.reviewer.availability.changed`
+If Raven is installed and publishes `raven.reviewer.availability.changed`
 events (availability ∈ [0.0, 1.0] per user), W4 multiplies the score by
 availability before ranking.
 
-Without Hornet, all candidates are assumed fully available (availability =
-1.0). Weaver does not try to parse out-of-office signals from git logs or
+Without Raven, all candidates are assumed fully available (availability =
+1.0). Sylph does not try to parse out-of-office signals from git logs or
 calendar integrations.
 
 ## Why caps at 3
 
 Kubernetes' early test-infra bot auto-assigned reviews to 8+ maintainers per
 PR, fragmenting attention. They eventually shipped `OWNERS_ALIASES` +
-randomized-subset selection. Weaver skips to the fix: cap at 3, rotate
+randomized-subset selection. Sylph skips to the fix: cap at 3, rotate
 across the larger eligible pool on subsequent PRs on the same paths
 (rotation logic lives in W5 via `state/reviewer-history.jsonl`).
 
@@ -70,7 +70,7 @@ future suggestions.
 
 ## Exit paths
 
-- No candidates ranked: `/weaver:pr` proceeds with no reviewers; the PR
+- No candidates ranked: `/sylph:pr` proceeds with no reviewers; the PR
   opens as draft without assignments. Reviewers can be added manually.
 - CODEOWNERS absent AND blame graph empty (new file): candidate pool is
   empty, ranking returns `[]`. That's fine for a genuinely new area.

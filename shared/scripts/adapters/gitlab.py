@@ -2,7 +2,7 @@
 GitLab adapter (SaaS + self-managed).
 
 GitLab Merge Requests via REST v4. Project identifier uses URL-encoded
-full path — e.g., `enchanted-plugins/weaver` becomes `enchanted-plugins%2Fweaver`.
+full path — e.g., `enchanted-plugins/sylph` becomes `enchanted-plugins%2Fsylph`.
 
 Token resolution: $GITLAB_TOKEN, $GL_TOKEN, or git-credential fill for
 `gitlab.com` (SaaS) / self-managed host.
@@ -222,7 +222,7 @@ class GitLabAdapter(HostAdapter):
     # ── helpers ────────────────────────────────────────────────────────
 
     def _mr_to_pr(self, repo: str, mr: dict[str, Any]) -> PullRequest:
-        """Normalize a GitLab MR payload into Weaver's PullRequest shape."""
+        """Normalize a GitLab MR payload into Sylph's PullRequest shape."""
         raw_state = str(mr.get("state") or "").lower()
         draft = bool(mr.get("draft") or mr.get("work_in_progress"))
         if raw_state == "merged":

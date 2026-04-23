@@ -1,12 +1,12 @@
 ---
-name: weaver:workflow-detect
-description: Run W3 Workflow-Pattern Classifier on the current repo and show which branching model Weaver detected — GitHub Flow / Trunk-Based / GitFlow / Release Flow / Stacked Diffs / Unknown. Shows the signals and the rationale.
-allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/workflow_detect.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/workflow_detect.py *), Read(**/.weaver/workflow-map.yaml)
+name: sylph:workflow-detect
+description: Run W3 Workflow-Pattern Classifier on the current repo and show which branching model Sylph detected — GitHub Flow / Trunk-Based / GitFlow / Release Flow / Stacked Diffs / Unknown. Shows the signals and the rationale.
+allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/workflow_detect.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/workflow_detect.py *), Read(**/.sylph/workflow-map.yaml)
 ---
 
-# /weaver:workflow-detect
+# /sylph:workflow-detect
 
-Show Weaver's view of your repo's branching model.
+Show Sylph's view of your repo's branching model.
 
 ## What it does
 
@@ -30,16 +30,16 @@ Show Weaver's view of your repo's branching model.
 
 ## When to use it
 
-- Before `/weaver:commit` if you're curious which branch-naming convention
-  Weaver will use.
-- When Weaver picks a branch name you disagree with — the signals reveal
+- Before `/sylph:commit` if you're curious which branch-naming convention
+  Sylph will use.
+- When Sylph picks a branch name you disagree with — the signals reveal
   which heuristic fired.
 - When you've just adopted a stacked-diff tool (Graphite / Sapling /
   git-branchless) and want to confirm W3 noticed.
 
 ## Overriding
 
-Drop `.weaver/workflow-map.yaml` at repo root:
+Drop `.sylph/workflow-map.yaml` at repo root:
 
 ```yaml
 packages/mobile: release-flow

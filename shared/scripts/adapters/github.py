@@ -37,7 +37,7 @@ def _registry() -> dict[str, Any]:
     return get_host("github")
 
 
-USER_AGENT = "weaver/0.1.0"
+USER_AGENT = "sylph/0.1.0"
 
 
 # ──────────────────────────────────────────────────────────────────────
@@ -457,7 +457,7 @@ class GitHubAdapter(HostAdapter):
     def close_pr(self, repo: str, number: int) -> PullRequest:
         """Close a PR without merging (useful for cleanup in tests). Not
         part of the formal HostAdapter contract but exposed here for
-        weaver-owned integration tests."""
+        sylph-owned integration tests."""
         if self._token():
             self._api_request(
                 "PATCH",

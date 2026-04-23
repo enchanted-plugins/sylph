@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=../shared/helpers.sh
 source "$SCRIPT_DIR/../shared/helpers.sh"
 
-HOOK="$PLUGINS_ROOT/weaver-gate/hooks/pre-tool-use/inspect-git-command.sh"
+HOOK="$PLUGINS_ROOT/sylph-gate/hooks/pre-tool-use/inspect-git-command.sh"
 assert_file_exists "$HOOK" "gate hook script"
 
 # Use a sandboxed CLAUDE_PLUGIN_ROOT so the audit log goes to a tmp state dir.
@@ -23,13 +23,13 @@ chmod +x "$fake_plugin_root/hooks/pre-tool-use/inspect-git-command.sh"
 # override SHARED by pre-pointing to real structure. We'll instead stage a
 # nested sandbox matching the real layout.
 rm -rf "$fake_plugin_root"
-fake_product="$SANDBOX/weaver-sim"
-mkdir -p "$fake_product/plugins/weaver-gate/hooks/pre-tool-use"
-mkdir -p "$fake_product/plugins/weaver-gate/state"
-cp "$HOOK" "$fake_product/plugins/weaver-gate/hooks/pre-tool-use/inspect-git-command.sh"
-chmod +x "$fake_product/plugins/weaver-gate/hooks/pre-tool-use/inspect-git-command.sh"
+fake_product="$SANDBOX/sylph-sim"
+mkdir -p "$fake_product/plugins/sylph-gate/hooks/pre-tool-use"
+mkdir -p "$fake_product/plugins/sylph-gate/state"
+cp "$HOOK" "$fake_product/plugins/sylph-gate/hooks/pre-tool-use/inspect-git-command.sh"
+chmod +x "$fake_product/plugins/sylph-gate/hooks/pre-tool-use/inspect-git-command.sh"
 ln -s "$REPO_ROOT/shared" "$fake_product/shared"
-fake_plugin_root="$fake_product/plugins/weaver-gate"
+fake_plugin_root="$fake_product/plugins/sylph-gate"
 audit="$fake_plugin_root/state/audit.jsonl"
 
 export CLAUDE_PLUGIN_ROOT="$fake_plugin_root"

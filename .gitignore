@@ -5,7 +5,7 @@
 # Claude Code local config (per-machine)
 .claude/
 
-# Weaver plugin state (runtime-generated — seeded data is committed explicitly)
+# Sylph plugin state (runtime-generated — seeded data is committed explicitly)
 plugins/*/state/audit.jsonl
 plugins/*/state/metrics.jsonl
 plugins/*/state/boundary-clusters.json

@@ -16,7 +16,7 @@ Produces one of:
   - unknown           — nothing matched; emit a signal, prompt developer
 
 Handles monorepos via per-subtree classification keyed by CODEOWNERS blocks
-or a `.weaver/workflow-map.yaml` overlay.
+or a `.sylph/workflow-map.yaml` overlay.
 
 Stdlib only. Delegates all git interaction to subprocess + `git` binary.
 """
@@ -309,7 +309,7 @@ def classify(sig: RepoSignals) -> Classification:
 # ──────────────────────────────────────────────────────────────────────
 
 def read_workflow_map(cwd: Path) -> dict[str, str] | None:
-    """If `.weaver/workflow-map.yaml` exists, parse it as a simple subpath→workflow
+    """If `.sylph/workflow-map.yaml` exists, parse it as a simple subpath→workflow
     mapping. We don't pull in a YAML dep — the format here is strict:
 
         packages/mobile: release-flow
@@ -317,7 +317,7 @@ def read_workflow_map(cwd: Path) -> dict[str, str] | None:
 
     One line per entry, `:` separator. Comments start with `#`.
     """
-    f = cwd / ".weaver" / "workflow-map.yaml"
+    f = cwd / ".sylph" / "workflow-map.yaml"
     if not f.exists():
         return None
 
@@ -337,7 +337,7 @@ def read_workflow_map(cwd: Path) -> dict[str, str] | None:
 
 
 # ──────────────────────────────────────────────────────────────────────
-# CLI — consumed by /weaver:workflow-detect and /weaver:branch
+# CLI — consumed by /sylph:workflow-detect and /sylph:branch
 # ──────────────────────────────────────────────────────────────────────
 
 def detect(cwd: Path) -> dict[str, Any]:
@@ -394,7 +394,7 @@ def suggest_branch_name(workflow: str, commit_type: str | None, slug: str) -> st
 
 
 def __main_cli():
-    """CLI for /weaver:workflow-detect + /weaver:branch.
+    """CLI for /sylph:workflow-detect + /sylph:branch.
 
     Usage:
       python workflow_detect.py detect [cwd]

@@ -21,7 +21,7 @@ ESCALATIONS="$PLUGIN_ROOT/state/escalations.jsonl"
 
 mkdir -p "$(dirname "$STATE_FILE")"
 
-# Source constants for WEAVER_ settings (may override thresholds).
+# Source constants for SYLPH_ settings (may override thresholds).
 if [[ -f "$PRODUCT_ROOT/shared/constants.sh" ]]; then
     # shellcheck source=/dev/null
     source "$PRODUCT_ROOT/shared/constants.sh"
@@ -30,8 +30,8 @@ fi
 # Confidence floor below which a boundary is provisional and must be
 # reviewed by the Opus boundary-detector agent before downstream plugins
 # commit to any irreversible action. Honors env override per the
-# product-wide WEAVER_* convention.
-CONF_THRESHOLD="${WEAVER_BOUNDARY_CONFIDENCE_THRESHOLD:-0.7}"
+# product-wide SYLPH_* convention.
+CONF_THRESHOLD="${SYLPH_BOUNDARY_CONFIDENCE_THRESHOLD:-0.7}"
 
 # Atomic-append helper — the escalations feed is append-only, concurrent
 # with other plugins that may be touching sibling state files.
@@ -81,7 +81,7 @@ if command -v jq >/dev/null 2>&1 && [[ -n "$verdict" ]]; then
         # (b) the distance landed in the ±uncertainty_band around θ (the
         # Python segmenter flags this as `uncertain:true`). The hook never
         # calls Opus itself — it leaves an escalation record for the
-        # /weaver:review-boundary skill to pick up.
+        # /sylph:review-boundary skill to pick up.
         escalated="false"
         if command -v awk >/dev/null 2>&1; then
             below_floor="$(awk -v c="$confidence" -v t="$CONF_THRESHOLD" 'BEGIN { print (c+0 < t+0) ? "true" : "false" }')"
@@ -95,13 +95,13 @@ if command -v jq >/dev/null 2>&1 && [[ -n "$verdict" ]]; then
             escalated="true"
         fi
 
-        printf '{"ts":"%s","event":"weaver.task.boundary.detected","closed_cluster":%s,"active_cluster":%s,"distance":%s,"confidence":%s,"uncertain":%s,"escalated":%s}\n' \
+        printf '{"ts":"%s","event":"sylph.task.boundary.detected","closed_cluster":%s,"active_cluster":%s,"distance":%s,"confidence":%s,"uncertain":%s,"escalated":%s}\n' \
             "$ts" "$closed" "$active" "$distance" "$confidence" "$uncertain" "$escalated" \
             >> "$EVENTS"
 
         if [[ "$escalated" == "true" ]]; then
             # Fire reason mirrors the rule that tripped — informational
-            # only, consumed by /weaver:review-boundary + the audit trail.
+            # only, consumed by /sylph:review-boundary + the audit trail.
             reason="low_confidence"
             if [[ "$uncertain" == "true" && "$below_floor" != "true" ]]; then
                 reason="uncertainty_band"
@@ -111,7 +111,7 @@ if command -v jq >/dev/null 2>&1 && [[ -n "$verdict" ]]; then
 
             escalation_record="$(printf '%s' "$verdict" | jq -c \
                 --arg ts "$ts" \
-                --arg event "weaver.boundary.escalation.requested" \
+                --arg event "sylph.boundary.escalation.requested" \
                 --arg reason "$reason" \
                 --arg agent "boundary-detector" \
                 '{ts:$ts, event:$event, cluster:(.closed_cluster // .active_cluster // null), confidence:(.confidence // null), distance:(.distance // null), uncertain:(.uncertain // false), reason:$reason, agent:$agent}')"

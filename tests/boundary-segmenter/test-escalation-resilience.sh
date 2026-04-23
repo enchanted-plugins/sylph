@@ -3,10 +3,10 @@
 #
 # Case A — cohesive stream: no boundary fires → no escalation is appended.
 #   A stream of same-file, same-token edits stays in one cluster. We observe
-#   zero weaver.task.boundary.detected events and zero escalation records.
+#   zero sylph.task.boundary.detected events and zero escalation records.
 #
 # Case B — high-confidence boundary (via tunable threshold): boundary fires
-#   but WEAVER_BOUNDARY_CONFIDENCE_THRESHOLD is lowered so the computed
+#   but SYLPH_BOUNDARY_CONFIDENCE_THRESHOLD is lowered so the computed
 #   confidence is at/above the floor → boundary event is emitted with
 #   escalated:false and escalations.jsonl remains empty.
 set -euo pipefail
@@ -20,7 +20,7 @@ assert_file_exists "$HOOK"
 
 # ── Case A: cohesive stream, no boundary ────────────────────────────────
 new_sandbox > /dev/null
-fake_product="$SANDBOX/weaver-sim-a"
+fake_product="$SANDBOX/sylph-sim-a"
 mkdir -p "$fake_product/plugins/boundary-segmenter/hooks/post-tool-use"
 mkdir -p "$fake_product/plugins/boundary-segmenter/state"
 cp "$HOOK" "$fake_product/plugins/boundary-segmenter/hooks/post-tool-use/boundary-segment.sh"
@@ -45,20 +45,20 @@ done
 # Boundary events file should not exist or should be empty — the hook only
 # touches it when a boundary fires.
 if [[ -s "$events_a" ]]; then
-    boundary_lines=$(grep -c 'weaver.task.boundary.detected' "$events_a" || true)
+    boundary_lines=$(grep -c 'sylph.task.boundary.detected' "$events_a" || true)
     assert_eq "$boundary_lines" "0" "cohesive stream must not emit a boundary event"
 fi
 
 # No escalation record at all.
 if [[ -s "$escalations_a" ]]; then
-    esc_lines=$(grep -c 'weaver.boundary.escalation.requested' "$escalations_a" || true)
+    esc_lines=$(grep -c 'sylph.boundary.escalation.requested' "$escalations_a" || true)
     assert_eq "$esc_lines" "0" "cohesive stream must not emit an escalation record"
 fi
 ok "Case A: cohesive stream — no boundary, no escalation"
 
 # ── Case B: boundary fires but confidence clears a lowered floor ────────
 new_sandbox > /dev/null
-fake_product_b="$SANDBOX/weaver-sim-b"
+fake_product_b="$SANDBOX/sylph-sim-b"
 mkdir -p "$fake_product_b/plugins/boundary-segmenter/hooks/post-tool-use"
 mkdir -p "$fake_product_b/plugins/boundary-segmenter/state"
 cp "$HOOK" "$fake_product_b/plugins/boundary-segmenter/hooks/post-tool-use/boundary-segment.sh"
@@ -77,7 +77,7 @@ escalations_b="$plugin_root_b/state/escalations.jsonl"
 # comfortably above 0.65 (threshold + band) to dodge the uncertain flag.
 # The "auth → docs" context switch with a 15-minute idle gap lands
 # distance around 0.9, well outside the band.
-export WEAVER_BOUNDARY_CONFIDENCE_THRESHOLD="0.0"
+export SYLPH_BOUNDARY_CONFIDENCE_THRESHOLD="0.0"
 
 # Drive the same three-event sequence as the emission test.
 pb1='{"tool_name":"Edit","tool_input":{"file_path":"src/auth.py","old_string":"old","new_string":"def verify_token(t): return sha256(t)"},"timestamp":1700000000}'
@@ -90,7 +90,7 @@ for p in "$pb1" "$pb2" "$pb3"; do
 done
 
 assert_file_exists "$events_b" "boundary-events.jsonl exists after context switch (case B)"
-boundary_lines_b=$(grep -c 'weaver.task.boundary.detected' "$events_b" || true)
+boundary_lines_b=$(grep -c 'sylph.task.boundary.detected' "$events_b" || true)
 assert_eq "$boundary_lines_b" "1" "exactly one boundary event emitted (case B)"
 
 last_event_b="$(tail -n1 "$events_b")"
@@ -113,10 +113,10 @@ else
     assert_eq "$escalated_b" "false" "boundary with confidence >= floor is not escalated"
     # And therefore no escalation record on the feed.
     if [[ -s "$escalations_b" ]]; then
-        esc_lines_b=$(grep -c 'weaver.boundary.escalation.requested' "$escalations_b" || true)
+        esc_lines_b=$(grep -c 'sylph.boundary.escalation.requested' "$escalations_b" || true)
         assert_eq "$esc_lines_b" "0" "no escalation record when confidence >= floor and not uncertain"
     fi
     ok "Case B: boundary fires but confidence clears lowered floor — no escalation"
 fi
 
-unset WEAVER_BOUNDARY_CONFIDENCE_THRESHOLD
+unset SYLPH_BOUNDARY_CONFIDENCE_THRESHOLD

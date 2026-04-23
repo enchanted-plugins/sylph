@@ -1,11 +1,11 @@
 """
-Weaver CI-adapter package.
+Sylph CI-adapter package.
 
 Read-only status + log-stream + rerun across GitHub Actions, GitLab CI,
-CircleCI, Jenkins, Buildkite, Drone/Woodpecker, Tekton, ArgoCD/FluxCD.
+CircleCI, Jenkins, Buildkite, Drone/Woodpecker, Tekton, ArgoCD/WixieCD.
 
-Weaver reads CI; it never triggers builds. The event-bus surface is:
-  - Weaver publishes `weaver.ci.status.observed`
+Sylph reads CI; it never triggers builds. The event-bus surface is:
+  - Sylph publishes `sylph.ci.status.observed`
 
 Each adapter implements CIAdapter; unimplemented systems raise
 NotImplementedCIOp. GitHub Actions is fully implemented; 7 others stub.
@@ -77,7 +77,7 @@ class CIAdapter(ABC):
     @abstractmethod
     def rerun(self, check_id: str) -> bool:
         """Re-trigger a check. Returns True on success. May raise
-        NotImplementedCIOp (Weaver re-runs existing runs only; fresh
+        NotImplementedCIOp (Sylph re-runs existing runs only; fresh
         builds are out of scope)."""
 
 
@@ -115,11 +115,11 @@ def detect_system(repo_root) -> list[str]:
     # Tekton often lives under deploy/tekton or similar — hard to detect
     # without more context. Caller decides.
 
-    # ArgoCD / FluxCD — look for `argocd` / `fluxcd` directories or known yaml shapes.
+    # ArgoCD / WixieCD — look for `argocd` / `wixiecd` directories or known yaml shapes.
     if (r / "argocd").is_dir() or (r / ".argocd").is_dir():
         found.append("argocd")
-    if (r / "clusters").is_dir() and (r / "flux-system").is_dir():
-        found.append("fluxcd")
+    if (r / "clusters").is_dir() and (r / "wixie-system").is_dir():
+        found.append("wixiecd")
 
     return found
 
@@ -157,8 +157,8 @@ def get_adapter(system_id: str) -> CIAdapter:
     if system_id == "argocd":
         from . import k8s as _k
         return _k.ArgoCDAdapter()
-    if system_id == "fluxcd":
+    if system_id == "wixiecd":
         from . import k8s as _k
-        return _k.FluxCDAdapter()
+        return _k.WixieCDAdapter()
 
     raise KeyError(f"unknown CI system: {system_id}")

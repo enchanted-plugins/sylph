@@ -1,14 +1,14 @@
 # full
 
-**Meta-plugin. Declares the other 8 plugins as dependencies so one install pulls in the whole Weaver pipeline.**
+**Meta-plugin. Declares the other 8 plugins as dependencies so one install pulls in the whole Sylph pipeline.**
 
-Same pattern as Flux's `full` and the other enchanted-plugins meta-plugins.
+Same pattern as Wixie's `full` and the other enchanted-plugins meta-plugins.
 
 ## Install
 
 ```
-/plugin marketplace add enchanted-plugins/weaver
-/plugin install full@weaver
+/plugin marketplace add enchanted-plugins/sylph
+/plugin install full@sylph
 ```
 
 That single command resolves dependencies and installs:
@@ -17,19 +17,19 @@ That single command resolves dependencies and installs:
 - `boundary-segmenter` (W2 — defining engine)
 - `branch-workflow` (W3)
 - `pr-lifecycle` (W4)
-- `weaver-gate` (destructive-op gate)
+- `sylph-gate` (destructive-op gate)
 - `capability-memory` (provider registry)
 - `ci-reader` (CI status, read-only)
-- `weaver-learning` (W5)
+- `sylph-learning` (W5)
 
-Verify with `/plugin list` — expected: `full` plus the 8 above under the `weaver` marketplace.
+Verify with `/plugin list` — expected: `full` plus the 8 above under the `sylph` marketplace.
 
 ## Why install `full` instead of cherry-picking
 
-The plugins coordinate via the enchanted-mcp event bus. Cherry-picking is supported for isolated use (e.g. `commit-intelligence` alone for manual `/weaver commit` usage), but most cross-plugin flows depend on multiple plugins being present:
+The plugins coordinate via the enchanted-mcp event bus. Cherry-picking is supported for isolated use (e.g. `commit-intelligence` alone for manual `/sylph commit` usage), but most cross-plugin flows depend on multiple plugins being present:
 
 - Auto-orchestration needs `boundary-segmenter` + `branch-workflow` + `commit-intelligence` + `pr-lifecycle` at minimum.
-- Safe destructive-op handling needs `weaver-gate` always.
+- Safe destructive-op handling needs `sylph-gate` always.
 - Host abstraction needs `capability-memory` always.
 
 So `full` is the supported default. Cherry-pick only when you know which event flows you're opting out of.

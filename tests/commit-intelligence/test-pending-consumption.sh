@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Test: /weaver:commit's inbox consumer contract.
+# Test: /sylph:commit's inbox consumer contract.
 #
 # Exercises shared/scripts/pending_inbox.py against pending-drafts.jsonl —
 # the commit-intelligence side of the hook pipeline. Coverage mirrors the
@@ -45,9 +45,9 @@ ok "read on empty file returns empty array"
 # ── 3. read filters to executed=false ────────────────────────────────
 # Three records: two pending, one already done.
 cat > "$drafts_path" <<'EOF'
-{"ts":"2026-04-20T10:00:00Z","event":"commit.drafted","suggested_type":"feat","dominant_file":"src/auth.py","files":["src/auth.py","src/session.py"],"event_count":4,"source_event":{"ts":"2026-04-20T09:59:58Z","event":"weaver.task.boundary.detected","closed_cluster":{"id":"c1"}},"executed":false}
-{"ts":"2026-04-20T10:05:00Z","event":"commit.drafted","suggested_type":"docs","dominant_file":"README.md","files":["README.md"],"event_count":1,"source_event":{"ts":"2026-04-20T10:04:59Z","event":"weaver.task.boundary.detected","closed_cluster":{"id":"c2"}},"executed":false}
-{"ts":"2026-04-20T09:00:00Z","event":"commit.drafted","suggested_type":"fix","dominant_file":"src/old.py","files":["src/old.py"],"event_count":2,"source_event":{"ts":"2026-04-20T08:59:59Z","event":"weaver.task.boundary.detected","closed_cluster":{"id":"c0"}},"executed":true,"executed_at":"2026-04-20T09:01:00Z","sha":"abc1234"}
+{"ts":"2026-04-20T10:00:00Z","event":"commit.drafted","suggested_type":"feat","dominant_file":"src/auth.py","files":["src/auth.py","src/session.py"],"event_count":4,"source_event":{"ts":"2026-04-20T09:59:58Z","event":"sylph.task.boundary.detected","closed_cluster":{"id":"c1"}},"executed":false}
+{"ts":"2026-04-20T10:05:00Z","event":"commit.drafted","suggested_type":"docs","dominant_file":"README.md","files":["README.md"],"event_count":1,"source_event":{"ts":"2026-04-20T10:04:59Z","event":"sylph.task.boundary.detected","closed_cluster":{"id":"c2"}},"executed":false}
+{"ts":"2026-04-20T09:00:00Z","event":"commit.drafted","suggested_type":"fix","dominant_file":"src/old.py","files":["src/old.py"],"event_count":2,"source_event":{"ts":"2026-04-20T08:59:59Z","event":"sylph.task.boundary.detected","closed_cluster":{"id":"c0"}},"executed":true,"executed_at":"2026-04-20T09:01:00Z","sha":"abc1234"}
 EOF
 
 out="$("$PY" "$INBOX" read "$drafts_path")"

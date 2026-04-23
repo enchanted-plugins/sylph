@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Test: /weaver:branch's inbox consumer contract.
+# Test: /sylph:branch's inbox consumer contract.
 #
 # Exercises shared/scripts/pending_inbox.py — the consumer side of the
 # branch-workflow hook pipeline. Coverage:
@@ -42,9 +42,9 @@ ok "read on empty file returns empty array"
 # ── 3. read filters to executed=false ────────────────────────────────
 # Three records: two pending (one high-confidence, one low), one already done.
 cat > "$pending_path" <<'EOF'
-{"ts":"2026-04-20T10:00:00Z","event":"branch.suggested","workflow":"github-flow","dominant_file":"src/auth.py","confidence":0.85,"source_event":{"ts":"2026-04-20T09:59:58Z","event":"weaver.task.boundary.detected","closed_cluster":{"id":"c1"}},"executed":false}
-{"ts":"2026-04-20T10:05:00Z","event":"branch.suggested","workflow":"unknown","dominant_file":"README.md","confidence":0.3,"source_event":{"ts":"2026-04-20T10:04:59Z","event":"weaver.task.boundary.detected","closed_cluster":{"id":"c2"}},"executed":false}
-{"ts":"2026-04-20T09:00:00Z","event":"branch.suggested","workflow":"trunk-based","dominant_file":"src/old.py","confidence":0.9,"source_event":{"ts":"2026-04-20T08:59:59Z","event":"weaver.task.boundary.detected","closed_cluster":{"id":"c0"}},"executed":true,"executed_at":"2026-04-20T09:01:00Z","branch_name":"dave/old-fix"}
+{"ts":"2026-04-20T10:00:00Z","event":"branch.suggested","workflow":"github-flow","dominant_file":"src/auth.py","confidence":0.85,"source_event":{"ts":"2026-04-20T09:59:58Z","event":"sylph.task.boundary.detected","closed_cluster":{"id":"c1"}},"executed":false}
+{"ts":"2026-04-20T10:05:00Z","event":"branch.suggested","workflow":"unknown","dominant_file":"README.md","confidence":0.3,"source_event":{"ts":"2026-04-20T10:04:59Z","event":"sylph.task.boundary.detected","closed_cluster":{"id":"c2"}},"executed":false}
+{"ts":"2026-04-20T09:00:00Z","event":"branch.suggested","workflow":"trunk-based","dominant_file":"src/old.py","confidence":0.9,"source_event":{"ts":"2026-04-20T08:59:59Z","event":"sylph.task.boundary.detected","closed_cluster":{"id":"c0"}},"executed":true,"executed_at":"2026-04-20T09:01:00Z","branch_name":"dave/old-fix"}
 EOF
 
 out="$("$PY" "$INBOX" read "$pending_path")"

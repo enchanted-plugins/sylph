@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Weaver — Architecture Explorer</title>
+<title>Sylph — Architecture Explorer</title>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -131,7 +131,7 @@
 <body>
 <div class="brand-bar"></div>
 <div class="container">
-  <h1>Weaver <span>Architecture Explorer</span></h1>
+  <h1>Sylph <span>Architecture Explorer</span></h1>
   <div class="subtitle">Auto-generated from codebase — 2026-04-21 13:29 UTC</div>
 
   <h2>System Diagrams</h2>
@@ -179,16 +179,16 @@
     pr_lifecycle_out(["state/metrics.jsonl"])
     pr_lifecycle --> pr_lifecycle_out
     style pr_lifecycle fill:#161b22,stroke:#3fb950,color:#e6edf3
-    weaver_gate["weaver-gate<br/><small>PreToolUse</small>"]
-    CC --> weaver_gate
-    weaver_gate_out(["state/metrics.jsonl"])
-    weaver_gate --> weaver_gate_out
-    style weaver_gate fill:#161b22,stroke:#58a6ff,color:#e6edf3
-    weaver_learning["weaver-learning<br/><small>PreCompact + SessionStart</small>"]
-    CC --> weaver_learning
-    weaver_learning_out(["state/metrics.jsonl"])
-    weaver_learning --> weaver_learning_out
-    style weaver_learning fill:#161b22,stroke:#bc8cff,color:#e6edf3
+    sylph_gate["sylph-gate<br/><small>PreToolUse</small>"]
+    CC --> sylph_gate
+    sylph_gate_out(["state/metrics.jsonl"])
+    sylph_gate --> sylph_gate_out
+    style sylph_gate fill:#161b22,stroke:#58a6ff,color:#e6edf3
+    sylph_learning["sylph-learning<br/><small>PreCompact + SessionStart</small>"]
+    CC --> sylph_learning
+    sylph_learning_out(["state/metrics.jsonl"])
+    sylph_learning --> sylph_learning_out
+    style sylph_learning fill:#161b22,stroke:#bc8cff,color:#e6edf3
     style CC fill:#0d1117,stroke:#bc8cff,color:#e6edf3</pre>
   </div>
   <div id="panel-hooks" class="diagram-panel">
@@ -228,18 +228,18 @@
         pr_lifecycle_h0_script["on-commit.sh<br/><small>timeout: 10s</small>"]
         pr_lifecycle_h0_trigger --> pr_lifecycle_h0_script
     end
-    subgraph weaver_gate["weaver-gate"]
-        weaver_gate_h0_trigger["PreToolUse<br/>Bash"]
-        weaver_gate_h0_script["inspect-git-command.sh<br/><small>timeout: 5s</small>"]
-        weaver_gate_h0_trigger --> weaver_gate_h0_script
+    subgraph sylph_gate["sylph-gate"]
+        sylph_gate_h0_trigger["PreToolUse<br/>Bash"]
+        sylph_gate_h0_script["inspect-git-command.sh<br/><small>timeout: 5s</small>"]
+        sylph_gate_h0_trigger --> sylph_gate_h0_script
     end
-    subgraph weaver_learning["weaver-learning"]
-        weaver_learning_h0_trigger["SessionStart<br/>*"]
-        weaver_learning_h0_script["load-priors.sh<br/><small>timeout: 5s</small>"]
-        weaver_learning_h0_trigger --> weaver_learning_h0_script
-        weaver_learning_h1_trigger["PreCompact<br/>*"]
-        weaver_learning_h1_script["checkpoint-learnings.sh<br/><small>timeout: 5s</small>"]
-        weaver_learning_h1_trigger --> weaver_learning_h1_script
+    subgraph sylph_learning["sylph-learning"]
+        sylph_learning_h0_trigger["SessionStart<br/>*"]
+        sylph_learning_h0_script["load-priors.sh<br/><small>timeout: 5s</small>"]
+        sylph_learning_h0_trigger --> sylph_learning_h0_script
+        sylph_learning_h1_trigger["PreCompact<br/>*"]
+        sylph_learning_h1_script["checkpoint-learnings.sh<br/><small>timeout: 5s</small>"]
+        sylph_learning_h1_trigger --> sylph_learning_h1_script
     end</pre>
   </div>
   <div id="panel-dataflow" class="diagram-panel">
@@ -250,20 +250,20 @@
         Write["Write / Edit"]
         Glob["Glob / Grep"]
     end
-    boundary_segmenter_metrics["boundary-segmenter/state/metrics.jsonl<br/><small>weaver.task.boundary.detected</small>"]
+    boundary_segmenter_metrics["boundary-segmenter/state/metrics.jsonl<br/><small>sylph.task.boundary.detected</small>"]
     Write --> boundary_segmenter_metrics
-    branch_workflow_metrics["branch-workflow/state/metrics.jsonl<br/><small>weaver.workflow.detected<br/>weaver.branch.created</small>"]
+    branch_workflow_metrics["branch-workflow/state/metrics.jsonl<br/><small>sylph.workflow.detected<br/>sylph.branch.created</small>"]
     Write --> branch_workflow_metrics
     capability_memory_metrics["capability-memory/state/metrics.jsonl<br/><small>capability_loaded<br/>gitlab_version_probed</small>"]
-    ci_reader_metrics["ci-reader/state/metrics.jsonl<br/><small>weaver.ci.status.observed</small>"]
-    commit_intelligence_metrics["commit-intelligence/state/metrics.jsonl<br/><small>weaver.commit.drafted<br/>weaver.commit.committed</small>"]
+    ci_reader_metrics["ci-reader/state/metrics.jsonl<br/><small>sylph.ci.status.observed</small>"]
+    commit_intelligence_metrics["commit-intelligence/state/metrics.jsonl<br/><small>sylph.commit.drafted<br/>sylph.commit.committed</small>"]
     Write --> commit_intelligence_metrics
     full_metrics["full/state/metrics.jsonl<br/><small></small>"]
-    pr_lifecycle_metrics["pr-lifecycle/state/metrics.jsonl<br/><small>weaver.pr.drafted<br/>weaver.pr.ready<br/>weaver.pr.merged</small>"]
+    pr_lifecycle_metrics["pr-lifecycle/state/metrics.jsonl<br/><small>sylph.pr.drafted<br/>sylph.pr.ready<br/>sylph.pr.merged</small>"]
     Bash --> pr_lifecycle_metrics
-    weaver_gate_metrics["weaver-gate/state/metrics.jsonl<br/><small>weaver.destructive.detected<br/>weaver.destructive.confirmed</small>"]
-    Bash --> weaver_gate_metrics
-    weaver_learning_metrics["weaver-learning/state/metrics.jsonl<br/><small>priors_loaded<br/>preferences_checkpointed</small>"]
+    sylph_gate_metrics["sylph-gate/state/metrics.jsonl<br/><small>sylph.destructive.detected<br/>sylph.destructive.confirmed</small>"]
+    Bash --> sylph_gate_metrics
+    sylph_learning_metrics["sylph-learning/state/metrics.jsonl<br/><small>priors_loaded<br/>preferences_checkpointed</small>"]
     bus["🌐 mcp-event-bus<br/>Cross-plugin coordination"]
     boundary_segmenter_metrics --> bus
     branch_workflow_metrics --> bus
@@ -272,21 +272,21 @@
     commit_intelligence_metrics --> bus
     full_metrics --> bus
     pr_lifecycle_metrics --> bus
-    weaver_gate_metrics --> bus
-    weaver_learning_metrics --> bus</pre>
+    sylph_gate_metrics --> bus
+    sylph_learning_metrics --> bus</pre>
   </div>
   <div id="panel-lifecycle" class="diagram-panel">
     <pre class="mermaid">graph TD
     start(["Session Start"]) --> turns
     subgraph turns["Active Session"]
         t1["Turn N: Tool Call"]
-        t1 --> pre["PreToolUse<br/>weaver-gate"]
+        t1 --> pre["PreToolUse<br/>sylph-gate"]
         pre --> exec["Tool Executes"]
         exec --> post["PostToolUse<br/>boundary-segmenter, branch-workflow, commit-intelligence, pr-lifecycle"]
         post --> t1
     end
     turns -->|"Context full"| compact["⚠️ Compaction"]
-    compact --> precompact["PreCompact<br/>boundary-segmenter, weaver-learning"]
+    compact --> precompact["PreCompact<br/>boundary-segmenter, sylph-learning"]
     precompact --> wipe["Context Wiped"]
     wipe --> restore["Restore context"]
     restore --> resume(["Session Continues"])
@@ -300,7 +300,7 @@
     
         <div class="plugin-card">
           <h3>boundary-segmenter</h3>
-          <p class="desc">W2 — Jaccard-Cosine Boundary Segmentation. Weaver's defining engine. Clusters PostToolUse(Edit|Write) events into task boundaries via multi-modal distance (file-set Jaccard + token cosine + idle-time gap). Standalone: works without Hornet V1 by deriving token vectors from edit content. Upgraded automatically when Hornet V1 embeddings are available on the event bus.</p>
+          <p class="desc">W2 — Jaccard-Cosine Boundary Segmentation. Sylph's defining engine. Clusters PostToolUse(Edit|Write) events into task boundaries via multi-modal distance (file-set Jaccard + token cosine + idle-time gap). Standalone: works without Raven V1 by deriving token vectors from edit content. Upgraded automatically when Raven V1 embeddings are available on the event bus.</p>
           <div class="section-label">Hooks</div>
           <div class="hook"><span class="phase">PostToolUse</span> <span class="matcher">Edit|Write|MultiEdit</span> → <code>boundary-segment.sh</code> <span class="dim">(10s)</span></div><div class="hook"><span class="phase">PreCompact</span> <span class="matcher">*</span> → <code>checkpoint-clusters.sh</code> <span class="dim">(5s)</span></div>
           <div class="section-label">Skills</div>
@@ -308,11 +308,11 @@
           <div class="section-label">Agents</div>
           <div class="item"><strong>boundary-detector</strong> <span class="dim">(claude-opus-4-7, narrow)</span></div>
           <div class="section-label">Commands</div>
-          <div class="item"><code>weaver:review-boundary</code></div>
+          <div class="item"><code>sylph:review-boundary</code></div>
         </div>
         <div class="plugin-card">
           <h3>branch-workflow</h3>
-          <p class="desc">W3 — Workflow-Pattern Classifier. Infers the active branching model (GitHub Flow / Trunk-Based / GitFlow / Release Flow / Stacked Diffs / Unknown) from repo signals and suggests a branch name for the next task boundary. Per-subtree support for monorepos via .weaver/workflow-map.yaml.</p>
+          <p class="desc">W3 — Workflow-Pattern Classifier. Infers the active branching model (GitHub Flow / Trunk-Based / GitFlow / Release Flow / Stacked Diffs / Unknown) from repo signals and suggests a branch name for the next task boundary. Per-subtree support for monorepos via .sylph/workflow-map.yaml.</p>
           <div class="section-label">Hooks</div>
           <div class="hook"><span class="phase">PostToolUse</span> <span class="matcher">Edit|Write|MultiEdit</span> → <code>on-boundary.sh</code> <span class="dim">(10s)</span></div>
           <div class="section-label">Skills</div>
@@ -320,7 +320,7 @@
           <div class="section-label">Agents</div>
           <div class="dim">None</div>
           <div class="section-label">Commands</div>
-          <div class="item"><code>weaver:branch</code></div><div class="item"><code>weaver:workflow-detect</code></div>
+          <div class="item"><code>sylph:branch</code></div><div class="item"><code>sylph:workflow-detect</code></div>
         </div>
         <div class="plugin-card">
           <h3>capability-memory</h3>
@@ -332,11 +332,11 @@
           <div class="section-label">Agents</div>
           <div class="dim">None</div>
           <div class="section-label">Commands</div>
-          <div class="item"><code>weaver:setup</code></div>
+          <div class="item"><code>sylph:setup</code></div>
         </div>
         <div class="plugin-card">
           <h3>ci-reader</h3>
-          <p class="desc">Read-only CI status + log streaming across GitHub Actions, GitLab CI, CircleCI, Jenkins, Buildkite, Drone/Woodpecker, Tekton, ArgoCD/FluxCD. Ships ci-registry.json — a declarative capability surface for all 10 systems (auth modes, rate limits, status/conclusion enums, webhook event taxonomy, known quirks) loaded at SessionStart. Normalizes per-system check payloads into a typed Check interface and emits weaver.ci.status.observed events. GitHub Actions fully implemented via gh CLI; 7 other systems stub and degrade to manual-handoff; ArgoCD/FluxCD are GitOps read-only drift detection.</p>
+          <p class="desc">Read-only CI status + log streaming across GitHub Actions, GitLab CI, CircleCI, Jenkins, Buildkite, Drone/Woodpecker, Tekton, ArgoCD/WixieCD. Ships ci-registry.json — a declarative capability surface for all 10 systems (auth modes, rate limits, status/conclusion enums, webhook event taxonomy, known quirks) loaded at SessionStart. Normalizes per-system check payloads into a typed Check interface and emits sylph.ci.status.observed events. GitHub Actions fully implemented via gh CLI; 7 other systems stub and degrade to manual-handoff; ArgoCD/WixieCD are GitOps read-only drift detection.</p>
           <div class="section-label">Hooks</div>
           <div class="hook"><span class="phase">SessionStart</span> <span class="matcher">*</span> → <code>load-ci-registry.sh</code> <span class="dim">(10s)</span></div>
           <div class="section-label">Skills</div>
@@ -344,7 +344,7 @@
           <div class="section-label">Agents</div>
           <div class="dim">None</div>
           <div class="section-label">Commands</div>
-          <div class="item"><code>weaver:ci-status</code></div><div class="item"><code>weaver:retry-ci</code></div>
+          <div class="item"><code>sylph:ci-status</code></div><div class="item"><code>sylph:retry-ci</code></div>
         </div>
         <div class="plugin-card">
           <h3>commit-intelligence</h3>
@@ -356,11 +356,11 @@
           <div class="section-label">Agents</div>
           <div class="item"><strong>commit-drafter</strong> <span class="dim">(claude-sonnet-4-6, narrow)</span></div><div class="item"><strong>message-validator</strong> <span class="dim">(claude-haiku-4-5, narrow)</span></div>
           <div class="section-label">Commands</div>
-          <div class="item"><code>weaver:commit</code></div>
+          <div class="item"><code>sylph:commit</code></div>
         </div>
         <div class="plugin-card">
           <h3>full</h3>
-          <p class="desc">Meta-plugin that installs every Weaver plugin at once via dependency resolution. Installs: commit-intelligence, boundary-segmenter, branch-workflow, pr-lifecycle, weaver-gate, capability-memory, ci-reader, weaver-learning.</p>
+          <p class="desc">Meta-plugin that installs every Sylph plugin at once via dependency resolution. Installs: commit-intelligence, boundary-segmenter, branch-workflow, pr-lifecycle, sylph-gate, capability-memory, ci-reader, sylph-learning.</p>
           <div class="section-label">Hooks</div>
           <div class="dim">None</div>
           <div class="section-label">Skills</div>
@@ -372,7 +372,7 @@
         </div>
         <div class="plugin-card">
           <h3>pr-lifecycle</h3>
-          <p class="desc">W4 — Path-History Reviewer Routing + idempotent PR state machine. Opens draft PRs with session-context descriptions (upgrades to Hornet V4 when available), ranks reviewers via git-blame + CODEOWNERS + optional availability events, drives merge-queue integration. GitHub fully implemented via gh CLI; 9 other hosts stub cleanly and degrade to manual-handoff mode.</p>
+          <p class="desc">W4 — Path-History Reviewer Routing + idempotent PR state machine. Opens draft PRs with session-context descriptions (upgrades to Raven V4 when available), ranks reviewers via git-blame + CODEOWNERS + optional availability events, drives merge-queue integration. GitHub fully implemented via gh CLI; 9 other hosts stub cleanly and degrade to manual-handoff mode.</p>
           <div class="section-label">Hooks</div>
           <div class="hook"><span class="phase">PostToolUse</span> <span class="matcher">Bash</span> → <code>on-commit.sh</code> <span class="dim">(10s)</span></div>
           <div class="section-label">Skills</div>
@@ -380,10 +380,10 @@
           <div class="section-label">Agents</div>
           <div class="item"><strong>conflict-resolver</strong> <span class="dim">(claude-opus-4-7, medium)</span></div><div class="item"><strong>pr-description-crafter</strong> <span class="dim">(claude-opus-4-7, medium)</span></div>
           <div class="section-label">Commands</div>
-          <div class="item"><code>weaver:close</code></div><div class="item"><code>weaver:gate-check</code></div><div class="item"><code>weaver:merge</code></div><div class="item"><code>weaver:pr</code></div><div class="item"><code>weaver:release</code></div><div class="item"><code>weaver:revert</code></div><div class="item"><code>weaver:reviewers</code></div><div class="item"><code>weaver:status</code></div>
+          <div class="item"><code>sylph:close</code></div><div class="item"><code>sylph:gate-check</code></div><div class="item"><code>sylph:merge</code></div><div class="item"><code>sylph:pr</code></div><div class="item"><code>sylph:release</code></div><div class="item"><code>sylph:revert</code></div><div class="item"><code>sylph:reviewers</code></div><div class="item"><code>sylph:status</code></div>
         </div>
         <div class="plugin-card">
-          <h3>weaver-gate</h3>
+          <h3>sylph-gate</h3>
           <p class="desc">Destructive-op decision-gate for git. Inspects every Bash invocation; routes force-push, history rewrite, branch/tag deletion, clean -fdx, and merge-queue bypass through a confirmation surface before execution.</p>
           <div class="section-label">Hooks</div>
           <div class="hook"><span class="phase">PreToolUse</span> <span class="matcher">Bash</span> → <code>inspect-git-command.sh</code> <span class="dim">(5s)</span></div>
@@ -392,11 +392,11 @@
           <div class="section-label">Agents</div>
           <div class="dim">None</div>
           <div class="section-label">Commands</div>
-          <div class="item"><code>weaver:audit</code></div><div class="item"><code>weaver:dry-run</code></div>
+          <div class="item"><code>sylph:audit</code></div><div class="item"><code>sylph:dry-run</code></div>
         </div>
         <div class="plugin-card">
-          <h3>weaver-learning</h3>
-          <p class="desc">W5 — Gauss Learning (Weaver). Per-developer preference persistence via exponential moving averages with Allay-A4 atomic serialization. Tracks commit-style (scope rate, body rate, types), branch-naming conventions, PR turnaround, reviewer overrides, W2 corrections. Priors flow back to W1/W2/W3/W4 after the bootstrap sample floor.</p>
+          <h3>sylph-learning</h3>
+          <p class="desc">W5 — Gauss Learning (Sylph). Per-developer preference persistence via exponential moving averages with Fae-A4 atomic serialization. Tracks commit-style (scope rate, body rate, types), branch-naming conventions, PR turnaround, reviewer overrides, W2 corrections. Priors flow back to W1/W2/W3/W4 after the bootstrap sample floor.</p>
           <div class="section-label">Hooks</div>
           <div class="hook"><span class="phase">SessionStart</span> <span class="matcher">*</span> → <code>load-priors.sh</code> <span class="dim">(5s)</span></div><div class="hook"><span class="phase">PreCompact</span> <span class="matcher">*</span> → <code>checkpoint-learnings.sh</code> <span class="dim">(5s)</span></div>
           <div class="section-label">Skills</div>
@@ -404,13 +404,13 @@
           <div class="section-label">Agents</div>
           <div class="dim">None</div>
           <div class="section-label">Commands</div>
-          <div class="item"><code>weaver:audit-pdf</code></div><div class="item"><code>discard</code></div><div class="item"><code>weaver:learnings</code></div><div class="item"><code>weaver:stats</code></div>
+          <div class="item"><code>sylph:audit-pdf</code></div><div class="item"><code>discard</code></div><div class="item"><code>sylph:learnings</code></div><div class="item"><code>sylph:stats</code></div>
         </div>
   </div>
 
   <div class="footer">
     <span>Generated by docs/architecture/generate.py from plugin.json, hooks.json, SKILL.md, agents/*.md</span>
-    <span>Weaver v0.0.1</span>
+    <span>Sylph v0.0.1</span>
   </div>
 </div>
 

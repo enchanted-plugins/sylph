@@ -3,12 +3,12 @@
 #
 # Assertions:
 #   1. With no executed-commits.jsonl feed: hook is a silent no-op (exit 0).
-#   2. One `weaver.commit.committed` event → one pending-prs.jsonl record.
+#   2. One `sylph.commit.committed` event → one pending-prs.jsonl record.
 #   3. Listener-offset advances to the current executed-commits.jsonl size.
 #   4. Re-running with no new events is idempotent (no duplicate record).
 #   5. Non-commit events on the feed (e.g. stray junk or other event types)
 #      are skipped without error.
-#   6. Record schema: {ts, event:"weaver.pr.drafted", branch, sha, title,
+#   6. Record schema: {ts, event:"sylph.pr.drafted", branch, sha, title,
 #      body, reviewer_suggestions:[], source_commit, source_event}.
 #   7. Advisory-only: hook always exits 0, even with a malformed feed.
 set -euo pipefail
@@ -19,7 +19,7 @@ source "$SCRIPT_DIR/../shared/helpers.sh"
 
 # Sandbox mirroring the product layout so PLUGIN_ROOT + PRODUCT_ROOT resolve.
 new_sandbox >/dev/null
-fake_product="$SANDBOX/weaver-sim"
+fake_product="$SANDBOX/sylph-sim"
 mkdir -p "$fake_product/plugins/commit-intelligence/state"
 mkdir -p "$fake_product/plugins/pr-lifecycle/hooks/post-tool-use"
 mkdir -p "$fake_product/plugins/pr-lifecycle/state"
@@ -58,7 +58,7 @@ ok "no-op when upstream feed missing"
 # ── Assertion 2: one executed-commit event → one PR draft record ───────
 ts_1="2026-04-20T10:00:00Z"
 cat >> "$feed" <<JSON
-{"ts":"$ts_1","event":"weaver.commit.committed","sha":"deadbeefcafebabe0001","branch":"feat/chain-listener","message":"feat(pr-lifecycle): add chain-listener for executed commits","source_draft_ts":"2026-04-20T09:59:00Z"}
+{"ts":"$ts_1","event":"sylph.commit.committed","sha":"deadbeefcafebabe0001","branch":"feat/chain-listener","message":"feat(pr-lifecycle): add chain-listener for executed commits","source_draft_ts":"2026-04-20T09:59:00Z"}
 JSON
 
 run_hook
@@ -70,12 +70,12 @@ lines_1=$(wc -l < "$pending_prs" | tr -d '[:space:]')
 assert_eq "$lines_1" "1" "exactly one pending-prs record written"
 
 # Schema sanity.
-assert_jq "$pending_prs" '.event' "weaver.pr.drafted" "record event name"
+assert_jq "$pending_prs" '.event' "sylph.pr.drafted" "record event name"
 assert_jq "$pending_prs" '.branch' "feat/chain-listener" "record branch"
 assert_jq "$pending_prs" '.sha' "deadbeefcafebabe0001" "record sha"
 assert_jq "$pending_prs" '.source_commit' "deadbeefcafebabe0001" "record source_commit"
 assert_jq "$pending_prs" '.reviewer_suggestions | length' "0" "reviewer_suggestions is empty list (skill fills it)"
-assert_jq "$pending_prs" '.source_event.event' "weaver.commit.committed" "source_event preserved"
+assert_jq "$pending_prs" '.source_event.event' "sylph.commit.committed" "source_event preserved"
 assert_jq "$pending_prs" '.executed' "false" "executed false (skill flips it)"
 
 # Title should be derived from the commit message's first line.
@@ -107,7 +107,7 @@ ok "listener is idempotent: re-run with no new events is a no-op"
 # A stray non-committed event (e.g. an older schema marker) should be ignored.
 ts_2="2026-04-20T10:05:00Z"
 cat >> "$feed" <<JSON
-{"ts":"$ts_2","event":"weaver.commit.aborted","sha":"0000","branch":"noop","message":"stray","source_draft_ts":""}
+{"ts":"$ts_2","event":"sylph.commit.aborted","sha":"0000","branch":"noop","message":"stray","source_draft_ts":""}
 JSON
 
 run_hook
@@ -125,7 +125,7 @@ ok "non-commit events are skipped without dropping into pending-prs.jsonl"
 # ── Assertion 5: a second real commit event appends a second record ─────
 ts_3="2026-04-20T10:10:00Z"
 cat >> "$feed" <<JSON
-{"ts":"$ts_3","event":"weaver.commit.committed","sha":"aaaabbbbccccdddd0002","branch":"feat/chain-listener","message":"test(pr-lifecycle): add chain-listener coverage","source_draft_ts":"2026-04-20T10:09:00Z"}
+{"ts":"$ts_3","event":"sylph.commit.committed","sha":"aaaabbbbccccdddd0002","branch":"feat/chain-listener","message":"test(pr-lifecycle): add chain-listener coverage","source_draft_ts":"2026-04-20T10:09:00Z"}
 JSON
 
 run_hook
@@ -144,7 +144,7 @@ ok "two commit events → two pending-prs records in order"
 ts_4="2026-04-20T10:15:00Z"
 printf 'not-json-at-all\n' >> "$feed"
 cat >> "$feed" <<JSON
-{"ts":"$ts_4","event":"weaver.commit.committed","sha":"eeeeffff0003","branch":"feat/chain-listener","message":"fix: trailing good event","source_draft_ts":"2026-04-20T10:14:00Z"}
+{"ts":"$ts_4","event":"sylph.commit.committed","sha":"eeeeffff0003","branch":"feat/chain-listener","message":"fix: trailing good event","source_draft_ts":"2026-04-20T10:14:00Z"}
 JSON
 
 run_hook

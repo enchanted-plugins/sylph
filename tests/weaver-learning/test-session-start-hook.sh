@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
-# Test: weaver-learning SessionStart hook exports priors.json + logs status.
+# Test: sylph-learning SessionStart hook exports priors.json + logs status.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=../shared/helpers.sh
 source "$SCRIPT_DIR/../shared/helpers.sh"
 
-HOOK="$PLUGINS_ROOT/weaver-learning/hooks/session-start/load-priors.sh"
+HOOK="$PLUGINS_ROOT/sylph-learning/hooks/session-start/load-priors.sh"
 assert_file_exists "$HOOK"
 
 # Sandbox with the product layout so $PRODUCT_ROOT resolves via dir climbing.
 new_sandbox > /dev/null
-fake_product="$SANDBOX/weaver-sim"
-mkdir -p "$fake_product/plugins/weaver-learning/hooks/session-start"
-mkdir -p "$fake_product/plugins/weaver-learning/state"
-cp "$HOOK" "$fake_product/plugins/weaver-learning/hooks/session-start/load-priors.sh"
-chmod +x "$fake_product/plugins/weaver-learning/hooks/session-start/load-priors.sh"
+fake_product="$SANDBOX/sylph-sim"
+mkdir -p "$fake_product/plugins/sylph-learning/hooks/session-start"
+mkdir -p "$fake_product/plugins/sylph-learning/state"
+cp "$HOOK" "$fake_product/plugins/sylph-learning/hooks/session-start/load-priors.sh"
+chmod +x "$fake_product/plugins/sylph-learning/hooks/session-start/load-priors.sh"
 ln -s "$REPO_ROOT/shared" "$fake_product/shared"
 
-fake_plugin_root="$fake_product/plugins/weaver-learning"
+fake_plugin_root="$fake_product/plugins/sylph-learning"
 state="$fake_plugin_root/state/learnings.json"
 priors="$fake_plugin_root/state/priors.json"
 

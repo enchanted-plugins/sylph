@@ -1,26 +1,26 @@
-<!-- Placed in weaver-learning because /weaver:discard is a cross-plugin op over pending state, and weaver-learning is the canonical home for session-level preferences/rollback; a dedicated weaver-undo plugin would be architectural over-reach for now. -->
+<!-- Placed in sylph-learning because /sylph:discard is a cross-plugin op over pending state, and sylph-learning is the canonical home for session-level preferences/rollback; a dedicated sylph-undo plugin would be architectural over-reach for now. -->
 ---
-name: weaver:discard
-description: Surface every pending branch/commit/PR suggestion Weaver has queued and drop specific ones. Targets the three hook-driven inboxes (pending-actions.jsonl, pending-drafts.jsonl, pending-prs.jsonl) and flips matching records to discarded:true for provenance. Side-effects already committed (created branches, pushed commits, opened PRs) are NOT undone — this only rolls back the suggestion itself and warns when a real artifact exists.
+name: sylph:discard
+description: Surface every pending branch/commit/PR suggestion Sylph has queued and drop specific ones. Targets the three hook-driven inboxes (pending-actions.jsonl, pending-drafts.jsonl, pending-prs.jsonl) and flips matching records to discarded:true for provenance. Side-effects already committed (created branches, pushed commits, opened PRs) are NOT undone — this only rolls back the suggestion itself and warns when a real artifact exists.
 allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/discard_surface.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/discard_surface.py *), Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pending_inbox.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pending_inbox.py *), Read(plugins/branch-workflow/state/pending-actions.jsonl), Read(plugins/commit-intelligence/state/pending-drafts.jsonl), Read(plugins/pr-lifecycle/state/pending-prs.jsonl)
 ---
 
-# /weaver:discard
+# /sylph:discard
 
-Drop a stale or wrong suggestion out of Weaver's pending inbox before it
+Drop a stale or wrong suggestion out of Sylph's pending inbox before it
 gets executed — or mark one for provenance after the fact.
 
 ## Usage
 
 ```
-/weaver:discard                                     # list every pending item across the 3 inboxes
-/weaver:discard --inbox branch                      # list only branch suggestions
-/weaver:discard --inbox commit                      # list only commit drafts
-/weaver:discard --inbox pr                          # list only PR drafts
-/weaver:discard --inbox branch --ts 2026-04-20T10:00:00Z
-/weaver:discard --inbox branch --index 2
-/weaver:discard --inbox commit --ts 2026-04-20T10:05:00Z --reason "wrong scope"
-/weaver:discard --inbox pr --index 0 --reason "superseded"
+/sylph:discard                                     # list every pending item across the 3 inboxes
+/sylph:discard --inbox branch                      # list only branch suggestions
+/sylph:discard --inbox commit                      # list only commit drafts
+/sylph:discard --inbox pr                          # list only PR drafts
+/sylph:discard --inbox branch --ts 2026-04-20T10:00:00Z
+/sylph:discard --inbox branch --index 2
+/sylph:discard --inbox commit --ts 2026-04-20T10:05:00Z --reason "wrong scope"
+/sylph:discard --inbox pr --index 0 --reason "superseded"
 ```
 
 ## The three inboxes
@@ -39,7 +39,7 @@ together only when they agree — prefer `--ts` for cross-session stability):
 - `--ts <iso>` — exact timestamp match. Stable across re-runs because
   the ts is the natural key on every inbox record.
 - `--index <n>` — 0-based index into the filtered list shown by
-  `/weaver:discard --inbox <name>`. Convenient but session-local: if a
+  `/sylph:discard --inbox <name>`. Convenient but session-local: if a
   new hook appends while you're deciding, indexes can shift.
 
 If neither `--ts` nor `--index` is given, nothing is discarded — you
@@ -62,7 +62,7 @@ get the listing and exit 0.
    | Inbox | Field | Warning |
    |---|---|---|
    | `branch` | `branch_name` | "branch already created; delete manually with `git branch -D <name>` if needed" |
-   | `commit` | `sha` | "commit already exists; use `/weaver:reset` or `git reset` to undo" |
+   | `commit` | `sha` | "commit already exists; use `/sylph:reset` or `git reset` to undo" |
    | `pr` | `pr_number` | "PR already drafted; close it via the host UI or `gh pr close <n>`" |
 
 ## Idempotence
@@ -88,12 +88,12 @@ Unknown `--inbox` exits 2.
 ```
 
 `read_pending` excludes records where `discarded:true`, so the next
-`/weaver:branch` / `/weaver:commit` / `/weaver:pr` invocation never
+`/sylph:branch` / `/sylph:commit` / `/sylph:pr` invocation never
 sees the dropped suggestion again.
 
 Discarded records remain on disk as terminal provenance so W5's EMA
 can eventually read them as a negative signal (future work; see the
-`# TODO: emit discard signal to weaver-learning for W5 EMA` marker in
+`# TODO: emit discard signal to sylph-learning for W5 EMA` marker in
 `shared/scripts/pending_inbox.py`).
 
 ## Exit codes

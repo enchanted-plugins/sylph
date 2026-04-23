@@ -1,4 +1,4 @@
-"""Weaver discard-surface aggregator — listing side of /weaver:discard.
+"""Sylph discard-surface aggregator — listing side of /sylph:discard.
 
 Walks the three hook-driven inboxes and emits a unified view of every
 pending record the developer could still drop. This script is **read-only**
@@ -25,7 +25,7 @@ envelope with stable fields the skill can index into without re-parsing:
       "record":      { ...full original record... }
     }
 
-CLI — ``/weaver:discard`` shells out:
+CLI — ``/sylph:discard`` shells out:
 
     python discard_surface.py list [--root <repo>] [--inbox branch|commit|pr]
         Prints a JSON array of envelopes sorted by (inbox, confidence desc,
@@ -199,7 +199,7 @@ def _cli_resolve(args: argparse.Namespace) -> int:
 def _main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(
         prog="discard_surface.py",
-        description="Aggregate pending records across Weaver's 3 inboxes.",
+        description="Aggregate pending records across Sylph's 3 inboxes.",
     )
     sub = parser.add_subparsers(dest="action", required=True)
 

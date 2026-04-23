@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Weaver cross-platform compatibility layer
+# Sylph cross-platform compatibility layer
 # Provides portable wrappers for GNU vs BSD tool differences.
 # Must be sourced, not executed.
 
@@ -7,7 +7,7 @@
 # GNU Linux: md5sum, sha256sum
 # macOS/BSD: md5, shasum -a 256
 
-weaver_md5() {
+sylph_md5() {
   # Returns first 8 chars of MD5 hash of input string
   local input="$1"
   if command -v md5sum >/dev/null 2>&1; then
@@ -20,7 +20,7 @@ weaver_md5() {
   fi
 }
 
-weaver_md5_file() {
+sylph_md5_file() {
   # Returns first 8 chars of MD5 hash of a file
   local filepath="$1"
   if command -v md5sum >/dev/null 2>&1; then
@@ -32,7 +32,7 @@ weaver_md5_file() {
   fi
 }
 
-weaver_sha256_file() {
+sylph_sha256_file() {
   # Returns first 16 chars of SHA256 hash of a file
   local filepath="$1"
   if command -v sha256sum >/dev/null 2>&1; then
@@ -47,7 +47,7 @@ weaver_sha256_file() {
 
 # ── Binary file detection ──
 
-weaver_is_binary() {
+sylph_is_binary() {
   # Returns 0 (true) if file appears to be binary
   local filepath="$1"
   if command -v file >/dev/null 2>&1; then
@@ -72,7 +72,7 @@ weaver_is_binary() {
 
 # ── Stdin reading with size cap ──
 
-weaver_read_stdin() {
+sylph_read_stdin() {
   # Read stdin with a size limit (default 1MB)
   local max_bytes="${1:-1048576}"
   head -c "$max_bytes" 2>/dev/null
@@ -80,7 +80,7 @@ weaver_read_stdin() {
 
 # ── Stale lock cleanup ──
 
-weaver_acquire_lock() {
+sylph_acquire_lock() {
   # Same as acquire_lock but cleans stale locks older than 60s
   local lock_dir="$1"
   local retries=50
