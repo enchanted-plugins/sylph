@@ -17,7 +17,7 @@ Every developer asks these during an AI-assisted session. Each question maps to 
 └──────────────────────────────────────────────────────────┘
 ```
 
-## Plugin Ecosystem (9 games, Hollow Knight shared by Crow + Sylph)
+## Plugin Ecosystem (modded Minecraft entities)
 
 Shipped today: Wixie, Emu, Crow, Hydra, Sylph. Planned: Pech, Athena, Crucible, + 11 more in Phase 3–4.
 
@@ -35,8 +35,8 @@ Shipped today: Wixie, Emu, Crow, Hydra, Sylph. Planned: Pech, Athena, Crucible, 
 │ craft  │ │health│ │ trust   │ │urity │ │ flow   │ │track │ │ plugins  │
 │  v3.0  │ │ v2.0 │ │  v1.0   │ │ v1.0 │ │ v0.0.1 │ │ n/a  │ │          │
 └────────┘ └──────┘ └─────────┘ └──────┘ └────────┘ └──────┘ └──────────┘
- Minecraft  Minecraft  Hollow    Subnautica Hollow   Animal   Hades, Terraria,
- enchant.    emu     Knight               Knight   Crossing Factorio, ...
+ Alex's   Ars        Alex's  Twilight   Ars      Thaumcraft  Hades, Terraria,
+ Mobs     Nouveau    Mobs      Forest     Nouveau              Factorio, ...
 
   Shipped     Shipped     Shipped    Shipped  Shipped   Planned    Planned
 ```
@@ -107,13 +107,14 @@ PreCompact    ──▶  Emu  (state-keeper: checkpoint before compaction)
 
 | Game | Plugin | Why this game fits |
 |------|--------|-------------------|
-| Minecraft | Wixie, Emu | Crafting, enchanting, and collecting — the foundation of building something from nothing |
-| Hollow Knight | Crow | A game about exploration where every area hides secrets you must carefully observe to survive |
-| Subnautica | Hydra | A game where the ocean is beautiful but the darkness hides creatures that hunt by sound — you're never truly safe |
-| Animal Crossing | Pech | A game where every transaction is tracked, every loan is remembered, and the economy is always watching |
+| Ars Nouveau | Wixie | A cauldron-summoned familiar that iterates ingredients until the brew carries the right properties — enchanting prompts |
+| Alex's Mobs | Emu | A flightless bird with long-range vision that spots threats on the horizon before they arrive — token horizon watching |
+| Alex's Mobs | Crow | A sharp-eyed corvid that inspects every object it finds, remembers faces, and sorts friend from threat — change observation |
+| Twilight Forest | Hydra | A multi-headed boss whose heads regenerate faster than they can be severed — suppress one surface and two more emerge — security scanning |
+| Thaumcraft | Pech | Short hooded hoarders that pick up every dropped item and track every token in their packs — cost accounting |
 | Hades | Athena | A game where gods judge your performance and reward excellence with boons — quality is earned |
 | Terraria | Crucible | A game where you forge items in increasingly extreme conditions to prove their worth |
-| Hollow Knight | Sylph | Sylphs are Crow's ancestral kin — silk-spinners who weave threads into coherent patterns. Branches are threads; merges stitch them into a coherent history. |
+| Ars Nouveau | Sylph | A wind elemental that threads air currents between distant points, carrying seeds across long distances to stitch the landscape — weaving branches, commits, and PRs into one history |
 
 ## Infrastructure
 
