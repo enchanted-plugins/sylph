@@ -27,7 +27,7 @@ sylph/
 │   ├── boundary-segmenter/                 W2 — Jaccard-Cosine Boundary Segmentation (defining)
 │   ├── branch-workflow/                    W3 — Workflow-Pattern Classifier
 │   ├── pr-lifecycle/                       W4 — Path-History Reviewer Routing
-│   ├── sylph-gate/                        Destructive-op decision-gate (Raven pattern)
+│   ├── sylph-gate/                        Destructive-op decision-gate (Crow pattern)
 │   ├── capability-memory/                  Provider capability registry (the "memory")
 │   ├── ci-reader/                          Read-only CI status across 8 systems
 │   ├── sylph-learning/                    W5 — Gauss Learning (Sylph)
@@ -57,8 +57,8 @@ Every engine has a formal-algorithm-level name. "Smart commit generator" is not 
 
 Sylph plugins talk via the enchanted-mcp event bus, not direct imports. Cross-plugin logic belongs in event handlers.
 
-- W2 consumes Raven V1 embeddings via `raven.change.classified`.
-- W4 consumes Raven V4 session-continuity via `raven.session.continuity.node`.
+- W2 consumes Crow V1 embeddings via `crow.change.classified`.
+- W4 consumes Crow V4 session-continuity via `crow.session.continuity.node`.
 - Pech cost pressure routes through `pech.budget.threshold.crossed`.
 
 If you find yourself importing another plugin's module, stop — publish an event instead.

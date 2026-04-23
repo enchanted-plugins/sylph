@@ -47,7 +47,7 @@ class PRDescription:
         session_continuity: dict[str, Any] | None = None,
     ) -> "PRDescription":
         """Build a PR title + body from a W2 cluster + commit messages +
-        optional Raven V4 session-continuity data.
+        optional Crow V4 session-continuity data.
 
         Falls back gracefully when V4 is unavailable.
         """
@@ -108,7 +108,7 @@ class PRDescription:
             body_parts.append("## Why\n")
             body_parts.append(
                 "_Raven V4 session-continuity data unavailable — this PR description "
-                "reflects W2 cluster metadata + commit messages only. Install raven "
+                "reflects W2 cluster metadata + commit messages only. Install crow "
                 "to upgrade._\n"
             )
             body_parts.append("## How it was verified\n")
@@ -426,11 +426,11 @@ def _try_load_cluster_state(cwd: Path) -> dict[str, Any] | None:
 
 
 def _try_load_session_continuity(cwd: Path) -> dict[str, Any] | None:
-    """Load Raven V4 session-continuity if raven is installed. None otherwise."""
-    # Lookup path: plugins/raven-session-memory/state/session-graph.json
-    # (or wherever raven v1.0.0 puts it).
+    """Load Crow V4 session-continuity if crow is installed. None otherwise."""
+    # Lookup path: plugins/crow-session-memory/state/session-graph.json
+    # (or wherever crow v1.0.0 puts it).
     for rel in (
-        "plugins/raven-session-memory/state/session-graph.json",
+        "plugins/crow-session-memory/state/session-graph.json",
         "plugins/session-memory/state/session-graph.json",
     ):
         p = cwd / rel

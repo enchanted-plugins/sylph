@@ -10,7 +10,7 @@
     "decision-gate",
     "destructive-op",
     "audit",
-    "raven-pattern"
+    "crow-pattern"
   ],
   "commands": [
     "./commands/dry-run.md"

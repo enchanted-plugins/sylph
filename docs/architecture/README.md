@@ -130,8 +130,8 @@ tests/
 | Event (consumed) | From | Used by |
 |------------------|------|---------|
 | `hydra.action.dangerous` | Hydra | sylph-gate (escalates classification) |
-| `raven.diff.compressed` | Raven | commit-intelligence (diff > 1500 tokens) |
-| `raven.session.continuity` | Raven | pr-lifecycle (context for PR description) |
+| `crow.diff.compressed` | Crow | commit-intelligence (diff > 1500 tokens) |
+| `crow.session.continuity` | Crow | pr-lifecycle (context for PR description) |
 
 | Event (published) | Purpose |
 |-------------------|---------|

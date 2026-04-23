@@ -12,7 +12,7 @@ These aren't abstractions. Every formula maps to running code.
 
 <p align="center"><img src="../assets/math/w1-valid.svg" alt="valid(m) iff type(m) in canonical_set AND len(subject) <= 72 AND body_line_len <= 72 AND breaking_marker => api_path"></p>
 
-Two-stage pipeline. Stage 1 (Sonnet `commit-drafter` agent) generates `type(scope)!: subject\n\nbody` from `git status` and the diff (raw, or Raven-H1 compressed form when the diff exceeds 1500 tokens). Stage 2 (Haiku `message-validator`) checks against the 11 canonical types (feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert), subject length, body wrap, breaking-change markers versus exported-API paths, and safe-amend (blocks amend on pushed commits). The pipeline never re-computes diffs — that cost lives upstream in Raven.
+Two-stage pipeline. Stage 1 (Sonnet `commit-drafter` agent) generates `type(scope)!: subject\n\nbody` from `git status` and the diff (raw, or Crow-H1 compressed form when the diff exceeds 1500 tokens). Stage 2 (Haiku `message-validator`) checks against the 11 canonical types (feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert), subject length, body wrap, breaking-change markers versus exported-API paths, and safe-amend (blocks amend on pushed commits). The pipeline never re-computes diffs — that cost lives upstream in Crow.
 
 **Implementation:** `plugins/commit-intelligence/agents/{commit-drafter.md, message-validator.md}`, `shared/scripts/commit_classify.py`
 
@@ -26,7 +26,7 @@ Two-stage pipeline. Stage 1 (Sonnet `commit-drafter` agent) generates `type(scop
 
 <p align="center"><img src="../assets/math/w2-boundary.svg" alt="boundary(a, b) iff d(a, b) > 0.55"></p>
 
-Online agglomerative clustering over PostToolUse Edit/Write events. Each event contributes three signals: file-set overlap (Jaccard, α = 0.4), semantic vector similarity (cosine of Raven-H1 embeddings or stdlib bag-of-tokens with L2 norm, β = 0.4), and idle-time gap via `tanh(Δt / 300s)` (γ = 0.2). A cluster closes and fires a `sylph.task.boundary.detected` event when the next event exceeds θ = 0.55. Within the ±0.10 uncertainty band, the `boundary-detector` Opus agent gets called for judgment. Multi-signal design avoids the idle-timer-only failure that sank Graphite's 2023 auto-commit feature.
+Online agglomerative clustering over PostToolUse Edit/Write events. Each event contributes three signals: file-set overlap (Jaccard, α = 0.4), semantic vector similarity (cosine of Crow-H1 embeddings or stdlib bag-of-tokens with L2 norm, β = 0.4), and idle-time gap via `tanh(Δt / 300s)` (γ = 0.2). A cluster closes and fires a `sylph.task.boundary.detected` event when the next event exceeds θ = 0.55. Within the ±0.10 uncertainty band, the `boundary-detector` Opus agent gets called for judgment. Multi-signal design avoids the idle-timer-only failure that sank Graphite's 2023 auto-commit feature.
 
 **Implementation:** `plugins/boundary-segmenter/agents/boundary-detector.md`, `shared/scripts/boundary_segment.py` (stdlib-only, ~1,200 lines)
 
@@ -50,7 +50,7 @@ W3 is a decision tree, not closed-form. Feature extraction: branch names and age
 
 <p align="center"><img src="../assets/math/w4-recency.svg" alt="w_rec(t) = exp(-ln(2) * (t_now - t) / 90d)"></p>
 
-For each changed file, pull the last 50 commits (`git log --format=%an%x09%ae%x09%at -- <file>`). Weight each author by recency (exponential decay, 90-day half-life) × path-depth specificity (deeper path matches outrank root-level authors). Union with CODEOWNERS entries (hard boost, no displacement). Filter by Raven availability events; cap at 3 reviewers to avoid reviewer storms. Per-host adapters: GitHub is first-class; GitLab, Bitbucket, Azure DevOps, Gitea, CodeCommit, SourceHut, Codeberg stub `NotImplementedHostOp`.
+For each changed file, pull the last 50 commits (`git log --format=%an%x09%ae%x09%at -- <file>`). Weight each author by recency (exponential decay, 90-day half-life) × path-depth specificity (deeper path matches outrank root-level authors). Union with CODEOWNERS entries (hard boost, no displacement). Filter by Crow availability events; cap at 3 reviewers to avoid reviewer storms. Per-host adapters: GitHub is first-class; GitLab, Bitbucket, Azure DevOps, Gitea, CodeCommit, SourceHut, Codeberg stub `NotImplementedHostOp`.
 
 **Implementation:** `plugins/pr-lifecycle/skills/reviewer-router`, `shared/scripts/reviewer_route.py`, `shared/scripts/adapters/`
 
@@ -72,7 +72,7 @@ Exponential moving averages with α = 0.3, tracked per developer across sessions
 - `reviewer_overrides`: manually added handles with weights
 - `w2_corrections`: boundary split/merge counts
 
-Bootstrap floor of 10 samples — below that, priors are ignored as low-confidence. Priors persist via Fae-A4 atomic serialization (tempfile + rename). Feeds learned defaults into W1 (commit drafting), W3 (workflow overrides), and W4 (reviewer weights). After ~6 weeks of active use, Sylph adapts to the developer's style.
+Bootstrap floor of 10 samples — below that, priors are ignored as low-confidence. Priors persist via Emu-A4 atomic serialization (tempfile + rename). Feeds learned defaults into W1 (commit drafting), W3 (workflow overrides), and W4 (reviewer weights). After ~6 weeks of active use, Sylph adapts to the developer's style.
 
 **Implementation:** `plugins/sylph-learning/hooks/{session-start/load-priors.sh, pre-compact/checkpoint-learnings.sh}`, `shared/scripts/{gauss_learning.py, atomic_json.py}`
 

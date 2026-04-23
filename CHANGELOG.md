@@ -23,7 +23,7 @@ The current shipped release. See [README.md](README.md) for the complete feature
 - 15 slash commands across the workflow lifecycle.
 - 10 git hosts supported (GitHub, GitLab, Bitbucket, Gitea, Forgejo, and others).
 - 10 CI systems recognized for read-only status reporting.
-- Destructive-op decision gate (sylph-gate) modeled after the Raven pattern.
+- Destructive-op decision gate (sylph-gate) modeled after the Crow pattern.
 - Boundary-segmenter: task-boundary clustering on post-tool events.
 - Per-developer learning via W5 Gauss EMA — preferences persist across compaction.
 - 28/28 tests passing. Zero runtime dependencies (bash + jq + Python stdlib).

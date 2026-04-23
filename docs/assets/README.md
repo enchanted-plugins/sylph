@@ -24,8 +24,8 @@ gitignored; only the rendered SVGs and their sources are committed.
 The `apply-blueprint.js` step overlays an engineering-blueprint grid
 (navy `#0a1628` paper, `#1e3a5f` major lines / `#16304f` minor lines)
 onto the rendered diagram so it reads as a CAD drawing rather than a
-neutral dark card. Matches the look of the sibling repos (fae,
-wixie, raven, hydra).
+neutral dark card. Matches the look of the sibling repos (emu,
+wixie, crow, hydra).
 
 ## Math assets
 

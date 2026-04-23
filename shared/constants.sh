@@ -21,7 +21,7 @@ SYLPH_MAX_LEARNINGS_BYTES=524288       # 512KB — moving averages only
 # ── Boundary-segmentation (W2) thresholds ──────────────────────────────────
 # Jaccard-Cosine Boundary Segmentation distance weights.
 SYLPH_BOUNDARY_ALPHA="0.4"             # Jaccard weight
-SYLPH_BOUNDARY_BETA="0.4"              # Raven V1 cosine weight
+SYLPH_BOUNDARY_BETA="0.4"              # Crow V1 cosine weight
 SYLPH_BOUNDARY_GAMMA="0.2"             # Idle-gap tanh weight
 SYLPH_BOUNDARY_TAU_SECONDS=300         # Idle-gap scale factor
 SYLPH_BOUNDARY_THRESHOLD="0.55"        # Cluster-close threshold
@@ -31,7 +31,7 @@ SYLPH_BOUNDARY_CONFIDENCE_THRESHOLD="${SYLPH_BOUNDARY_CONFIDENCE_THRESHOLD:-0.7}
 # ── Commit-classifier (W1) thresholds ──────────────────────────────────────
 SYLPH_COMMIT_SUBJECT_MAX=72
 SYLPH_COMMIT_BODY_LINE_MAX=72
-SYLPH_COMMIT_DIFF_COMPRESS_TOKENS=1500  # Above this, substitute Raven V1
+SYLPH_COMMIT_DIFF_COMPRESS_TOKENS=1500  # Above this, substitute Crow V1
 
 # ── Capability-registry runtime probing ────────────────────────────────────
 SYLPH_PROBE_CACHE_TTL_SECONDS=86400    # 24h cache

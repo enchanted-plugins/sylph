@@ -1,5 +1,5 @@
 """
-Sylph atomic-state helper — Fae-A4 pattern.
+Sylph atomic-state helper — Emu-A4 pattern.
 
 Stdlib-only (json, os, pathlib, tempfile, fcntl). Used by hook scripts and
 engines that persist per-plugin state under ``plugins/*/state/``. The three
@@ -10,7 +10,7 @@ call against:
     write_state(path, state)
     append_jsonl(path, record)
 
-Pattern (Fae-A4):
+Pattern (Emu-A4):
     1. Write payload to a tempfile in the **same directory** as the target.
     2. ``flush()`` + ``os.fsync()`` the tempfile descriptor.
     3. ``os.replace(tmp, target)`` — POSIX-atomic rename, same-volume on NT.

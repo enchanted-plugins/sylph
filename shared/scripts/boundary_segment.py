@@ -15,7 +15,7 @@ Weights (alpha=0.4, beta=0.4, gamma=0.2, tau=300s) defaulted from
 constants.sh; W5 tunes them per-developer later.
 
 Vector extraction:
-  - If Raven V1 embedding is available on the event, use it as vec.
+  - If Crow V1 embedding is available on the event, use it as vec.
   - Else (standalone mode), compute a stdlib vector from the edit content
     itself: the set of non-stopword tokens from the changed lines,
     L2-normalized as a dict-weighted bag-of-tokens.
@@ -199,7 +199,7 @@ def event_from_post_tool_use(payload: dict[str, Any], v1_embedding: dict[str, fl
 
     text = "\n".join(text_chunks)
 
-    # If Raven V1 embedding is attached, prefer it; else compute stdlib vector.
+    # If Crow V1 embedding is attached, prefer it; else compute stdlib vector.
     vec = v1_embedding if v1_embedding else vector_from_text(text)
 
     return Event(
@@ -378,7 +378,7 @@ def _load_state(state_path: Path) -> Segmenter:
 
 
 def _save_state(state_path: Path, seg: Segmenter) -> None:
-    # Atomic write via tempfile + rename (Fae A4 pattern inline — avoids
+    # Atomic write via tempfile + rename (Emu A4 pattern inline — avoids
     # importing atomic_json from a subprocess context where sys.path may not
     # yet be set).
     import tempfile

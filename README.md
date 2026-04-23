@@ -22,12 +22,12 @@ Built from the commit log of teams that ship: every flow exists because someone,
 
 > You edit three files. Sylph watches via `PostToolUse(Edit|Write)`.
 >
-> **W2** clusters the edits — file-set Jaccard + Raven-V1 cosine + idle-gap — and fires a task boundary at distance 0.81 (threshold 0.55).
+> **W2** clusters the edits — file-set Jaccard + Crow-V1 cosine + idle-gap — and fires a task boundary at distance 0.81 (threshold 0.55).
 > **W3** classifies the repo as github-flow from the branch graph + protection rules + tag cadence. Creates `feat/oauth-pkce-verify`.
 > **W1** (Sonnet) drafts a Conventional Commits message: `feat(auth): add OAuth PKCE verify`. Haiku + Python validate: 72-char subject ✓, canonical type ✓, body under 72-char wrap ✓. Signed with SSH, DCO sign-off appended.
 > `git push -u origin feat/oauth-pkce-verify`. sylph-gate inspects — safe push, no block.
-> Opens a draft PR against main. Body composed from the W2 cluster + commits + Raven V4 session continuity: "What changed", "Why", "How it was verified", "Rollback plan".
-> **W4** ranks reviewers from `git log` blame × recency × CODEOWNERS × Raven availability. Top-3 requested: @dave (blame + CODEOWNERS), @alice (blame), @ben (CODEOWNERS).
+> Opens a draft PR against main. Body composed from the W2 cluster + commits + Crow V4 session continuity: "What changed", "Why", "How it was verified", "Rollback plan".
+> **W4** ranks reviewers from `git log` blame × recency × CODEOWNERS × Crow availability. Top-3 requested: @dave (blame + CODEOWNERS), @alice (blame), @ben (CODEOWNERS).
 > Subscribes to CI status via ci-reader. When all required checks go green, auto-enqueues on the GitHub Merge Queue.
 > **W5** records: scope "auth" seen, slug-style kebab confirmed, W4's top pick accepted.
 >
@@ -104,10 +104,10 @@ Sylph runs inside your Claude Code session and drives git on your behalf:
 - **Watches every edit.** PostToolUse hooks feed W2 Jaccard-Cosine boundary segmentation. Logical tasks get clustered automatically.
 - **Scaffolds branches.** W3 detects your workflow (GitHub Flow / Trunk-Based / GitFlow / Release Flow / Stacked Diffs) and names branches to match (`feat/x`, `feature/x`, `user/x`, bare-topic).
 - **Drafts commits.** W1 Sonnet drafts a Conventional Commits message; Haiku + Python stdlib validate format + policy; SSH/GPG signed; DCO sign-off if the repo wants it.
-- **Opens PRs.** W4 ranks reviewers (blame × recency × CODEOWNERS × availability), composes a 4-section body from W2 cluster + Raven V4 continuity, dispatches to the right host adapter.
+- **Opens PRs.** W4 ranks reviewers (blame × recency × CODEOWNERS × availability), composes a 4-section body from W2 cluster + Crow V4 continuity, dispatches to the right host adapter.
 - **Reads CI.** ci-reader normalizes check runs from 10 systems. Never triggers a build itself — Sylph is a git-workflow plugin; CI execution belongs to your existing CI pipelines.
 - **Merges.** Strategy inferred from workflow; merge-queue-enqueues where configured.
-- **Guards destructive ops.** sylph-gate intercepts `PreToolUse(Bash)` — force-push / filter-branch / clean -fdx / rebase-i-of-pushed etc. route through a Raven-style decision-gate before they can run.
+- **Guards destructive ops.** sylph-gate intercepts `PreToolUse(Bash)` — force-push / filter-branch / clean -fdx / rebase-i-of-pushed etc. route through a Crow-style decision-gate before they can run.
 - **Learns.** W5 Gauss EMA adapts priors per-developer. Past sample 10, the defaults give way to what you actually do.
 
 <p align="center">
@@ -134,7 +134,7 @@ W2 Jaccard-Cosine Boundary Segmentation runs on `PostToolUse(Edit|Write)` — *b
 
 10 hosts, 1 `HostAdapter` contract: token resolution → authenticated request → normalized `PullRequest` return. Same `_rest.api_request` call path for GitHub, GitLab, Bitbucket Cloud / Data Center, Azure DevOps, Gitea, Forgejo, Codeberg, AWS CodeCommit, and SourceHut. When one host's JSON shape changes, exactly one file moves.
 
-### Destructive ops route through a Raven-style gate
+### Destructive ops route through a Crow-style gate
 
 `git push --force`, `git rebase -i <pushed-ref>`, `git clean -fdx`, `git filter-branch` — every destructive pattern routes through sylph-gate before it can run. Recovery windows documented per op; `clean -fdx` has zero; force-push to protected branches has zero bypass. No accidental career-enders.
 
@@ -272,7 +272,7 @@ plugins/pr-lifecycle/state/
 └── last-reviewer-suggestion.json    W4's last blame-graph reviewer ranking
 ```
 
-Everything event-sourced, JSONL where applicable, atomic where writes matter (Fae-A4 tempfile + rename + fsync). All state dirs gitignored; `.gitkeep` sentinels only.
+Everything event-sourced, JSONL where applicable, atomic where writes matter (Emu-A4 tempfile + rename + fsync). All state dirs gitignored; `.gitkeep` sentinels only.
 
 ---
 
@@ -388,7 +388,7 @@ Every destructive git operation routes through sylph-gate before it can run:
 | **`git clean -fdx`** | **Protected-destructive** | **0 (irrecoverable)** | **Never** |
 | Merge-queue `--admin` bypass | Destructive | 0 (immediate) | `--admin-bypass` flag only |
 
-Every gated op is audited to `plugins/sylph-gate/state/audit.jsonl` — append-only, Fae-A4 atomic write.
+Every gated op is audited to `plugins/sylph-gate/state/audit.jsonl` — append-only, Emu-A4 atomic write.
 
 ---
 
@@ -402,7 +402,7 @@ Every gated op is audited to `plugins/sylph-gate/state/audit.jsonl` — append-o
 | Branch workflow detection | ✗ | ✗ | ✗ | GitHub Flow assumed | ✗ | **W3 per-subtree classifier** |
 | Reviewer routing | ✗ | ✗ | ✗ | CODEOWNERS only | manual | **W4 weighted sum (blame × recency × depth × CODEOWNERS × availability), capped at 3** |
 | Per-developer learning | ✗ | ✗ | ✗ | ✗ | ✗ | **W5 Gauss EMA** |
-| Force-push gate | ✗ | ✗ | ✗ | ✗ | ✗ | **Raven-pattern decision-gate** |
+| Force-push gate | ✗ | ✗ | ✗ | ✗ | ✗ | **Crow-pattern decision-gate** |
 | Multi-host | github-only | any | any | github+gitlab | github-only | **10 hosts** |
 | Multi-CI | n/a | n/a | n/a | n/a | github-only | **10 systems** |
 | Zero runtime deps | ✗ npm | ✓ python | ✗ npm | ✗ node | ✓ | ✓ |
@@ -482,7 +482,7 @@ Sylph builds on foundations laid by others:
 - **[Citation File Format](https://citation-file-format.github.io/)** — citation metadata.
 - **[Conventional Commits](https://www.conventionalcommits.org/)** — commit convention the W1 engine emits and Haiku validates.
 
-W5 Gauss Learning shares the EMA update shape with Raven's H6 Session Learning (see [docs/glossary.md](docs/glossary.md) § H-suffix references) — aligned patterns across siblings, independent implementations.
+W5 Gauss Learning shares the EMA update shape with Crow's H6 Session Learning (see [docs/glossary.md](docs/glossary.md) § H-suffix references) — aligned patterns across siblings, independent implementations.
 
 ## Versioning & release cadence
 
@@ -521,8 +521,8 @@ MIT. See [LICENSE.txt](LICENSE.txt).
 
 ## Role in the ecosystem
 
-Sylph is the **git-workflow layer** — it coordinates branch / commit / PR / CI / merge across 10 git hosts and 10 CI systems. Upstream, it consumes signals from Wixie (commits emerge from Wixie-engineered sessions), Raven (trust-gaming gate pattern reused in sylph-gate; W4 reviewer availability borrows Raven's signal), and Lich (findings surfaced on the PR body at `/sylph:pr` time). Downstream, the W2 boundary-segmentation events feed Pech's per-task cost attribution.
+Sylph is the **git-workflow layer** — it coordinates branch / commit / PR / CI / merge across 10 git hosts and 10 CI systems. Upstream, it consumes signals from Wixie (commits emerge from Wixie-engineered sessions), Crow (trust-gaming gate pattern reused in sylph-gate; W4 reviewer availability borrows Crow's signal), and Lich (findings surfaced on the PR body at `/sylph:pr` time). Downstream, the W2 boundary-segmentation events feed Pech's per-task cost attribution.
 
-Sylph does **not** trigger CI builds — Sylph is a git-workflow plugin, and CI execution belongs to your existing CI pipelines (push-triggered workflows, etc.). Sylph **reads** CI; it does not start it. Sylph also does not engineer prompts (Wixie), track tokens (Fae), score change trust (Raven), review code correctness (Lich), or scan security surfaces (Hydra).
+Sylph does **not** trigger CI builds — Sylph is a git-workflow plugin, and CI execution belongs to your existing CI pipelines (push-triggered workflows, etc.). Sylph **reads** CI; it does not start it. Sylph also does not engineer prompts (Wixie), track tokens (Emu), score change trust (Crow), review code correctness (Lich), or scan security surfaces (Hydra).
 
 See [docs/ecosystem.md § Data Flow Between Plugins](docs/ecosystem.md#data-flow-between-plugins) for the full map.

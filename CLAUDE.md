@@ -1,6 +1,6 @@
 # Sylph — Agent Contract
 
-Audience: Claude. Sylph owns the git-workflow layer of AI-assisted development. Observes Claude Code sessions, segments work into logical tasks, auto-branches, auto-commits per cohesive chunk, and auto-opens draft PRs with session context. Destructive ops always route through a Raven-style decision-gate.
+Audience: Claude. Sylph owns the git-workflow layer of AI-assisted development. Observes Claude Code sessions, segments work into logical tasks, auto-branches, auto-commits per cohesive chunk, and auto-opens draft PRs with session context. Destructive ops always route through a Crow-style decision-gate.
 
 ## Lifecycle
 
@@ -24,7 +24,7 @@ Sylph is hook-driven, not skill-invoked. Auto-orchestration is the product's rea
 | W2 | Jaccard-Cosine Boundary Segmentation | boundary-segmenter | Online agglomerative clustering, multi-modal distance. **Defining engine** |
 | W3 | Workflow-Pattern Classifier | branch-workflow | Weighted decision tree over repo feature vector |
 | W4 | Blame-Weighted Reviewer Ranker | pr-lifecycle | Blame score × recency decay × path depth × CODEOWNERS boost × availability filter; top-3 cap |
-| W5 | Gauss Learning (Sylph) | sylph-learning | Weighted moving averages over preference signals, Fae-A4 persistence |
+| W5 | Gauss Learning (Sylph) | sylph-learning | Weighted moving averages over preference signals, Emu-A4 persistence |
 
 ## Tier-1 vs Tier-2 hosts
 
@@ -48,13 +48,13 @@ Sylph **reads** CI status across 10 systems (GitHub Actions, GitLab CI, CircleCI
 ### Phase 1 (shipped)
 
 - **Sylph publishes**: `sylph.task.boundary.detected`, `sylph.commit.committed`, `sylph.pr.drafted`, `sylph.pr.ready`, `sylph.destructive.detected`, `sylph.ci.status.observed`
-- **Sylph subscribes to**: `raven.session.continuity.node` (PR description context), `raven.reviewer.availability.changed` (W4 availability filter)
+- **Sylph subscribes to**: `crow.session.continuity.node` (PR description context), `crow.reviewer.availability.changed` (W4 availability filter)
 
 ### Phase 2 aspirational (enchanted-mcp event bus not yet shipped)
 
 The following subscriptions are reserved for cross-plugin event consumption when the enchanted-mcp event bus becomes available — Phase 1 Sylph runs standalone with no consumption of these events:
 
-- `raven.change.classified` — Raven's code-change classification (reserved for PR risk scoring)
+- `crow.change.classified` — Crow's code-change classification (reserved for PR risk scoring)
 - `hydra.prepush.secret.detected` — Hydra secret-scanning findings (reserved for augmenting sylph-gate decisions)
 - `pech.budget.threshold.crossed` — Pech token-budget alerts (reserved for session-pacing recommendations)
 
@@ -67,7 +67,7 @@ Every destructive op routes through sylph-gate. See [docs/ARCHITECTURE.md](docs/
 - Merge-queue `--admin` bypass: **never** without explicit `--admin-bypass` flag.
 - All other destructive ops: `--yes-i-know` bypass for one invocation, always audited.
 
-Audit log: `plugins/*/state/audit.jsonl` — append-only, Fae-A4 atomic pattern.
+Audit log: `plugins/*/state/audit.jsonl` — append-only, Emu-A4 atomic pattern.
 
 ## Behavioral contracts
 
@@ -85,7 +85,7 @@ Audit log: `plugins/*/state/audit.jsonl` — append-only, Fae-A4 atomic pattern.
 - **Managed agents.** Opus for boundary judgment + PR description + conflict proposals. Sonnet for commit drafting + CODEOWNERS reasoning. Haiku for format validation + policy checks.
 - **Gauss Accumulation (W5).** Per-developer preference persistence in `plugins/sylph-learning/state/learnings.json`, exported to `shared/learnings.json`.
 - **Dark-themed PDF audit.** Ships from each plugin on final release.
-- **Fae-style marketplace structure.** `plugins/<name>/{agents,commands,hooks,skills,state}` per sub-plugin.
+- **Emu-style marketplace structure.** `plugins/<name>/{agents,commands,hooks,skills,state}` per sub-plugin.
 
 ## Anti-patterns
 

@@ -4,11 +4,11 @@ Quick answers to questions that don't yet have their own doc. For anything deepe
 
 ## What's the difference between Sylph and the other siblings?
 
-Sylph answers *"how does this ship?"* — it classifies your git workflow, drafts commits, opens PRs, routes reviewers, reads CI, gates destructive ops, and learns per-developer preferences. Sibling plugins answer different questions: Wixie engineers prompts, Fae tracks token spend, Raven watches change trust, Hydra scans for security surface. All are independent installs. See [docs/ecosystem.md](ecosystem.md) for the full map.
+Sylph answers *"how does this ship?"* — it classifies your git workflow, drafts commits, opens PRs, routes reviewers, reads CI, gates destructive ops, and learns per-developer preferences. Sibling plugins answer different questions: Wixie engineers prompts, Emu tracks token spend, Crow watches change trust, Hydra scans for security surface. All are independent installs. See [docs/ecosystem.md](ecosystem.md) for the full map.
 
 ## Do I need the other siblings to use Sylph?
 
-No. Sylph is self-contained — install `full@sylph` and every command works standalone. If Raven is present, Sylph's `sylph-gate` inherits Raven's trust signal for reviewer availability; without Raven, it falls back to recency + CODEOWNERS. Neither is a hard dependency.
+No. Sylph is self-contained — install `full@sylph` and every command works standalone. If Crow is present, Sylph's `sylph-gate` inherits Crow's trust signal for reviewer availability; without Crow, it falls back to recency + CODEOWNERS. Neither is a hard dependency.
 
 ## How do I report a bug vs. ask a question vs. disclose a security issue?
 

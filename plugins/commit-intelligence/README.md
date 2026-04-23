@@ -4,7 +4,7 @@
 
 Engine: **W1 — Myers-Diff Conventional Classifier.**
 
-Takes the Myers-diff + `git status` + file paths; if the raw diff exceeds 1500 tokens, substitutes Raven V1's compressed form. Stage 1 (Sonnet) emits `type(scope)!: subject\n\nbody`. Stage 2 (Haiku) validates type, subject length, breaking-change marker vs exported-API paths, sign-off policy, body wrapping. Safe-amend detection blocks `git commit --amend` when the target has been pushed to any remote.
+Takes the Myers-diff + `git status` + file paths; if the raw diff exceeds 1500 tokens, substitutes Crow V1's compressed form. Stage 1 (Sonnet) emits `type(scope)!: subject\n\nbody`. Stage 2 (Haiku) validates type, subject length, breaking-change marker vs exported-API paths, sign-off policy, body wrapping. Safe-amend detection blocks `git commit --amend` when the target has been pushed to any remote.
 
 ## Install
 
@@ -34,7 +34,7 @@ Architecture note: **independent listener (Option 1)** — each plugin owns its 
 
 ## Cross-plugin
 
-- **Consumes** `raven.change.classified` for V1 compressed-diff when diff > 1500 tokens.
+- **Consumes** `crow.change.classified` for V1 compressed-diff when diff > 1500 tokens.
 - **Publishes** `sylph.commit.drafted`, `sylph.commit.committed`.
 
 Full architecture: [../../docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md#layer-5-commit-intelligence-w1-myers-diff-conventional-classifier).

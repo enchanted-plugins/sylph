@@ -35,12 +35,12 @@ With `--explain`:
 @dave — 2.84
   blame: 3 commits on src/auth/oauth.py (0.4d, 2.1d, 14d ago) — recency × path-depth = 2.41
   CODEOWNERS match: /src/auth/* → +1.5x boost
-  availability: 1.0 (no Raven signal)
+  availability: 1.0 (no Crow signal)
 
 @alice — 1.67
   blame: 2 commits on src/api/routes.py (7d, 31d ago) — recency × path-depth = 1.67
   CODEOWNERS: no match
-  availability: 0.8 (raven.reviewer.availability.changed at 2026-04-17)
+  availability: 0.8 (crow.reviewer.availability.changed at 2026-04-17)
 
 @ben — 1.22
   ...
@@ -62,7 +62,7 @@ With `--explain`:
 3. For each path: `git log --format='%an <%ae>' -- <path>` weighted by
    recency (90-day half-life) × path depth.
 4. Score = blame × (1.5 if CODEOWNERS match else 1.0) × availability
-   (from raven.reviewer.availability events when Raven is installed,
+   (from crow.reviewer.availability events when Crow is installed,
    else default 1.0).
 5. Cap at SYLPH_REVIEWER_MAX_SUGGEST (default 3; --max overrides).
 6. Print ranked list.

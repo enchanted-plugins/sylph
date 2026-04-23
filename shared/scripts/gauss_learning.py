@@ -2,7 +2,7 @@
 W5 — Gauss Learning (Sylph).
 
 Per-developer preference persistence via exponential moving averages
-with Fae-A4 atomic serialization. Tracks:
+with Emu-A4 atomic serialization. Tracks:
 
   - commit_style: dict of signals
       - scope_usage_rate            float in [0,1]  — fraction of commits with (scope)
@@ -222,7 +222,7 @@ def priors(state: dict[str, Any]) -> dict[str, Any]:
 
 
 # ──────────────────────────────────────────────────────────────────────
-# Persistence (Fae-A4)
+# Persistence (Emu-A4)
 # ──────────────────────────────────────────────────────────────────────
 
 def load_state(path: Path) -> dict[str, Any]:

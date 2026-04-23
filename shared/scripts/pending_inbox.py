@@ -60,7 +60,7 @@ from pathlib import Path
 from typing import Any, Union
 
 # Re-use the canonical atomic primitives — keep one source of truth for the
-# Fae-A4 pattern.
+# Emu-A4 pattern.
 _here = Path(__file__).resolve().parent
 if str(_here) not in sys.path:
     sys.path.insert(0, str(_here))

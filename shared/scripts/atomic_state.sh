@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sylph atomic-state helper — pure-bash wrapper over the Fae-A4 pattern.
+# Sylph atomic-state helper — pure-bash wrapper over the Emu-A4 pattern.
 #
 # Hooks that don't want to spawn Python source this file and call:
 #

@@ -31,15 +31,15 @@ Sylph never *forces* a classification. Every command that depends on class print
 
 ## H-suffix references
 
-Some Sylph engines cite Raven's engines explicitly because Sylph reuses the pattern that Raven established for its pre-tool gate.
+Some Sylph engines cite Crow's engines explicitly because Sylph reuses the pattern that Crow established for its pre-tool gate.
 
-| H-suffix | Raven engine | Where Sylph uses it |
+| H-suffix | Crow engine | Where Sylph uses it |
 |----------|---------------|----------------------|
 | H2 | Bayesian Trust | `sylph-gate` uses the same gate pattern: advisory-first, blast-radius honest, never silently blocks. |
 | H5 | Adversarial Robustness | Hardening the decision-gate against "benign-looking destructive commands" (re-label exploits, typo'd flags) uses the H5 pattern. |
 | H6 | Session Learning | W5 Gauss Learning shares the EMA update shape. |
 
-The cross-ref isn't a dependency — Sylph runs standalone — it's an acknowledgement that the patterns originated in Raven and stay aligned.
+The cross-ref isn't a dependency — Sylph runs standalone — it's an acknowledgement that the patterns originated in Crow and stay aligned.
 
 ## Conventional Commits shorthand
 

@@ -252,7 +252,7 @@ def check_gate(
 
     Args:
       pr_record: Minimum shape is `{"head_sha": "<sha>"}`. Extras are
-        ignored; anything else is Raven session-continuity / W2 cluster
+        ignored; anything else is Crow session-continuity / W2 cluster
         metadata the caller may choose to carry.
       host_id: capability-registry id (e.g. "github", "gitlab",
         "sourcehut"). Used for the ci_event hint and to lookup the host

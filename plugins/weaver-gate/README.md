@@ -1,6 +1,6 @@
 # sylph-gate
 
-**Destructive-op decision-gate. Raven's pattern, Sylph's domain.**
+**Destructive-op decision-gate. Crow's pattern, Sylph's domain.**
 
 Inspects every `git` invocation via `PreToolUse(Bash)`. If the command matches a destructive-op pattern (force-push, `filter-branch`, `reset --hard` past pushed tip, `branch -D`, `tag -d`, `clean -fdx`, remote-branch deletion, `commit --amend` of a pushed HEAD, merge-queue `--admin` bypass), routes through a confirmation surface before allowing it.
 
@@ -36,7 +36,7 @@ Part of the [Sylph](../..) bundle. **Installing Sylph without sylph-gate is not 
 |------|------|------|
 | Hook | PreToolUse(Bash) | Primary inspection point |
 | Skill | destructive-gate-confirmation | Decision surface |
-| State | audit.jsonl | Append-only, Fae-A4 atomic pattern |
+| State | audit.jsonl | Append-only, Emu-A4 atomic pattern |
 
 ## Cross-plugin
 

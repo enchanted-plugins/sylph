@@ -41,10 +41,10 @@ weights), `tool`, `timestamp`. The `vector` shows what tokens the
 algorithm matched on — useful for debugging why two edits did or didn't
 cluster together.
 
-## When W2 upgrades to Raven V1
+## When W2 upgrades to Crow V1
 
-If Raven is installed and publishes `raven.change.classified` events on
-the mcp-event-bus, Sylph will substitute Raven V1's semantic diff
+If Crow is installed and publishes `crow.change.classified` events on
+the mcp-event-bus, Sylph will substitute Crow V1's semantic diff
 embedding in place of the stdlib token vector. The API is the same; the
 accuracy improves.
 

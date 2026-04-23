@@ -4,7 +4,7 @@
 
 Engine: **W2 — Jaccard-Cosine Boundary Segmentation.**
 
-Each `PostToolUse(Edit|Write)` event produces a feature vector `{files, raven_v1_embedding, timestamp}`. Distance between two events combines file-set Jaccard (α=0.4), Raven-V1 semantic-diff cosine (β=0.4), and idle-time gap with `tanh((Δt)/τ=300s)` (γ=0.2). Events stream into an online agglomerative cluster; boundary fires when the next event's min cluster-distance exceeds θ=0.55. Multi-signal avoids Graphite's 2023 idle-timer-only failure mode.
+Each `PostToolUse(Edit|Write)` event produces a feature vector `{files, raven_v1_embedding, timestamp}`. Distance between two events combines file-set Jaccard (α=0.4), Crow-V1 semantic-diff cosine (β=0.4), and idle-time gap with `tanh((Δt)/τ=300s)` (γ=0.2). Events stream into an online agglomerative cluster; boundary fires when the next event's min cluster-distance exceeds θ=0.55. Multi-signal avoids Graphite's 2023 idle-timer-only failure mode.
 
 Late-boundary correction surfaces as a skill invocation ("merge last N commits?") rather than silent history rewrite — destructive corrections always route through `sylph-gate`.
 
@@ -30,7 +30,7 @@ Standalone: `/plugin install boundary-segmenter@sylph`. This is Sylph's core eng
 
 ## Cross-plugin
 
-- **Requires** `raven.change.classified` (Raven V1 embedding is the substrate).
+- **Requires** `crow.change.classified` (Crow V1 embedding is the substrate).
 - **Publishes** `sylph.task.boundary.detected`.
 
 Full architecture: [../../docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md#layer-6-task-boundary-segmentation-w2--defining-engine).

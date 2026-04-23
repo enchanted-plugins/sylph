@@ -1,6 +1,6 @@
 ---
 name: pr-description-crafter
-description: Explains how Sylph composes PR descriptions — the 4-section template, the fallback ladder when Raven V4 continuity or W2 cluster data is missing, and how to override the default template via PULL_REQUEST_TEMPLATE.md.
+description: Explains how Sylph composes PR descriptions — the 4-section template, the fallback ladder when Crow V4 continuity or W2 cluster data is missing, and how to override the default template via PULL_REQUEST_TEMPLATE.md.
 allowed-tools: Read
 ---
 
@@ -10,7 +10,7 @@ allowed-tools: Read
 
 ```
 ## What changed     — commit subjects, with short SHAs
-## Why              — session intent (Raven V4) or inferred from commits
+## Why              — session intent (Crow V4) or inferred from commits
 ## How it was verified — observed test runs, or "inspection only"
 ## Rollback plan    — `git revert --no-commit <shas>` template
 ```
@@ -19,9 +19,9 @@ allowed-tools: Read
 
 Sylph produces the best description it can from whatever signals are present:
 
-1. **Full signal** (Raven V4 installed + W2 active + commits present)
+1. **Full signal** (Crow V4 installed + W2 active + commits present)
    → every section populated from distinct sources. Ideal state.
-2. **No Raven V4** (most common today — Raven is Phase-1 shipping)
+2. **No Crow V4** (most common today — Crow is Phase-1 shipping)
    → "Why" block notes the missing data and falls back to commit-subject
    synthesis.
 3. **No W2 cluster** (user hasn't adopted auto-orchestration)

@@ -29,7 +29,7 @@ Otherwise compute them fresh from `git diff --staged`.
    ├─ Check `git status --short` — are there staged changes?
    │  If no staged changes: abort with hint to stage first.
    ├─ Check whether --amend targets a pushed commit.
-   │  If yes: route through sylph-gate (Raven-pattern decision-gate).
+   │  If yes: route through sylph-gate (Crow-pattern decision-gate).
    └─ Resolve user.signingkey + commit.gpgsign config.
 
 2. Pending inbox (unless --message or --no-pending)
@@ -52,7 +52,7 @@ Otherwise compute them fresh from `git diff --staged`.
    ├─ If a pending record was accepted, pass its `suggested_type` and `files`
    │  as hints; Sonnet may override if the staged diff obviously disagrees
    │  (e.g. the hook suggested `chore` but the diff touches `src/**`).
-   ├─ If diff > 1500 tokens, subscribe to the next raven.change.classified
+   ├─ If diff > 1500 tokens, subscribe to the next crow.change.classified
    │  event for this SHA and use the V1 compressed vector narrative instead.
    ├─ Collect co-author candidates via `git log --follow --format='%an <%ae>' <files>`.
    └─ Emit draft message in Conventional Commits form.

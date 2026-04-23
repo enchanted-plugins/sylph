@@ -21,11 +21,11 @@
     },
     {
       "name": "pr-lifecycle",
-      "description": "W4 — Path-History Reviewer Routing. Idempotent PR state machine + reviewer ranking from blame + CODEOWNERS + Raven availability."
+      "description": "W4 — Path-History Reviewer Routing. Idempotent PR state machine + reviewer ranking from blame + CODEOWNERS + Crow availability."
     },
     {
       "name": "sylph-gate",
-      "description": "Destructive-op decision-gate modeled after Raven's pattern. Routes force-push, history-rewrite, branch/tag deletion, clean -fdx, merge-queue bypass."
+      "description": "Destructive-op decision-gate modeled after Crow's pattern. Routes force-push, history-rewrite, branch/tag deletion, clean -fdx, merge-queue bypass."
     },
     {
       "name": "capability-memory",
@@ -37,7 +37,7 @@
     },
     {
       "name": "sylph-learning",
-      "description": "W5 — Gauss Learning (Sylph). Developer preference persistence across sessions via Fae-A4 atomic serialization."
+      "description": "W5 — Gauss Learning (Sylph). Developer preference persistence across sessions via Emu-A4 atomic serialization."
     },
     {
       "name": "full",

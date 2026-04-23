@@ -86,7 +86,7 @@ if ! tail_bytes=$(dd if="$EVENTS" bs=1 skip="$last_offset" 2>/dev/null); then
 fi
 
 # Build a minimal title/body from a commit message. /sylph:pr upgrades this
-# with boundary-cluster + Raven V4 continuity when actually opening the PR.
+# with boundary-cluster + Crow V4 continuity when actually opening the PR.
 # Title = first line of the message (truncated to 72 chars). Body = the full
 # message plus a Sylph footer.
 while IFS= read -r line; do
@@ -120,7 +120,7 @@ while IFS= read -r line; do
 ## Why
 
 _PR draft queued by pr-lifecycle chain-listener. Full description will
-be composed from W2 cluster state + Raven V4 continuity when
+be composed from W2 cluster state + Crow V4 continuity when
 \`/sylph:pr\` is invoked._
 
 ---

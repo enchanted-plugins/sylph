@@ -20,8 +20,8 @@ A staged diff the developer is about to commit. You may invoke:
 - `git status --short` — file-level summary.
 - `git log --format='%an <%ae>' -- <files>` — for co-author inference.
 
-If the diff is larger than ~1500 tokens, the plugin may substitute a Raven V1
-compressed form (delivered via the `raven.change.classified` event with the
+If the diff is larger than ~1500 tokens, the plugin may substitute a Crow V1
+compressed form (delivered via the `crow.change.classified` event with the
 same SHA). When that happens, the compressed vector narrative replaces the raw
 diff as your primary input.
 

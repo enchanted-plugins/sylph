@@ -1,6 +1,6 @@
 ---
 name: reviewer-router
-description: Explains how W4 Path-History Reviewer Routing ranks candidate reviewers — recency-weighted blame, path-depth specificity, CODEOWNERS boost, and optional Raven reviewer-availability filtering. Helpful when a developer asks "why did Sylph suggest these reviewers?"
+description: Explains how W4 Path-History Reviewer Routing ranks candidate reviewers — recency-weighted blame, path-depth specificity, CODEOWNERS boost, and optional Crow reviewer-availability filtering. Helpful when a developer asks "why did Sylph suggest these reviewers?"
 allowed-tools: Read
 ---
 
@@ -43,13 +43,13 @@ merged on top. An @-handle from CODEOWNERS and a "Name <email>" from
 blame can both be suggested — the PR adapter (W4) does de-dup at the
 `gh pr create --reviewer` level.
 
-## Availability (Raven integration)
+## Availability (Crow integration)
 
-If Raven is installed and publishes `raven.reviewer.availability.changed`
+If Crow is installed and publishes `crow.reviewer.availability.changed`
 events (availability ∈ [0.0, 1.0] per user), W4 multiplies the score by
 availability before ranking.
 
-Without Raven, all candidates are assumed fully available (availability =
+Without Crow, all candidates are assumed fully available (availability =
 1.0). Sylph does not try to parse out-of-office signals from git logs or
 calendar integrations.
 

@@ -61,7 +61,7 @@ Retry a flaky CI run:
 
 ## 6. The decision gate
 
-Destructive operations route through `sylph-gate`. A `git push --force`, a `git reset --hard`, a branch delete — all intercepted at PreToolUse. The gate is modeled on the Raven pattern: advisory-first, honest about blast radius, never silently blocks. Decline, and the command is gone.
+Destructive operations route through `sylph-gate`. A `git push --force`, a `git reset --hard`, a branch delete — all intercepted at PreToolUse. The gate is modeled on the Crow pattern: advisory-first, honest about blast radius, never silently blocks. Decline, and the command is gone.
 
 Dry-run any staged operation:
 

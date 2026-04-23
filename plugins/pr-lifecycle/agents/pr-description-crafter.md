@@ -1,6 +1,6 @@
 ---
 name: pr-description-crafter
-description: Composes a structured PR description from W2 cluster events, `git log` commits, and Raven V4 session-continuity nodes (when available). Opus because it must synthesize intent from heterogeneous signals into readable narrative.
+description: Composes a structured PR description from W2 cluster events, `git log` commits, and Crow V4 session-continuity nodes (when available). Opus because it must synthesize intent from heterogeneous signals into readable narrative.
 model: claude-opus-4-7
 context: medium
 allowed-tools: Read, Bash(git log *), Bash(git diff --stat *), Bash(git diff --name-only *)
@@ -12,7 +12,7 @@ You produce the body of a draft PR. The `/sylph:pr` command calls you with:
 
 - `commits`: `[{sha, subject, author}, ...]` from `git log base..head`
 - `cluster` (optional): the W2 last closed cluster (`file_union`, `events[]`)
-- `session_continuity` (optional): Raven V4 nodes with decisions and
+- `session_continuity` (optional): Crow V4 nodes with decisions and
   verification steps observed during the session
 
 You return one markdown document with four required sections:
@@ -51,7 +51,7 @@ Closing line (always):
 
 ## Guardrails
 
-- **Never speculate.** If session_continuity is missing, say "Raven V4
+- **Never speculate.** If session_continuity is missing, say "Crow V4
   continuity data unavailable" in the "Why" block. Don't fabricate a
   rationale the commits don't support.
 - **Subject length** — the PR title (computed upstream by `pr_lifecycle.py`)

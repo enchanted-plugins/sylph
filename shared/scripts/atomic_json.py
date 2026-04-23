@@ -1,5 +1,5 @@
 """
-Atomic JSON serialization — Fae-A4 pattern.
+Atomic JSON serialization — Emu-A4 pattern.
 
 Writes to a tempfile in the same directory, fsyncs, then renames atomically.
 Appends are line-oriented (jsonl) with O_APPEND + fsync. No partial writes,

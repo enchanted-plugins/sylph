@@ -1,6 +1,6 @@
 ---
 name: sylph:pr
-description: Open or update a draft PR for the current branch. Composes the description from W2 cluster state + Raven V4 session-continuity (when available), ranks reviewers via W4 Path-History Reviewer Routing, dispatches to the host adapter (GitHub fully implemented; other hosts degrade to manual-handoff mode).
+description: Open or update a draft PR for the current branch. Composes the description from W2 cluster state + Crow V4 session-continuity (when available), ranks reviewers via W4 Path-History Reviewer Routing, dispatches to the host adapter (GitHub fully implemented; other hosts degrade to manual-handoff mode).
 allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pr_lifecycle.py *), Bash(python ${CLAUDE_PLUGIN_ROOT}/../../shared/scripts/pr_lifecycle.py *), Bash(gh pr *), Bash(git branch --show-current), Bash(git remote get-url *), Bash(git log *), Read(plugins/boundary-segmenter/state/boundary-clusters.json)
 ---
 
@@ -34,7 +34,7 @@ Open or update a draft PR for the current branch.
 3. Compose description.
    ├─ commits = `git log origin/base..head` (or base..head for first push)
    ├─ cluster = plugins/boundary-segmenter/state/boundary-clusters.json (W2 last closed)
-   ├─ V4 continuity = plugins/raven-session-memory/state/session-graph.json (optional)
+   ├─ V4 continuity = plugins/crow-session-memory/state/session-graph.json (optional)
    └─ Build title + "## What changed / ## Why / ## How verified / ## Rollback plan"
 
 4. Rank reviewers via W4 (`shared/scripts/reviewer_route.py`).
@@ -50,7 +50,7 @@ Open or update a draft PR for the current branch.
 
 ## Graceful degradation
 
-- **Raven not installed** → description omits the "## Why" session-continuity
+- **Crow not installed** → description omits the "## Why" session-continuity
   block, uses commit messages only. Noted inline so reviewers know.
 - **boundary-segmenter not installed** → description falls back to
   commit-subject as title, first changed file as slug.
