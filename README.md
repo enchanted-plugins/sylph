@@ -278,7 +278,7 @@ Everything event-sourced, JSONL where applicable, atomic where writes matter (Em
 
 ## Roadmap
 
-Tracked in [docs/ROADMAP.md](docs/ROADMAP.md) and the shared [ecosystem map](https://github.com/enchanted-plugins/wixie/blob/main/docs/ecosystem.md). For upcoming work specific to Sylph, see issues tagged [roadmap](https://github.com/enchanted-plugins/sylph/labels/roadmap). New host adapters, CI systems, and workflow classes are **not** breaking and land in minor releases; the ROADMAP captures engine-level changes.
+Tracked in [docs/ROADMAP.md](docs/ROADMAP.md) and the shared [ecosystem map](docs/ecosystem.md). For upcoming work specific to Sylph, see issues tagged [roadmap](https://github.com/enchanted-plugins/sylph/labels/roadmap). New host adapters, CI systems, and workflow classes are **not** breaking and land in minor releases; the ROADMAP captures engine-level changes.
 
 ---
 
