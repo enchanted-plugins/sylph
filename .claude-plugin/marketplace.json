@@ -24,20 +24,12 @@
       "description": "W4 — Path-History Reviewer Routing. Idempotent PR state machine + reviewer ranking from blame + CODEOWNERS + Crow availability."
     },
     {
-      "name": "sylph-gate",
-      "description": "Destructive-op decision-gate modeled after Crow's pattern. Routes force-push, history-rewrite, branch/tag deletion, clean -fdx, merge-queue bypass."
-    },
-    {
       "name": "capability-memory",
       "description": "Provider capability registry — the host 'memory'. Hardcoded baseline + nightly CI refresh + GitLab self-managed runtime probe."
     },
     {
       "name": "ci-reader",
       "description": "Read-only CI status + log streaming across GitHub Actions, GitLab CI, CircleCI, Jenkins, Buildkite, Drone/Woodpecker, Tekton, ArgoCD/WixieCD."
-    },
-    {
-      "name": "sylph-learning",
-      "description": "W5 — Gauss Learning (Sylph). Developer preference persistence across sessions via Emu-A4 atomic serialization."
     },
     {
       "name": "full",
@@ -52,6 +44,18 @@
         "ci-reader",
         "sylph-learning"
       ]
+    },
+    {
+      "name": "weaver-gate",
+      "source": "./plugins/weaver-gate",
+      "description": "Destructive-op decision-gate for git. Inspects every Bash invocation; routes force-push, history rewrite, branch/tag deletion, clean -fdx, and merge-queue bypass through a confirmation surface before execution.",
+      "category": "plugin"
+    },
+    {
+      "name": "weaver-learning",
+      "source": "./plugins/weaver-learning",
+      "description": "W5 — Gauss Learning (Sylph). Per-developer preference persistence via exponential moving averages with Emu-A4 atomic serialization. Tracks commit-style (scope rate, body rate, types), branch-naming conventions, PR turnaround, reviewer overrides, W2 corrections. Priors flow back to W1/W2/W3/W4 after the bootstrap sample floor.",
+      "category": "plugin"
     }
   ]
 }
