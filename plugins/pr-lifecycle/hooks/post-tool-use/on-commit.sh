@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Subagent recursion guard — see shared/conduct/hooks.md
+if [[ -n "${CLAUDE_SUBAGENT:-}" ]]; then exit 0; fi
+
 # pr-lifecycle PostToolUse(Bash) — W4 listener.
 #
 # Tails plugins/commit-intelligence/state/executed-commits.jsonl from this

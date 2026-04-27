@@ -9,6 +9,10 @@
 # Never blocks: PostToolUse hooks that fail will be treated by Claude Code as
 # advisory. We exit 0 regardless unless the hook contract demands otherwise.
 
+
+# Subagent recursion guard — see shared/conduct/hooks.md
+if [[ -n "${CLAUDE_SUBAGENT:-}" ]]; then exit 0; fi
+
 set -euo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname "$(dirname "$(dirname "$0")")")}"

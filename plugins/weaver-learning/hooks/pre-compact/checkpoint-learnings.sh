@@ -5,6 +5,10 @@
 # The record-* hooks write atomically via tempfile+rename already; this is
 # a durability belt-and-suspenders before Claude Code wipes context.
 
+
+# Subagent recursion guard — see shared/conduct/hooks.md
+if [[ -n "${CLAUDE_SUBAGENT:-}" ]]; then exit 0; fi
+
 set -euo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname "$(dirname "$(dirname "$0")")")}"

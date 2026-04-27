@@ -9,6 +9,10 @@
 #
 # Dependencies: bash, jq, python3. Zero pip installs.
 
+
+# Subagent recursion guard — see shared/conduct/hooks.md
+if [[ -n "${CLAUDE_SUBAGENT:-}" ]]; then exit 0; fi
+
 set -euo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname "$(dirname "$(dirname "$0")")")}"

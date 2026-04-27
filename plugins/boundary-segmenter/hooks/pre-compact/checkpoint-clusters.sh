@@ -5,6 +5,10 @@
 # durability belt-and-suspenders: we rewrite the file via fsync to make sure
 # any unflushed buffers hit disk before Claude Code compacts.
 
+
+# Subagent recursion guard — see shared/conduct/hooks.md
+if [[ -n "${CLAUDE_SUBAGENT:-}" ]]; then exit 0; fi
+
 set -euo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname "$(dirname "$(dirname "$0")")")}"

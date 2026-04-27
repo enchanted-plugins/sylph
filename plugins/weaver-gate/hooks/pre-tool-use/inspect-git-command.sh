@@ -12,6 +12,10 @@
 # Dependencies: bash, jq, python3. All shipped by default with Git-for-Windows,
 # macOS, and every major Linux distro. Zero pip installs.
 
+
+# Subagent recursion guard — see shared/conduct/hooks.md
+if [[ -n "${CLAUDE_SUBAGENT:-}" ]]; then exit 0; fi
+
 set -euo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(dirname "$(dirname "$(dirname "$0")")")}"

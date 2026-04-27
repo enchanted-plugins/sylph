@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Subagent recursion guard — see shared/conduct/hooks.md
+if [[ -n "${CLAUDE_SUBAGENT:-}" ]]; then exit 0; fi
+
 # branch-workflow PostToolUse(Edit|Write|MultiEdit) — W3 listener.
 #
 # Tails plugins/boundary-segmenter/state/boundary-events.jsonl from this
