@@ -37,7 +37,7 @@ Sylph is the git workflow layer you wrote yourself, if you'd had three months an
 
 ## TL;DR
 
-**In plain English:** Every time Claude edits files you still have to branch, commit with a sensible message, open a PR, pick reviewers, and watch CI — none of which you asked the AI to do, and all of which you have to remember to do yourself.
+**In plain English:** You asked Claude to fix the bug. You did not ask to write the commit message, branch the changes, draft the PR, and pick the reviewers. Sylph handles all of it — the way you would have.
 
 **Technically:** W2 Jaccard-Cosine Boundary Segmentation clusters edit events online (`d = α·(1−jaccard) + β·(1−cosine) + γ·tanh(idle/τ)`, θ=0.55) to detect task boundaries without human input; W1 Myers-Diff Conventional Classifier drafts Conventional Commits messages validated by Haiku against the spec; W3 Workflow-Pattern Classifier picks the branch strategy from a weighted decision tree over branch-age, protection rules, and tag cadence. W5 Gauss Learning accumulates per-developer preferences (branch naming, reviewer overrides, W2 threshold corrections) across sessions with a bootstrap floor of 10 samples.
 
