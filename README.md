@@ -71,7 +71,7 @@ Not for:
 - [10 CI Systems, All Real](#10-ci-systems-all-real)
 - [The Decision-Gate Contract](#the-decision-gate-contract)
 - [vs Everything Else](#vs-everything-else)
-- [Agent Conduct (10 Modules)](#agent-conduct-10-modules)
+- [Agent Conduct (11 Modules)](#agent-conduct-11-modules)
 - [Architecture](#architecture)
 - [Testing](#testing)
 - [Acknowledgments](#acknowledgments)
@@ -411,7 +411,7 @@ Sylph isn't replacing git. It's **the layer above it** that you were building pi
 
 ---
 
-## Agent Conduct (10 Modules)
+## Agent Conduct (11 Modules)
 
 Every skill inherits a reusable behavioral contract from [shared/conduct/](shared/conduct/) — loaded once into [CLAUDE.md](CLAUDE.md), applied across all plugins. This is how Claude *acts* inside Sylph: deterministic, surgical, verifiable. Not a suggestion; a contract.
 
