@@ -34,13 +34,47 @@ if ! jq empty "$REGISTRY" >/dev/null 2>&1; then
 fi
 
 # 2. GitLab self-managed probe (only if current dir is a git repo with a GitLab remote).
+#
+# Probe allowlist: only hosts the developer has pre-authorized are probed at all.
+# A malicious repo can plant `git remote set-url origin https://attacker.example/...`;
+# without an allowlist this hook would emit an HTTPS request to attacker-controlled
+# infrastructure on every session start, leaking session presence + timing.
+# Default allow: github.com, gitlab.com, bitbucket.org, codeberg.org. For any
+# other host the probe is skipped and an advisory is emitted. To enable probing
+# for a self-managed instance, append the host to SYLPH_PROBE_ALLOWLIST (space-
+# or comma-separated) in your shell env or .claude/settings.json env block.
+PROBE_ALLOWLIST_DEFAULT="github.com gitlab.com bitbucket.org codeberg.org"
+PROBE_ALLOWLIST_USER="${SYLPH_PROBE_ALLOWLIST:-}"
+# Normalize commas to spaces for either form.
+PROBE_ALLOWLIST_USER="${PROBE_ALLOWLIST_USER//,/ }"
+PROBE_ALLOWLIST="$PROBE_ALLOWLIST_DEFAULT $PROBE_ALLOWLIST_USER"
+
+host_in_allowlist() {
+    local needle="$1"
+    local entry
+    for entry in $PROBE_ALLOWLIST; do
+        [[ "$entry" == "$needle" ]] && return 0
+    done
+    return 1
+}
+
 if [[ -d .git ]] || git rev-parse --git-dir >/dev/null 2>&1; then
     remote_url="$(git remote get-url origin 2>/dev/null || true)"
     if [[ -n "$remote_url" ]]; then
         # Detect a GitLab-shaped URL that isn't gitlab.com (self-managed).
         if [[ "$remote_url" =~ ^(https?://|git@)([^:/]+)[:/] ]]; then
             host="${BASH_REMATCH[2]}"
-            if [[ "$host" != "gitlab.com" && "$host" != "github.com" && "$host" != "bitbucket.org" ]]; then
+            # Skip well-known hosts that don't need GitLab self-managed probing.
+            if [[ "$host" == "github.com" || "$host" == "gitlab.com" || "$host" == "bitbucket.org" ]]; then
+                : # noop — first-class hosts; capability covered by static registry.
+            elif ! host_in_allowlist "$host"; then
+                # Unknown host — refuse to probe; emit advisory.
+                {
+                    echo "=== capability-memory (advisory) ==="
+                    echo "Skipping registry probe for unknown host $host. Add to allowlist if intended."
+                    echo "Hint: export SYLPH_PROBE_ALLOWLIST=\"$host\" (space- or comma-separated for multiple)."
+                } >&2
+            else
                 # Could be GitLab self-managed, Gitea, Forgejo, etc. Try GitLab first.
                 cache_file="$SESSION_CACHE_DIR/gitlab-version-${host//[^a-zA-Z0-9]/_}.json"
 

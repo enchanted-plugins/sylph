@@ -4,6 +4,16 @@
 
 Hybrid update strategy: hardcoded baseline ships with the plugin, nightly CI refresh opens PRs against the registry file, runtime probe handles GitLab self-managed version drift only (one probe per session, cached 24h in `state/session-cache/`).
 
+## Probe allowlist (security)
+
+The SessionStart hook will ONLY emit an HTTPS request to a host on its allowlist. Default allow: `github.com`, `gitlab.com`, `bitbucket.org`, `codeberg.org`. For any other origin host, the probe is skipped and an advisory is emitted on stderr — this prevents a malicious repo from planting `git remote set-url origin https://attacker.example/...` to leak session presence + timing on every session start.
+
+To enable probing for a self-managed GitLab/Gitea/Forgejo instance, append the host to `SYLPH_PROBE_ALLOWLIST` (space- or comma-separated) in your shell env or `.claude/settings.json` env block. Example:
+
+```bash
+export SYLPH_PROBE_ALLOWLIST="gitlab.example.com,git.internal"
+```
+
 Schema version: **1.1** (see `schema_changelog` in the registry for history).
 
 Schema fields (23 per host):
@@ -28,7 +38,7 @@ Standalone: `/plugin install capability-memory@sylph`.
 
 | Type | Name | Role |
 |------|------|------|
-| Hook | SessionStart | Load registry, probe GitLab self-managed version |
+| Hook | SessionStart | Load registry, probe allowlisted GitLab self-managed version |
 | Script | capability_probe.py | Runtime version probe (stdlib + urllib) |
 | State | capability-registry.json | The authoritative registry |
 

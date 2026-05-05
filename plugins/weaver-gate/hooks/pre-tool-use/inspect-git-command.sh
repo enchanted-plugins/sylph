@@ -4,10 +4,10 @@
 # Reads a PreToolUse payload from stdin (Claude Code hook protocol), extracts
 # the Bash command, and delegates classification to shared/scripts/destructive_patterns.py.
 #
-# Exit semantics follow Claude Code's hook contract:
-#   0 — allow the tool call to proceed
-#   2 — block with reason, surface decision-gate prompt to Claude
-# Anything else — allow (fail-open so a hook bug never stops the user's work).
+# Advisory contract per shared/conduct/hooks.md — never block, never exit non-zero.
+# Exit semantics:
+#   0 — always. Destructive ops produce a stderr advisory; the model decides.
+# Detection logic is unchanged; only the EXIT changes.
 #
 # Dependencies: bash, jq, python3. All shipped by default with Git-for-Windows,
 # macOS, and every major Linux distro. Zero pip installs.
@@ -87,23 +87,18 @@ if [[ "$exit_code" -eq 0 ]]; then
     exit 0
 fi
 
-# Destructive or protected-destructive → block (exit 2).
-# Claude Code surfaces the stderr message as the block reason, which reaches
-# the model context. The model then decides whether to proceed after the
-# decision-gate skill fires.
-cat <<EOF >&2
-[sylph-gate] Destructive git operation detected.
-
-  Command: $cmd
-  Op:      $op
-  Reason:  $reason
-  Recovery window: $recovery day(s)
-
-This command is blocked pending confirmation via the destructive-gate-confirmation
-skill. Review the operation, consider safer alternatives (e.g. --force-with-lease),
-and if you genuinely intend to proceed, invoke the skill explicitly or add
---yes-i-know to the command (protected-destructive ops cannot be bypassed).
-
-Exit code 2 — Claude should surface this to the user and/or invoke the skill.
-EOF
-exit 2
+# Destructive or protected-destructive → emit stderr advisory, never block.
+# Advisory contract per shared/conduct/hooks.md — Claude reads the advisory
+# and decides whether to proceed (or invoke destructive-gate-confirmation).
+{
+    echo "=== sylph-gate (advisory) ==="
+    echo "Would have flagged: destructive git operation detected"
+    echo "  Command: $cmd"
+    echo "  Op:      $op"
+    echo "  Reason:  $reason"
+    echo "  Recovery window: $recovery day(s)"
+    echo "Hint: review the operation, consider safer alternatives (e.g. --force-with-lease),"
+    echo "      or invoke the destructive-gate-confirmation skill before proceeding."
+    echo "      Protected-destructive ops (clean -fdx) are irrecoverable — reflog won't help."
+} >&2
+exit 0
