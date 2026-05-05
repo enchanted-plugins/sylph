@@ -4,8 +4,8 @@
   "description": "Auto-orchestrates branch/commit/PR per task boundary; reads CI status across 10 hosts and 10 CI systems. Enchanted-plugins Phase 4 plugin #21.",
   "version": "1.0.0",
   "license": "MIT",
-  "homepage": "https://github.com/enchanted-plugins/sylph",
-  "author": "enchanted-plugins",
+  "homepage": "https://github.com/enchanter-ai/sylph",
+  "author": "enchanter-ai",
   "plugins": [
     {
       "name": "commit-intelligence",

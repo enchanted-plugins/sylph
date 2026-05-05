@@ -18,7 +18,7 @@ After 6+ weeks, W1 and W3 adapt to the developer's style. Learnings export to `s
 Part of the [Sylph](../..) bundle:
 
 ```
-/plugin marketplace add enchanted-plugins/sylph
+/plugin marketplace add enchanter-ai/sylph
 /plugin install full@sylph
 ```
 

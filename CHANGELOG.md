@@ -28,5 +28,5 @@ The current shipped release. See [README.md](README.md) for the complete feature
 - Per-developer learning via W5 Gauss EMA — preferences persist across compaction.
 - 28/28 tests passing. Zero runtime dependencies (bash + jq + Python stdlib).
 
-[Unreleased]: https://github.com/enchanted-plugins/sylph/compare/v0.0.1...HEAD
-[0.0.1]: https://github.com/enchanted-plugins/sylph/releases/tag/v0.0.1
+[Unreleased]: https://github.com/enchanter-ai/sylph/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/enchanter-ai/sylph/releases/tag/v0.0.1

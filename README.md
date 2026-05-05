@@ -16,7 +16,7 @@
   <a href="https://www.repostatus.org/#active"><img alt="Project Status: Active" src="https://www.repostatus.org/badges/latest/active.svg"></a>
 </p>
 
-> **An @enchanted-plugins product — algorithm-driven, agent-managed, self-learning.**
+> **An @enchanter-ai product — algorithm-driven, agent-managed, self-learning.**
 
 **8 plugins. 5 named engines. 10 git hosts. 10 CI systems. 15 slash commands. Zero runtime deps.**
 
@@ -177,7 +177,7 @@ Source: [docs/assets/lifecycle.mmd](docs/assets/lifecycle.mmd) · Regeneration c
 Two commands in Claude Code + one per project:
 
 ```
-/plugin marketplace add enchanted-plugins/sylph
+/plugin marketplace add enchanter-ai/sylph
 /plugin install full@sylph
 ```
 
@@ -288,7 +288,7 @@ Everything event-sourced, JSONL where applicable, atomic where writes matter (Em
 
 ## Roadmap
 
-Tracked in [docs/ROADMAP.md](docs/ROADMAP.md) and the shared [ecosystem map](docs/ecosystem.md). For upcoming work specific to Sylph, see issues tagged [roadmap](https://github.com/enchanted-plugins/sylph/labels/roadmap). New host adapters, CI systems, and workflow classes are **not** breaking and land in minor releases; the ROADMAP captures engine-level changes.
+Tracked in [docs/ROADMAP.md](docs/ROADMAP.md) and the shared [ecosystem map](docs/ecosystem.md). For upcoming work specific to Sylph, see issues tagged [roadmap](https://github.com/enchanter-ai/sylph/labels/roadmap). New host adapters, CI systems, and workflow classes are **not** breaking and land in minor releases; the ROADMAP captures engine-level changes.
 
 ---
 
@@ -474,7 +474,7 @@ npx -y -p @mermaid-js/mermaid-cli mmdc -i docs/architecture/highlevel.mmd \
 ## Testing
 
 - **28 test assertions** passing (`bash tests/run-all.sh`) — unit, contract, and integration tiers. JSON validation, bash syntax check, Python functional smoke, end-to-end hook simulation.
-- **1 live integration test** (`SYLPH_INTEGRATION=1 bash tests/run-all.sh`) — creates a real branch on `enchanted-plugins/sylph`, opens a real draft PR via the urllib adapter path (no `gh` required), round-trips it via `get_pr`, closes it, deletes the branch. Proven against real GitHub.
+- **1 live integration test** (`SYLPH_INTEGRATION=1 bash tests/run-all.sh`) — creates a real branch on `enchanter-ai/sylph`, opens a real draft PR via the urllib adapter path (no `gh` required), round-trips it via `get_pr`, closes it, deletes the branch. Proven against real GitHub.
 - **Contract test for every host** (`tests/pr-lifecycle/test-all-hosts-contract.sh`) — asserts every one of the 10 adapters instantiates cleanly, reports a bool `is_authenticated`, and refuses to fabricate a PR when credentials are absent.
 - **Honest numbers.** What's verified live: GitHub only. What's verified by contract: all 10 hosts + 10 CI systems. The README doesn't pretend otherwise. When you drop a GitLab/Bitbucket/Azure token in, you're using the same `_rest.api_request` call path that shipped through GitHub's real API. If something breaks there, it's in the per-host JSON shape, not the flow.
 
@@ -515,7 +515,7 @@ If you use this project in research or derivative work, please cite it:
   title = {Sylph},
   author = {{Klaiderman}},
   year = {2026},
-  url = {https://github.com/enchanted-plugins/sylph}
+  url = {https://github.com/enchanter-ai/sylph}
 }
 ```
 

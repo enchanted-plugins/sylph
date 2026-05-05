@@ -2,7 +2,7 @@
   "name": "full",
   "description": "Meta-plugin that installs every Sylph plugin at once via dependency resolution. Installs: commit-intelligence, boundary-segmenter, branch-workflow, pr-lifecycle, sylph-gate, capability-memory, ci-reader, sylph-learning.",
   "version": "0.0.1",
-  "author": { "name": "enchanted-plugins" },
+  "author": { "name": "enchanter-ai" },
   "license": "MIT",
   "keywords": ["meta", "bundle", "install-all"],
   "dependencies": [

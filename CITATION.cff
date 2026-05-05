@@ -4,16 +4,16 @@ message: "If you use this software, please cite it as below."
 type: software
 authors:
   - alias: klaiderman
-    affiliation: "enchanted-plugins"
-repository-code: "https://github.com/enchanted-plugins/sylph"
-url: "https://github.com/enchanted-plugins/sylph"
+    affiliation: "enchanter-ai"
+repository-code: "https://github.com/enchanter-ai/sylph"
+url: "https://github.com/enchanter-ai/sylph"
 license: MIT
 version: "0.0.1"
 date-released: "2026-04-20"
 abstract: "Git workflow layer for AI-assisted development: destructive-op decision gate, workflow-pattern classifier, path-history reviewer routing, per-developer preference adaptation."
 keywords:
   - claude-code
-  - enchanted-plugins
+  - enchanter-ai
   - git
   - pull-requests
   - ci-cd

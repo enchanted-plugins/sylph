@@ -2,7 +2,7 @@
   "name": "boundary-segmenter",
   "description": "W2 — Jaccard-Cosine Boundary Segmentation. Sylph's defining engine. Clusters PostToolUse(Edit|Write) events into task boundaries via multi-modal distance (file-set Jaccard + token cosine + idle-time gap). Standalone: works without Crow V1 by deriving token vectors from edit content. Upgraded automatically when Crow V1 embeddings are available on the event bus.",
   "version": "0.1.0",
-  "author": { "name": "enchanted-plugins" },
+  "author": { "name": "enchanter-ai" },
   "license": "MIT",
   "keywords": [
     "boundary-segmentation",

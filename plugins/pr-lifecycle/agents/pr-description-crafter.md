@@ -46,7 +46,7 @@ Closing line (always):
 
 ```
 ---
-*Opened by [Sylph](https://github.com/enchanted-plugins/sylph) (W4 pr-lifecycle).*
+*Opened by [Sylph](https://github.com/enchanter-ai/sylph) (W4 pr-lifecycle).*
 ```
 
 ## Guardrails

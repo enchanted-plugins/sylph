@@ -2,7 +2,7 @@
 GitLab adapter (SaaS + self-managed).
 
 GitLab Merge Requests via REST v4. Project identifier uses URL-encoded
-full path — e.g., `enchanted-plugins/sylph` becomes `enchanted-plugins%2Fsylph`.
+full path — e.g., `enchanter-ai/sylph` becomes `enchanter-ai%2Fsylph`.
 
 Token resolution: $GITLAB_TOKEN, $GL_TOKEN, or git-credential fill for
 `gitlab.com` (SaaS) / self-managed host.

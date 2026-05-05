@@ -11,7 +11,7 @@ Infers active workflow (GitHub Flow / Trunk-Based / GitFlow / Release Flow / Sta
 Part of the [Sylph](../..) bundle:
 
 ```
-/plugin marketplace add enchanted-plugins/sylph
+/plugin marketplace add enchanter-ai/sylph
 /plugin install full@sylph
 ```
 

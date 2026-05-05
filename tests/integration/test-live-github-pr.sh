@@ -22,7 +22,7 @@ export PYTHONIOENCODING=utf-8
 
 # Pre-flight: must be on the sylph repo, on main, clean tree.
 remote="$(git remote get-url origin 2>&1)"
-assert_contains "$remote" "enchanted-plugins/sylph" "remote points at sylph repo"
+assert_contains "$remote" "enchanter-ai/sylph" "remote points at sylph repo"
 current="$(git branch --show-current)"
 assert_eq "$current" "main" "must start on main"
 if [[ -n "$(git status --porcelain)" ]]; then
@@ -63,7 +63,7 @@ if not adapter.is_authenticated():
     print(json.dumps({"error": "adapter could not resolve a token"}))
     sys.exit(2)
 
-repo = "enchanted-plugins/sylph"
+repo = "enchanter-ai/sylph"
 title = "test: sylph live integration ${ts}"
 body = (
     "## What changed\n\n"
@@ -73,7 +73,7 @@ body = (
     "Verifying W4 pr-lifecycle end-to-end against real GitHub.\n\n"
     "## How it was verified\n\n"
     "- is_authenticated() returned True via git-credential-manager.\n"
-    "- open_pr POST /repos/enchanted-plugins/sylph/pulls returned HTTP 201.\n"
+    "- open_pr POST /repos/enchanter-ai/sylph/pulls returned HTTP 201.\n"
     "- get_pr GET /repos/.../pulls/{number} round-tripped state + title.\n\n"
     "## Rollback plan\n\n"
     "PR is auto-closed; branch ${branch} is deleted locally + on the remote.\n"
@@ -108,7 +108,7 @@ import json, sys
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from adapters.github import GitHubAdapter
 adapter = GitHubAdapter()
-pr = adapter.get_pr("enchanted-plugins/sylph", ${pr_number})
+pr = adapter.get_pr("enchanter-ai/sylph", ${pr_number})
 print(json.dumps({"number": pr.number, "state": pr.state, "title": pr.title,
                   "base": pr.base, "head": pr.head}))
 PYEOF
@@ -126,7 +126,7 @@ import sys
 sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from adapters.github import GitHubAdapter
 adapter = GitHubAdapter()
-adapter.close_pr("enchanted-plugins/sylph", ${pr_number})
+adapter.close_pr("enchanter-ai/sylph", ${pr_number})
 PYEOF
 ok "close_pr: PR #${pr_number} closed"
 

@@ -30,7 +30,7 @@ All entries below trigger a stderr advisory only — the gate warns, the model d
 Part of the [Sylph](../..) bundle. **Installing Sylph without sylph-gate is not supported** — it's the safety floor.
 
 ```
-/plugin marketplace add enchanted-plugins/sylph
+/plugin marketplace add enchanter-ai/sylph
 /plugin install full@sylph
 ```
 

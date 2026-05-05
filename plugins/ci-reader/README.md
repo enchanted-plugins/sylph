@@ -37,7 +37,7 @@ Schema validation: `tests/ci-reader/test-ci-registry-schema.sh`.
 Part of the [Sylph](../..) bundle:
 
 ```
-/plugin marketplace add enchanted-plugins/sylph
+/plugin marketplace add enchanter-ai/sylph
 /plugin install full@sylph
 ```
 

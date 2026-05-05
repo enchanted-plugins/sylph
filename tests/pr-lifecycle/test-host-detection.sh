@@ -13,8 +13,8 @@ sys.path.insert(0, r"$SHARED_SCRIPTS_PY")
 from adapters import detect_host, parse_github_repo, get_adapter, NotImplementedHostOp
 
 cases = [
-    ("git@github.com:enchanted-plugins/sylph.git", "github"),
-    ("https://github.com/enchanted-plugins/sylph", "github"),
+    ("git@github.com:enchanter-ai/sylph.git", "github"),
+    ("https://github.com/enchanter-ai/sylph", "github"),
     ("https://gitlab.com/foo/bar.git", "gitlab"),
     ("https://gitlab.self-hosted.corp/foo/bar", "gitlab"),
     ("https://bitbucket.org/foo/bar", "bitbucket-cloud"),
@@ -37,8 +37,8 @@ for url, expected in cases:
 
 # parse_github_repo
 for url, expected in [
-    ("git@github.com:enchanted-plugins/sylph.git", "enchanted-plugins/sylph"),
-    ("https://github.com/enchanted-plugins/sylph", "enchanted-plugins/sylph"),
+    ("git@github.com:enchanter-ai/sylph.git", "enchanter-ai/sylph"),
+    ("https://github.com/enchanter-ai/sylph", "enchanter-ai/sylph"),
     ("https://github.com/foo/bar/", "foo/bar"),
     ("https://gitlab.com/foo/bar", None),
 ]:

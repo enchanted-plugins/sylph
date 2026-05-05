@@ -2,12 +2,12 @@
 
 **Meta-plugin. Declares the other 8 plugins as dependencies so one install pulls in the whole Sylph pipeline.**
 
-Same pattern as Wixie's `full` and the other enchanted-plugins meta-plugins.
+Same pattern as Wixie's `full` and the other enchanter-ai meta-plugins.
 
 ## Install
 
 ```
-/plugin marketplace add enchanted-plugins/sylph
+/plugin marketplace add enchanter-ai/sylph
 /plugin install full@sylph
 ```
 

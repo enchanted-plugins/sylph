@@ -13,7 +13,7 @@ Late-boundary correction surfaces as a skill invocation ("merge last N commits?"
 Part of the [Sylph](../..) bundle:
 
 ```
-/plugin marketplace add enchanted-plugins/sylph
+/plugin marketplace add enchanter-ai/sylph
 /plugin install full@sylph
 ```
 

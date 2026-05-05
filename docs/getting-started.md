@@ -5,7 +5,7 @@ Sylph is the git-workflow layer above git. It knows which host you're on (10 sup
 ## 1. Install (60 seconds)
 
 ```
-/plugin marketplace add enchanted-plugins/sylph
+/plugin marketplace add enchanter-ai/sylph
 /plugin install full@sylph
 /plugin list
 ```

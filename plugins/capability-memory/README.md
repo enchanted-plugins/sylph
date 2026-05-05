@@ -28,7 +28,7 @@ Support levels: `first-class` (Tier-1), `best-effort` (Azure DevOps, Gitea/Forge
 Part of the [Sylph](../..) bundle:
 
 ```
-/plugin marketplace add enchanted-plugins/sylph
+/plugin marketplace add enchanter-ai/sylph
 /plugin install full@sylph
 ```
 

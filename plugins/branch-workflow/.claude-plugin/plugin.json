@@ -2,7 +2,7 @@
   "name": "branch-workflow",
   "description": "W3 — Workflow-Pattern Classifier. Infers the active branching model (GitHub Flow / Trunk-Based / GitFlow / Release Flow / Stacked Diffs / Unknown) from repo signals and suggests a branch name for the next task boundary. Per-subtree support for monorepos via .sylph/workflow-map.yaml.",
   "version": "0.1.0",
-  "author": { "name": "enchanted-plugins" },
+  "author": { "name": "enchanter-ai" },
   "license": "MIT",
   "keywords": ["branching", "workflow-detection", "W3", "monorepo"],
   "commands": [

@@ -6,7 +6,7 @@
 # installs what's needed.
 set -euo pipefail
 
-REPO="https://github.com/enchanted-plugins/sylph"
+REPO="https://github.com/enchanter-ai/sylph"
 SYLPH_DIR="${HOME}/.claude/plugins/sylph"
 
 step() { printf "\n\033[1;36m▸ %s\033[0m\n" "$*"; }
@@ -58,7 +58,7 @@ cat <<'EOF'
 
   STEP 1 — Inside Claude Code, run:
 
-    /plugin marketplace add enchanted-plugins/sylph
+    /plugin marketplace add enchanter-ai/sylph
     /plugin install full@sylph
 
   STEP 2 — From inside the project you want to use Sylph on, run:

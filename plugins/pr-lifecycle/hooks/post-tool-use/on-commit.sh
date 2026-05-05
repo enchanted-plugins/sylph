@@ -127,7 +127,7 @@ be composed from W2 cluster state + Crow V4 continuity when
 \`/sylph:pr\` is invoked._
 
 ---
-*Drafted by [Sylph](https://github.com/enchanted-plugins/sylph) (W4 pr-lifecycle).*"
+*Drafted by [Sylph](https://github.com/enchanter-ai/sylph) (W4 pr-lifecycle).*"
 
     record="$(jq -nc \
         --arg ts "$ts" \

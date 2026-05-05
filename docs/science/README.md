@@ -78,4 +78,4 @@ Bootstrap floor of 10 samples — below that, priors are ignored as low-confiden
 
 ---
 
-*Every formula maps to executable code in the enchanted-plugins ecosystem. The math runs.*
+*Every formula maps to executable code in the enchanter-ai ecosystem. The math runs.*

@@ -128,7 +128,7 @@ class PRDescription:
 
         body_parts.append("")
         body_parts.append(
-            "---\n*Opened by [Sylph](https://github.com/enchanted-plugins/sylph) (W4 pr-lifecycle).*"
+            "---\n*Opened by [Sylph](https://github.com/enchanter-ai/sylph) (W4 pr-lifecycle).*"
         )
 
         return cls(title=title[:72], body="\n".join(body_parts))
